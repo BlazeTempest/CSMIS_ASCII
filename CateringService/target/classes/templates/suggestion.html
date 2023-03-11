@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8" />
@@ -181,30 +181,24 @@
 
         <div class="container-fluid pt-4 px-4">
             <div class="bg-secondary rounded h-100 p-4">
-                <div class="row">
+                <form class="row" th:action="@{/checkSuggestions}" method="get">
                     <div class="col input-group" style="margin-left: 180px;">
                         <span class="input-group-text" id="basic-addon1">Start Date</span>
-                        <input type="date" class="form-control bg-white" id="start">
+                        <input type="date" class="form-control bg-white" name="start" id="start">
                     </div>
                     <div class="col input-group">
                         <span class="input-group-text" id="basic-addon1">End Date</span>
-                        <input type="date" class="form-control bg-white" id="end">
+                        <input type="date" class="form-control bg-white" name="end" id="end">
                     </div>
                     <div class="col input-group">
-                        <input type="button" class="btn btn-outline-dark" value="Check">
+                        <input type="submit" class="btn btn-outline-dark" value="Check">
                     </div>
-                </div>
+                </form>
                 <div class="card mt-3">
                     <h5 class="card-header">Suggestions for Catering Service</h5>
-                    <div class="card-body bg-white">
-                        <p class="card-text">I like this restaurant &nbsp;&nbsp;&nbsp; <span style="margin-left: 600px;">11/2/2023</span></p>
-                        <p class="card-text">I like this restaurant &nbsp;&nbsp;&nbsp; <span style="margin-left: 600px;"></span>11/2/2023</p>
-                        <p class="card-text">I like this restaurant &nbsp;&nbsp;&nbsp; <span style="margin-left: 600px;"></span>11/2/2023</p>
-                        <p class="card-text">I like this restaurant &nbsp;&nbsp;&nbsp; <span style="margin-left: 600px;"></span>11/2/2023</p>
-                        <p class="card-text">I like this restaurant &nbsp;&nbsp;&nbsp; <span style="margin-left: 600px;"></span>11/2/2023</p>
-                        <p class="card-text">I like this restaurant &nbsp;&nbsp;&nbsp; <span style="margin-left: 600px;"></span>11/2/2023</p>
-                        <p class="card-text">I like this restaurant &nbsp;&nbsp;&nbsp; <span style="margin-left: 600px;"></span>11/2/2023</p>
-                        <p class="card-text">I like this restaurant &nbsp;&nbsp;&nbsp; <span style="margin-left: 600px;"></span>11/2/2023</p>
+                    <div class="card-body bg-white" th:each="suggestion:${suggestions}">
+                        <p class="card-text" th:text=${suggestion.description}><span th:text=${suggestion.created_date} style="margin-left: 600px;">11/2/2023</span></p>
+                        
                     </div>
                 </div>
             </div>
