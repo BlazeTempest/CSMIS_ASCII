@@ -12,7 +12,7 @@ public interface StaffRepository extends JpaRepository<Staff, String> {
 	public List<Staff> findByNameContainsAndStaffIDContainsAndTeamContainsAllIgnoreCase(String name, String id, String team);
 	public List<Staff> findByDivisionContainsAllIgnoreCase(String division);
 	public List<Staff> findByDeptContainsAllIgnoreCase(String dept);
-	public List<Staff> findByStatusContainsAllIgnoreCase(String status);
+	public List<Staff> findByEnabledContains(int status);
 	public List<Staff> findByRoleContainsAllIgnoreCase(String role);
 	@Query(value="SELECT DISTINCT team FROM staff WHERE team IS NOT NULL", nativeQuery = true)
 	public List<String> findTeamNames();
@@ -20,6 +20,6 @@ public interface StaffRepository extends JpaRepository<Staff, String> {
 	public List<String> findDivNames();
 	@Query(value="SELECT DISTINCT dept FROM staff WHERE dept IS NOT NULL", nativeQuery = true)
 	public List<String> findDeptNames();
-	@Query(value="SELECT * FROM staff WHERE status = :statusParam", nativeQuery = true)
-	public List<Staff> findActiveStaffs(@Param("statusParam")String status);
+	@Query(value="SELECT * FROM staff WHERE enabled = :statusParam", nativeQuery = true)
+	public List<Staff> findActiveStaffs(@Param("statusParam")int enabled);
 }

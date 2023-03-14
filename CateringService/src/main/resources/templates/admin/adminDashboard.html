@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <title>DarkPan - Bootstrap 5 Admin Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="keywords" />
+    <meta content="" name="description" />
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon" />
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet" />
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+
+    <!-- Template Stylesheet -->
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <style>
+        table tr th {
+            color: rgb(79, 30, 192);
+        }
+        
+        i.fa-solid {
+            font-size: 25\px;
+            cursor: pointer;
+            user-select: none;
+            color: white;
+        }
+        
+        .fa-solid:hover {
+            color: rgb(250, 16, 75);
+        }
+    </style>
+    <script>
+        function myFunction(x) {
+            x.classList.toggle("fa-bell-slash");
+        }
+    </script>
+</head>
+
+<body>
+
+
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-secondary navbar-dark">
+                <div class="sidebar-head">
+                    <div>
+                        <img class="sidebar-logo mt-0" src="img/dat logo.png" alt="DAT Logo" />
+                    </div>
+                    <div>
+                        <a href="index.html" class="navbar-brand mb-3">
+                            <h3 class="text-primary">CSMIS</h3>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="navbar-nav w-100">
+                    <a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
+            >
+            <a th:href="@{/employee-list}" class="nav-item nav-link"
+              ><i class="fas fa-users me-2"></i>Employee List</a
+            >
+            <div class="nav-item dropdown">
+              <a
+                href="#"
+                class="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
+                ><i class="fa fa-laptop me-2"></i>Report</a
+              >
+              <div class="dropdown-menu bg-transparent border-0">
+                <a href="registered-list.html" class="dropdown-item"
+                  >Monthly Registered List</a
+                >
+                <a href="register-eat-list.html" class="dropdown-item"
+                  >Registered & Eat List</a
+                >
+                <a href="register-not-eat-list.html" class="dropdown-item"
+                  >Registered & Not Eat List</a
+                >
+                <a href="not-registereed-eat-list.html" class="dropdown-item"
+                  >Not Registered & Eat List</a
+                >
+              </div>
+            </div>
+            <a th:href="@{registration}" class="nav-item nav-link"
+              ><i class="fas fa-pen me-2"></i>Lunch Register</a
+            >
+            <a href="menu.html" class="nav-item nav-link"
+              ><i class="fas fa-hamburger me-2"></i>Menu</a
+            >
+            <a href="restaurant.html" class="nav-item nav-link"
+              ><i class="fas fa-home me-2"></i>Restaurant</a
+            >
+            <div class="nav-item dropdown">
+              <a
+                href="#"
+                class="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
+                ><i class="fas fa-file me-2"></i>Invoice</a
+              >
+              <div class="dropdown-menu bg-transparent border-0">
+                <a href="weekly-invoice.html" class="dropdown-item"
+                  >Weekly Invoice</a
+                >
+                <a href="monthly-invoice.html" class="dropdown-item"
+                  >Monthly Invoice</a
+                >
+              </div>
+            </div>
+            <div class="nav-item">
+              <a href="suggestion.html" class="nav-link"><i class="far fa-file-alt me-2"></i>Suggestions</a>
+                </div>
+                <div class="nav-item">
+                    <a href="holiday.html" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
+                </div>
+        </div>
+        </nav>
+    </div>
+    <!-- Sidebar End -->
+
+    <!-- Content Start -->
+    <div class="content">
+        <!-- Navbar Start -->
+        <nav class="navbar navbar-expand bg-secondary-nav navbar-dark sticky-top px-4 py-0">
+            <a href="#" class="sidebar-toggler flex-shrink-0">
+                <i class="fa fa-bars"></i>
+            </a>
+            <div class="navbar-nav align-items-center ms-auto">
+                <div class="nav-item dropdown">
+                    <!-- <div id="mail-toggle" class="form-check form-switch">
+                        <label class="form-check-label changes" style="color: whitesmoke;" for="flexSwitchCheckChecked"><i class="bi bi-bell me-lg-2"></i>Email</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+                    </div> -->
+                    <i onclick="myFunction(this)" title="This is a mail notification on/off for lunch!" class="fa-solid fa-bell"></i>
+                    <span class="text-center text-white ms-2">Email </span>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img class="rounded-circle me-lg-2" src="img/admin-logo.png" alt="" style="width: 40px; height: 40px" />
+                            <span class="d-none d-lg-inline-flex" th:text=${name}></span>
+                        </a>
+                       <div
+                                class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
+                                <a href="profile.html" class="dropdown-item fw-bold text-center">Profile</a>
+
+                                <form action="#" th:action="@{/logout}" method="POST">
+
+                                    <input type="submit" value="Logout"
+                                        class="btn btn-outline-link bg-white fw-bold mt-1"
+                                        style="color: rgb(0, 0, 0); width: 100%; height: 45px;" />
+
+                                </form>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Navbar End -->
+
+        <!-- Sale & Revenue Start -->
+        <div class="container-fluid pt-4 px-4 ">
+            <div class="row g-4 ">
+                <div class="col-sm-6 col-xl-3 ">
+                    <div class="bg-secondary rounded p-4 ">
+                        <div class="ms-3 text-center">
+                            <h4 class="mb-2 text-dark">250</h4>
+                            <h6 class="mb-0 bg-secondary">Total Employees</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3 ">
+                    <div class="bg-secondary rounded p-4 ">
+                        <div class="ms-3 text-center">
+                            <h4 class="mb-2 text-dark">50</h4>
+                            <h6 class="bg-secondary mb-0">Total Departments</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3 ">
+                    <div class="bg-secondary rounded p-4">
+                        <div class="ms-3 text-center">
+                            <h4 class="mb-2 text-dark">120</h4>
+                            <h6 class="bg-secondary mb-0">Total Teams</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3 ">
+                    <div class="bg-secondary rounded p-4 ">
+                        <div class="ms-3 text-center">
+                            <h4 class="mb-2 text-dark">200</h4>
+                            <h6 class=" bg-secondary mb-0">Monthly Registered</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Sale & Revenue End -->
+        <div class="container-fluid">
+            <div class="row bg-secondary mt-5 ms-2 me-2 rounded">
+                <div class="offset-1 col-lg-8 mb-3">
+                    <div class="form-outline mt-4 mb-2">
+                        <textarea class="form-control bg-white" style="height: 50px;" id="textAreaExample1" placeholder="Something you want to announce..." rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="col-lg-2 text-sm-end">
+                    <button type="button" class="btn btn-lg mt-4 btn-outline-dark">Announce</button>
+                </div>
+            </div>
+        </div>
+        <!-- Department List-->
+        <div class="container-fluid px-4 py-4">
+            <div class="bg-secondary text-center rounded p-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h4 class="mb-0 bg-secondary">Overview Consumer List</h4>
+                    <a href="registered-list.html" class="text-decoration-underline" style="color:rgb(91, 80, 253)">Show All</a>
+                </div>
+                <table class="table table-hover bg-secondary text-center">
+                    <thead class="text-white">
+                        <tr>
+                            <th class="text-start">Department</th>
+                            <th>Registered Consumer Head Count</th>
+                            <th>Actual Consumer Head Count</th>
+                            <th>Difference</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-dark">
+                        <tr>
+                            <td class="text-start">BOD</td>
+                            <td>200</td>
+                            <td>150</td>
+                            <td>50</td>
+                        </tr>
+                        <tr>
+                            <td class="text-start">Commmon Infrastructure</td>
+                            <td>200</td>
+                            <td>150</td>
+                            <td>50</td>
+                        </tr>
+                        <tr>
+                            <td class="text-start">Expatriate</td>
+                            <td>200</td>
+                            <td>150</td>
+                            <td>50</td>
+                        </tr>
+                        <tr>
+                            <td class="text-start">Finance</td>
+                            <td>200</td>
+                            <td>150</td>
+                            <td>50</td>
+                        </tr>
+                        <tr>
+                            <td class="text-start">HR/Admin</td>
+                            <td>200</td>
+                            <td>150</td>
+                            <td>50</td>
+                        </tr>
+                        <tr>
+                            <td class="text-start">Local Bussiness</td>
+                            <td>200</td>
+                            <td>150</td>
+                            <td>50</td>
+                        </tr>
+                        <tr>
+                            <td class="text-start">Offshore dep-1</td>
+                            <td>200</td>
+                            <td>150</td>
+                            <td>50</td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-start">Offshore dep-2</td>
+                            <td>200</td>
+                            <td>150</td>
+                            <td>50</td>
+                        </tr>
+                        <tr>
+                            <td class="text-start">PMO + Service desk + SDQC</td>
+                            <td>200</td>
+                            <td>150</td>
+                            <td>50</td>
+                        </tr>
+                        <tr>
+                            <td class="text-start">SSD</td>
+                            <td>200</td>
+                            <td>150</td>
+                            <td>50</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <!-- Recent Sales Start -->
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary text-center rounded p-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h4 class="mb-0 bg-secondary">Employee List</h4>
+                    <a href="employee-list.html" class="text-decoration-underline" style="color:rgb(91, 80, 253)">Show All</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table text-start align-middle table-hover mb-0">
+                        <thead>
+                            <tr class="text-white">
+                                <!-- <th scope="col"><input class="form-check-input" type="checkbox"></th> -->
+                                <th scope="col">Sr.</th>
+                                <th scope="col">Division</th>
+                                <th scope="col">Staff ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">DoorLogNo.</th>
+                                <th scope="col">Department</th>
+                                <th scope="col">Team</th>
+                                <th scope="col" class="text-center">Email</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-dark">
+                            <tr>
+                                <!-- <td><input class="form-check-input" type="checkbox"></td> -->
+                                <td>1</td>
+                                <td>DIV001</td>
+                                <td>26-00070</td>
+                                <td>Amy Htun</td>
+                                <td>40042</td>
+                                <td>Offshore Department Dep-1</td>
+                                <td>DTO</td>
+                                <td>amyhtun@gmail.com</td>
+                            </tr>
+                            <tr>
+
+                                <td>2</td>
+                                <td>DIV001</td>
+                                <td>26-00070</td>
+                                <td>Amy Htun</td>
+                                <td>40042</td>
+                                <td>Offshore Department Dep-1</td>
+                                <td>DTO</td>
+                                <td>amyhtun@gmail.com</td>
+                            </tr>
+                            <tr>
+
+                                <td>3</td>
+                                <td>DIV001</td>
+                                <td>26-00070</td>
+                                <td>Amy Htun</td>
+                                <td>40042</td>
+                                <td>Offshore Department Dep-1</td>
+                                <td>DTO</td>
+                                <td>amyhtun@gmail.com</td>
+                            </tr>
+                            <tr>
+
+                                <td>4</td>
+                                <td>DIV001</td>
+                                <td>26-00070</td>
+                                <td>Amy Htun</td>
+                                <td>40042</td>
+                                <td>Offshore Department Dep-1</td>
+                                <td>DTO</td>
+                                <td>amyhtun@gmail.com</td>
+                            </tr>
+                            <tr>
+
+                                <td>5</td>
+                                <td>DIV001</td>
+                                <td>26-00070</td>
+                                <td>Amy Htun</td>
+                                <td>40042</td>
+                                <td>Offshore Department Dep-1</td>
+                                <td>DTO</td>
+                                <td>amyhtun@gmail.com</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Recent Sales End -->
+
+        <!-- Menu List start -->
+        <div class="container-fluid pt-4 px-4">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card bg-secondary">
+                        <div class="card-header">
+                            <h4 class="py-2">Current Week Menu</h4>
+                        </div>
+                        <div class="card-body">
+                            <img src="img/menu1.jpg" class="img-fluid w-100">
+                        </div>
+                        <div class="card-footer" style="color:black;text-align: center; font-size: 13px;">
+                            <span>DAT price : 1300</span>
+                            <spam>Staff Price: 1000</spam>
+                            <span>Total Price : 2300</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-6">
+                    <div class="card bg-secondary">
+                        <div class="card-header">
+                            <h4 class="py-2">Next Week Menu</h4>
+                        </div>
+                        <div class="card-body">
+                            <img src="img/menu1.jpg" class="img-fluid w-100">
+                        </div>
+                        <div class="card-footer" style="color:black;text-align: center; font-size: 13px;">
+                            <span>DAT price : 1300</span>
+                            <spam>Staff Price: 1000</spam>
+                            <span>Total Price : 2300</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Widgets End -->
+
+        <!-- Footer Start -->
+        <div class="container-fluid pt-4 px-4 ">
+            <div class="bg-secondary rounded-top p-4 ">
+                <div class="row ">
+                    <div class="col-12 col-sm-6 text-center text-sm-start ">
+                        &copy; <a href="#" style="color: rgb(8, 50, 238);">Catering Service Management System</a>, All Right Reserved.
+                    </div>
+                    <div class="col-12 col-sm-6 text-center text-sm-end">
+                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal ". Thank you for your support. ***/-->
+                        Designed By <a href="" style="color:  rgb(8, 50, 238);">TEAM ASCII</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
+    </div>
+    <!-- Content End -->
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-info btn-lg-square back-to-top"><i class="bi bi-arrow-up "></i></a>
+
+
+
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/chart/chart.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

@@ -36,7 +36,7 @@ public class Staff {
 	private String email;
 	
 	@Column(name="email_noti")
-	private String email_noti;
+	private Byte email_noti;
 	
 	@Column(name="password")
 	private String password;
@@ -65,15 +65,15 @@ public class Staff {
 	@Column(name="deleted_by")
 	private String delete_by;
 	
-	@Column(name="status")
-	private String status;
+	@Column(name="enabled")
+	private Byte enabled;
 	
 	@ManyToMany
     @JoinTable(name = "staff_avoid_meat",
                joinColumns = @JoinColumn(name = "staff_id"),
                inverseJoinColumns = @JoinColumn(name = "avoidmeat_id"))
     private List<Avoidmeat> avoidmeats;
-
+	
 	public Staff() {
 		super();
 	}
@@ -91,8 +91,8 @@ public class Staff {
 	}
 
 	public Staff(String staff_ID, String division, String name, int doorLogNo, String dept, String team,
-			String email, String email_noti, String password, String role, int suggestion_count, LocalDateTime created_date,
-			String created_by, LocalDateTime modify_date, String modify_by, LocalDateTime delete_date, String delete_by, String status,
+			String email, Byte email_noti, String password, String role, int suggestion_count, LocalDateTime created_date,
+			String created_by, LocalDateTime modify_date, String modify_by, LocalDateTime delete_date, String delete_by, Byte enabled,
 			List<Avoidmeat> avoidmeats) {
 		super();
 		this.staffID = staff_ID;
@@ -112,7 +112,7 @@ public class Staff {
 		this.modify_by = modify_by;
 		this.delete_date = delete_date;
 		this.delete_by = delete_by;
-		this.status = status;
+		this.enabled = enabled;
 		this.avoidmeats = avoidmeats;
 	}
 
@@ -172,11 +172,11 @@ public class Staff {
 		this.email = email;
 	}
 
-	public String getEmail_noti() {
+	public Byte getEmail_noti() {
 		return email_noti;
 	}
 
-	public void setEmail_noti(String email_noti) {
+	public void setEmail_noti(Byte email_noti) {
 		this.email_noti = email_noti;
 	}
 
@@ -252,12 +252,12 @@ public class Staff {
 		this.delete_by = delete_by;
 	}
 
-	public String getStatus() {
-		return status;
+	public Byte getEnabled() {
+		return enabled;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setStatus(Byte status) {
+		this.enabled = status;
 	}
 
 	public List<Avoidmeat> getAvoidmeats() {
@@ -267,8 +267,4 @@ public class Staff {
 	public void setAvoidmeats(List<Avoidmeat> avoidmeats) {
 		this.avoidmeats = avoidmeats;
 	}
-	
-	
-	
-	
 }

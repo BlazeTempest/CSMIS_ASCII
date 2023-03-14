@@ -19,6 +19,11 @@ public class StaffServiceImpl implements StaffService {
 	}
 
 	@Override
+	public void addAllStaff(List<Staff> staffs) {
+		repository.saveAll(staffs);
+	}
+	
+	@Override
 	public List<Staff> getAllStaffs() {
 		return repository.findAll();
 	}
@@ -44,8 +49,8 @@ public class StaffServiceImpl implements StaffService {
 	}
 	
 	@Override
-	public List<Staff> filterByStatus(String status) {
-		return repository.findByStatusContainsAllIgnoreCase(status);
+	public List<Staff> filterByStatus(int status) {
+		return repository.findByEnabledContains(status);
 	}
 
 	@Override
@@ -69,7 +74,7 @@ public class StaffServiceImpl implements StaffService {
 	}
 
 	@Override
-	public List<Staff> getActiveStaffs(String status) {
+	public List<Staff> getActiveStaffs(int status) {
 		return repository.findActiveStaffs(status);
 	}
 

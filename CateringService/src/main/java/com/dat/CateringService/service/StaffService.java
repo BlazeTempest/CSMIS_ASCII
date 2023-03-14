@@ -10,7 +10,7 @@ public interface StaffService {
 	
 	//select staffs
 	public List<Staff> getAllStaffs();
-	public List<Staff> getActiveStaffs(String status);
+	public List<Staff> getActiveStaffs(int status);
 	public Staff getStaffById(String id);
 	
 	//search
@@ -19,7 +19,7 @@ public interface StaffService {
 	//filter
 	public List<Staff> filterByDivision(String division);
 	public List<Staff> filterByDept(String dept);
-	public List<Staff> filterByStatus(String status);
+	public List<Staff> filterByStatus(int status);
 	public List<Staff> filterByRole(String role);
 	
 	//get name of divisions, departments and teams
@@ -30,4 +30,6 @@ public interface StaffService {
 	
 	//delete
 	public void deleteById(String id);
+
+	public void addAllStaff(List<Staff> staffs);
 }

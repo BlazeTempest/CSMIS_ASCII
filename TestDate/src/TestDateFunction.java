@@ -11,7 +11,7 @@ public class TestDateFunction {
 		holidays.add(LocalDate.now());
 		LocalDate currentDate = LocalDate.now();
 //		System.out.println(currentDate);
-		
+		 
 		LocalDate firstDayOfMonth = currentDate.withDayOfMonth(1);
 //		System.out.println(firstDayOfMonth);
 		
