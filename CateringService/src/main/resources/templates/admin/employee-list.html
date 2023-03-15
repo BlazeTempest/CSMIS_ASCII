@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
     <meta charset="utf-8" />
@@ -26,6 +26,19 @@
         .fa-solid:hover {
             color: rgb(250, 16, 75);
         }
+        .loader {
+		  border: 5px solid #f3f3f3; /* Light grey */
+		  border-top: 5px solid #3498db; /* Blue */
+		  border-radius: 50%;
+		  width: 50px;
+		  height: 50px;
+		  animation: spin 2s linear infinite;
+		}
+		
+		@keyframes spin {
+		  0% { transform: rotate(0deg); }
+		  100% { transform: rotate(360deg); }
+		}  
     </style>
 
     <!-- Favicon -->
@@ -55,11 +68,22 @@
         function myFunction(x) {
             x.classList.toggle("fa-bell-slash");
         }
+        
+        document.querySelector('form').addEventListener('submit', function() {
+        	  document.getElementById('loader').style.display = 'block';
+        	});
+        document.getElementById('formFileLg').addEventListener('load', function() {
+        	  document.getElementById('loader').style.display = 'none';
+        	});
+
     </script>
 </head>
 
 <body>
+	
+
     <div class="container-fluid position-relative d-flex p-0">
+    	
         <!-- Spinner Start -->
         <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem" role="status">
@@ -189,6 +213,7 @@
         <!-- Employee List Start -->
         <div class="container-fluid pt-4 px-4">
 	        <div class="bg-secondary rounded mb-3 p-4">
+	        	<div id="loader" class="loader" style="display:none;"></div>
 	        	<h2 class="mb-4 text-center">Import Employee Data</h2>
 	        		<form class="row" method="post" enctype="multipart/form-data" th:action="@{/importStaff}">
                     	<div class="card-body my-2 text-center offset-1 col-7">
@@ -311,10 +336,11 @@
                     
                     
                     <!-- UpdateForm Modal End-->
-                    <div class="table-responsive" id="staff-table">
-                        	<table class="table text-white table-hover">
+                    
+                    <div th:if="${staffs.size!=0}" class="table-responsive" id="staff-table">
+                        <table class="table text-white table-hover">
                             <thead>
-                                <tr> 
+                                <tr>
                                     <th scope="col">Division</th>
                                     <th scope="col">Staff-ID</th>
                                     <th scope="col">Name</th>

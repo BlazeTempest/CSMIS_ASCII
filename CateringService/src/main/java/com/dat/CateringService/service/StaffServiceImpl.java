@@ -83,4 +83,10 @@ public class StaffServiceImpl implements StaffService {
 		return repository.findByRoleContainsAllIgnoreCase(role);
 	}
 
+	@Override
+	public List<String> getEmails() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
