@@ -18,7 +18,7 @@ public class SuggestionController {
 	@GetMapping("/suggestion")
 	public String Suggestion(Model model) {
 		model.addAttribute("suggestions", suggestionService.getAllSuggestions());
-		return "suggestion";
+		return "admin/suggestion";
 	}
 	
 	@GetMapping("/checkSuggestions")
@@ -26,6 +26,6 @@ public class SuggestionController {
 		LocalDate start = LocalDate.parse(startDate);
 		LocalDate end = LocalDate.parse(endDate);
 		model.addAttribute("suggestions", suggestionService.getByStartAndEndDate(start, end));
-		return "suggestion";
+		return "admin/suggestion";
 	}
 }

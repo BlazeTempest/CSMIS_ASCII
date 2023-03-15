@@ -37,7 +37,11 @@ public class DataSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.antMatchers("/admin/**").hasRole("admin")
-			.antMatchers("/suggestion").hasRole("admin")
+				/*
+				 * .antMatchers("/suggestion").hasRole("admin")
+				 * .antMatchers("/menu").hasRole("admin")
+				 * .antMatchers("/employee-list").hasRole("admin")
+				 */
 			.antMatchers("/employee/**").hasRole("operator")
 			.antMatchers("/resources/**").permitAll()
 			.and()
