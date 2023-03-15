@@ -87,9 +87,9 @@
                 </div>
 
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
+                    <a href="/" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
             >
-            <a href="employee-list.html" class="nav-item nav-link"
+            <a th:href="@{/employee-list}" class="nav-item nav-link"
               ><i class="fas fa-users me-2"></i>Employee List</a
             >
             <div class="nav-item dropdown">
@@ -131,21 +131,21 @@
                 ><i class="fas fa-file me-2"></i>Invoice</a
               >
               <div class="dropdown-menu bg-transparent border-0">
-                <a href="weekly-invoice.html" class="dropdown-item"
+                <a th:href="@{/weekly-invoice}" class="dropdown-item"
                   >Weekly Invoice</a
                 >
-                <a href="monthly-invoice.html" class="dropdown-item active"
+                <a th:href="@{/monthly_invoice}" class="dropdown-item active"
                   >Monthly Invoice</a
                 >
               </div>
             </div>
             <div class="nav-item">
-              <a href="suggestion.html" class="nav-link"
+              <a th:href="@{/suggestion}" class="nav-link"
                 ><i class="far fa-file-alt me-2"></i>Suggestions</a
               >
             </div>
             <div class="nav-item">
-              <a href="holiday.html" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
+              <a th:href="@{/holiday}" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
                 </div>
         </div>
         </nav>

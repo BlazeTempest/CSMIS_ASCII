@@ -96,7 +96,7 @@ i.fa-solid {
 				<div class="navbar-nav w-100">
 					<a href="/" class="nav-item nav-link"><i
 						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
-						href="employee-list.html" class="nav-item nav-link"><i
+						th:href="@{/employee-list}" class="nav-item nav-link"><i
 						class="fas fa-users me-2"></i>Employee List</a>
 					<div class="nav-item dropdown">
 						<a href="#" class="nav-link dropdown-toggle"
@@ -124,16 +124,16 @@ i.fa-solid {
 							class="fas fa-file me-2"></i>Invoice</a>
 						<div class="dropdown-menu bg-transparent border-0">
 							<a href="weekly-invoice" class="dropdown-item">Weekly
-								Invoice</a> <a href="monthly-invoice.html" class="dropdown-item">Monthly
+								Invoice</a> <a th:href="@{/monthly_invoice}" class="dropdown-item">Monthly
 								Invoice</a>
 						</div>
 					</div>
 					<div class="nav-item">
-						<a href="suggestion" class="nav-link active"><i
+						<a th:href="@{/suggestion}" class="nav-link active"><i
 							class="far fa-file-alt me-2"></i>Suggestions</a>
 					</div>
 					<div class="nav-item">
-						<a href="holiday" class="nav-link"><i
+						<a th:href="@{/holiday}" class="nav-link"><i
 							class="fa fa-mug-hot me-2"></i>Holidays</a>
 					</div>
 				</div>
@@ -169,7 +169,7 @@ i.fa-solid {
 							<div
 								class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
 								<a href="profile.html" class="dropdown-item">Profile</a> <a
-									href="signin.html" class="dropdown-item">Log Out</a>
+									th:href="@{/showMyLoginPage}" class="dropdown-item">Log Out</a>
 							</div>
 						</div>
 					</div>

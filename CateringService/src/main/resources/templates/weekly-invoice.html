@@ -89,7 +89,7 @@
                 <div class="navbar-nav w-100">
                     <a href="index.html" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
             >
-            <a href="employee-list.html" class="nav-item nav-link"
+            <a th:href="@{/employee-list}" class="nav-item nav-link"
               ><i class="fas fa-users me-2"></i>Employee List</a
             >
             <div class="nav-item dropdown">
@@ -131,21 +131,21 @@
                 ><i class="fas fa-file me-2"></i>Invoice</a
               >
               <div class="dropdown-menu bg-transparent border-0">
-                <a href="weekly-invoice.html" class="dropdown-item active"
+                <a th:href="@{/weekly-invoice}" class="dropdown-item active"
                   >Weekly Invoice</a
                 >
-                <a href="monthly-invoice.html" class="dropdown-item"
+                <a th:href="@{/monthly_invoice}" class="dropdown-item"
                   >Monthly Invoice</a
                 >
               </div>
             </div>
             <div class="nav-item">
-              <a href="suggestion.html" class="nav-link"
+              <a th:href="@{/suggestion}" class="nav-link"
                 ><i class="far fa-file-alt me-2"></i>Suggestions</a
               >
             </div>
             <div class="nav-item">
-              <a href="holiday.html" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
+              <a th:href="@{/holiday}" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
                 </div>
         </div>
         </nav>
@@ -174,7 +174,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
                             <a href="profile.html" class="dropdown-item">Profile</a>
-                            <a href="signin.html" class="dropdown-item">Log Out</a>
+                            <a th:href="@{/showMyLoginPage}" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
                 </div>
@@ -201,7 +201,7 @@
 
                     </div>
                     <div class="modal-body bg-secondary">
-                        <form>
+                        <form th:action="@{/saveInvoice}" th:object="${paymentVoucher}" method="get">
                             <div class="row mb-3">
                                 <label for="inputPassword3" class="col-sm-4 col-form-label text-dark"> Name</label>
                                 <div class="col-sm-8 ">
@@ -211,13 +211,13 @@
                             <div class="row mb-3">
                                 <label for="inputPassword3" class="col-sm-4 col-form-label text-dark">Payment Date</label>
                                 <div class="col-sm-8">
-                                    <input type="date" class="form-control bg-white text-primary" value="" id="inputPassword3">
+                                    <input type="date" th:field="*{payment_date}" class="form-control bg-white text-primary" value="" id="inputPassword3">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputPassword3" class="col-sm-4 col-form-label text-dark">Invoice for(Start Date)</label>
                                 <div class="col-sm-8">
-                                    <input type="date" class="form-control bg-white" id="inputPassword3">
+                                    <input type="date" th:field="*{from}" class="form-control bg-white" id="inputPassword3">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -239,24 +239,24 @@
                             <div class="row mb-3">
                                 <label for="inputPassword3" class="col-sm-4 col-form-label text-dark">Cashier</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control bg-white" id="inputPassword3" placeholder="Cashier name">
+                                    <input type="text" th:field="*{cashier}" class="form-control bg-white" id="inputPassword3" placeholder="Cashier name">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputPassword3" class="col-sm-4 col-form-label text-dark">Received by</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control bg-white" id="inputPassword3" placeholder="Receiver name">
+                                    <input type="text" th:field="*{received_by}" class="form-control bg-white" id="inputPassword3" placeholder="Receiver name">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputPassword3" class="col-sm-4 col-form-label text-dark">Approved by</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control bg-white" id="inputPassword3" placeholder="Approver name">
+                                    <input type="text" th:field="*{approved_by}" class="form-control bg-white" id="inputPassword3" placeholder="Approver name">
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-outline-dark">Save</button>
+                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" name="action" value="close">Close</button>
+                                <button type="submit" class="btn btn-outline-dark" name="action" value="save">Save</button>
                             </div>
                         </form>
                     </div>

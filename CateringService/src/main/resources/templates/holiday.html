@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 
 <head>
 <meta charset="utf-8" />
@@ -100,40 +100,36 @@ i.fa-solid {
 						class="fas fa-users me-2"></i>Employee List</a>
 					<div class="nav-item dropdown">
 						<a href="#" class="nav-link dropdown-toggle"
-							data-bs-toggle="dropdown"><i
-							class="fa fa-laptop me-2"></i>Report</a>
+							data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Report</a>
 						<div class="dropdown-menu bg-transparent border-0">
 							<a href="registered-list.html" class="dropdown-item">Monthly
 								Registered List</a> <a href="register-eat-list.html"
-								class="dropdown-item">Registered & Eat
-								List</a> <a href="register-not-eat-list.html" class="dropdown-item">Registered
+								class="dropdown-item">Registered & Eat List</a> <a
+								href="register-not-eat-list.html" class="dropdown-item">Registered
 								& Not Eat List</a> <a href="not-registereed-eat-list.html"
-								class="dropdown-item">Not Registered &
-								Eat List</a>
+								class="dropdown-item">Not Registered & Eat List</a>
 						</div>
 					</div>
 					<a href="lunch-register.html" class="nav-item nav-link"><i
 						class="fas fa-pen me-2"></i>Lunch Register</a> <a href="menu.html"
-						class="nav-item nav-link"><i
-						class="fas fa-hamburger me-2"></i>Menu</a> <a href="restaurant.html"
-						class="nav-item nav-link"><i
+						class="nav-item nav-link"><i class="fas fa-hamburger me-2"></i>Menu</a>
+					<a href="restaurant.html" class="nav-item nav-link"><i
 						class="fas fa-home me-2"></i>Restaurant</a>
 					<div class="nav-item dropdown">
 						<a href="#" class="nav-link dropdown-toggle"
-							data-bs-toggle="dropdown"><i
-							class="fas fa-file me-2"></i>Invoice</a>
+							data-bs-toggle="dropdown"><i class="fas fa-file me-2"></i>Invoice</a>
 						<div class="dropdown-menu bg-transparent border-0">
-							<a href="weekly-invoice" class="dropdown-item">Weekly
-								Invoice</a> <a th:href="@{/monthly_invoice}" class="dropdown-item">Monthly
+							<a th:href="@{/weekly-invoice}" class="dropdown-item">Weekly Invoice</a>
+							<a th:href="@{/monthly_invoice}" class="dropdown-item">Monthly
 								Invoice</a>
 						</div>
 					</div>
 					<div class="nav-item">
-						<a th:href="@{/suggestion}" class="nav-link active"><i
+						<a href="suggestion" class="nav-link"><i
 							class="far fa-file-alt me-2"></i>Suggestions</a>
 					</div>
 					<div class="nav-item">
-						<a th:href="@{/holiday}" class="nav-link"><i
+						<a href="holiday" class="nav-link active"><i
 							class="fa fa-mug-hot me-2"></i>Holidays</a>
 					</div>
 				</div>
@@ -151,7 +147,10 @@ i.fa-solid {
 				</a>
 				<div class="navbar-nav align-items-center ms-auto">
 					<div class="nav-item dropdown">
-
+						<!-- <div id="mail-toggle" class="form-check form-switch">
+                <label class="form-check-label changes" style="color: whitesmoke;" for="flexSwitchCheckChecked"><i class="bi bi-bell me-lg-2"></i>Email</label>
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+              </div> -->
 						<i onclick="myFunction(this)"
 							title="This is a mail notification on/off for lunch!"
 							class="fa-solid fa-bell"></i> <span
@@ -177,51 +176,51 @@ i.fa-solid {
 			</nav>
 			<!-- Navbar End -->
 
-			<!-- Suggestion Start -->
-
-			<div class="container-fluid pt-4 px-4">
-				<div class="bg-secondary rounded h-100 p-4">
-					<form class="row" th:action="@{/checkSuggestions}" method="get">
-						<div class="col input-group" style="margin-left: 180px;">
-							<span class="input-group-text" id="basic-addon1">Start
-								Date</span> <input type="date" class="form-control bg-white"
-								name="start" id="start">
+			<!-- Holiday Start -->
+			<div class="container-fluid mt-1 pt-4 px-4">
+				<div class="row">
+					<div class="col">
+						<div class="card bg-secondary">
+							<div class="card-header text-center mt-4 bg-secondary">
+								<h4>Please setup hoildays for correct lunch registration</h4>
+							</div>
+							<div class="row">
+								<form method="post" th:action="@{/importHoliday}"
+									enctype="multipart/form-data">
+									<div class="card-body my-2 text-center offset-1 col-7">
+										<input class="form-control form-control-lg bg-white fs-6"
+											id="formFileLg" accept="xlsx" type="file" name="file" />
+									</div>
+									<div class="card-body my-2 text-center col-4">
+										<button class="btn btn-outline-dark text-center">
+											<i class="fa fa-plus"></i>&nbsp; Import Holidays
+										</button>
+									</div>
+								</form>
+							</div>
 						</div>
-						<div class="col input-group">
-							<span class="input-group-text" id="basic-addon1">End Date</span>
-							<input type="date" class="form-control bg-white" name="end"
-								id="end">
-						</div>
-						<div class="col input-group">
-							<input type="submit" class="btn btn-outline-dark" value="Check">
-						</div>
-					</form>
-					<div class="card mt-3">
-						<h5 class="card-header">Suggestions for Catering Service</h5>
-						<!-- <div class="card-body bg-white"
-							th:each="suggestion, iterstat:${suggestions}"> -->
-
-							<table class="card-text table table-striped">
-								<tbody>
-									<tr th:each="tempSuggestion, iterStat : ${suggestions}">
-										<td th:text="${iterStat.count}" />
-										<td th:text="${tempSuggestion.description}" />
-										<td th:text="${tempSuggestion.created_date}">
-									</tr>
-
-								</tbody>
-							</table>
-							<!--  <p class="card-text" th:text=${suggestion.description}><span th:text=${suggestion.created_date} style="margin-left: 600px;">11/2/2023</span></p> -->
-
-						<!-- </div> -->
 					</div>
 				</div>
 			</div>
+			<!-- Holiday list show -->
+			<div class="card mt-3">
+				<h5 class="card-header">Holiday in This Year :</h5>
+				<div class="card-body bg-white">
+					<table class="card-text table table-striped">
+						<tbody>
+							<tr th:each="tempHoiday, iterStat : ${totalHolidays}">
+								<td th:text="${iterStat.count}" />
+								<td th:text="${tempHoiday.holiday_date}" />
+								<td th:text="${tempHoiday.holiday_name}">
+							</tr>
 
-			<!-- Suggestion End -->
-
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!--End Holiday list show -->
 			<!-- Footer Start -->
-			<div class="container-fluid pt-4 px-4 ">
+			<div class="container-fluid pt-4 px-4">
 				<div class="bg-secondary rounded-top p-4 ">
 					<div class="row ">
 						<div class="col-12 col-sm-6 text-center text-sm-start ">
