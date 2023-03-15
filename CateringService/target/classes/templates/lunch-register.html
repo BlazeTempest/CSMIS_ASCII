@@ -230,11 +230,12 @@ i.fa-solid {
     								</tr>
     								<tr th:each="week:${month}">
     									<td th:each="day:${week}">
-    									<input th:if="${day!=null}" type="checkbox" th:name="${#temporals.format(day, 'yyyy-MM-dd')}" />
+    									<input th:if="${day!=null}" type="checkbox" th:name="${#temporals.format(day, 'dd-MM-yyyy')}" th:checked="${day.getDayOfWeek().getValue() <= 5}"/>
   										<span th:text="${#temporals.format(day, 'dd')}"></span></td>
     								</tr>
     							</thead>
     						</table>
+    						<input type="submit" value="Register" class="btn btn-outline-dark float-end mt-3">
 						</form>
 					</div>
 
