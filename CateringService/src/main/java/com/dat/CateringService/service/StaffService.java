@@ -26,7 +26,7 @@ public interface StaffService {
 	public List<String> getTeamNames();
 	public List<String> getDivNames();
 	public List<String> getDeptNames();
-	
+	public List<String> getEmails();
 	
 	//delete
 	public void deleteById(String id);

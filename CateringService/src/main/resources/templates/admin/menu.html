@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>DarkPan - Bootstrap 5 Admin Template</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<meta content="" name="keywords" />
+<meta content="" name="description" />
+
+<!-- Favicon -->
+<link href="img/favicon.ico" rel="icon" />
+
+<!-- Google Web Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap"
+	rel="stylesheet" />
+
+<!-- Icon Font Stylesheet -->
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+	rel="stylesheet" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+	rel="stylesheet" />
+
+<!-- Libraries Stylesheet -->
+<link href="lib/owlcarousel/assets/owl.carousel.min.css"
+	rel="stylesheet" />
+<link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css"
+	rel="stylesheet" />
+
+<!-- Customized Bootstrap Stylesheet -->
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+
+<!-- font awesome -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+<!-- Template Stylesheet -->
+<link th:href="@{/css/style.css}" rel="stylesheet" />
+
+<style>
+table tr th {
+	color: rgb(79, 30, 192);
+}
+
+i.fa-solid {
+	font-size: 25\px;
+	cursor: pointer;
+	user-select: none;
+	color: white;
+}
+
+.fa-solid:hover {
+	color: rgb(250, 16, 75);
+}
+</style>
+<script>
+	function myFunction(x) {
+		x.classList.toggle("fa-bell-slash");
+	}
+</script>
+
+</head>
+
+<body>
+	<div class="container-fluid position-relative d-flex p-0">
+		<!-- Spinner Start -->
+		<div id="spinner"
+			class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+			<div class="spinner-border text-white"
+				style="width: 3rem; height: 3rem" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+		</div>
+		<!-- Spinner End -->
+
+		<!-- Sidebar Start -->
+		<div class="sidebar pe-4 pb-3">
+			<nav class="navbar bg-secondary navbar-dark">
+				<div class="sidebar-head">
+					<div>
+						<img class="sidebar-logo mt-0" src="img/dat logo.png"
+							alt="DAT Logo" />
+					</div>
+					<div>
+						<a href="index.html" class="navbar-brand mb-3">
+							<h3 class="text-primary">CSMIS</h3>
+						</a>
+					</div>
+				</div>
+
+				<div class="navbar-nav w-100">
+					<a href="index.html" class="nav-item nav-link"><i
+						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
+						href="employee-list.html" class="nav-item nav-link"><i
+						class="fas fa-users me-2"></i>Employee List</a>
+					<div class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle"
+							data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Report</a>
+						<div class="dropdown-menu bg-transparent border-0">
+							<a href="registered-list.html" class="dropdown-item">Monthly
+								Registered List</a> <a href="register-eat-list.html"
+								class="dropdown-item">Registered & Eat List</a> <a
+								href="register-not-eat-list.html" class="dropdown-item">Registered
+								& Not Eat List</a> <a href="not-registereed-eat-list.html"
+								class="dropdown-item">Not Registered & Eat List</a>
+						</div>
+					</div>
+					<a href="lunch-register.html" class="nav-item nav-link"><i
+						class="fas fa-pen me-2"></i>Lunch Register</a> <a href="menu.html"
+						class="nav-item nav-link active"><i
+						class="fas fa-hamburger me-2"></i>Menu</a> <a href="restaurant.html"
+						class="nav-item nav-link"><i class="fas fa-home me-2"></i>Restaurant</a>
+					<div class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle"
+							data-bs-toggle="dropdown"><i class="fas fa-file me-2"></i>Report</a>
+						<div class="dropdown-menu bg-transparent border-0">
+							<a href="weekly-invoice.html" class="dropdown-item">Weekly
+								Invoice</a> <a href="monthly-invoice.html" class="dropdown-item">Monthly
+								Invoice</a>
+						</div>
+					</div>
+					<div class="nav-item">
+						<a href="suggestion.html" class="nav-link"><i
+							class="far fa-file-alt me-2"></i>Suggestions</a>
+					</div>
+					<div class="nav-item">
+						<a href="holiday.html" class="nav-link"><i
+							class="fa fa-mug-hot me-2"></i>Holidays</a>
+					</div>
+				</div>
+			</nav>
+		</div>
+		<!-- Sidebar End -->
+
+		<!-- Content Start -->
+		<div class="content">
+			<!-- Navbar Start -->
+			<nav
+				class="navbar navbar-expand bg-secondary-nav navbar-dark sticky-top px-4 py-0">
+				<a href="#" class="sidebar-toggler flex-shrink-0"> <i
+					class="fa fa-bars"></i>
+				</a>
+				<div class="navbar-nav align-items-center ms-auto">
+					<div class="nav-item dropdown">
+						<i onclick="myFunction(this)"
+							title="This is a mail notification on/off for lunch!"
+							class="fa-solid fa-bell"></i> <span
+							class="text-center text-white ms-2">Email </span>
+					</div>
+					<div class="nav-item">
+
+						<div class="nav-item dropdown">
+							<a href="#" class="nav-link dropdown-toggle"
+								data-bs-toggle="dropdown"> <img
+								class="rounded-circle me-lg-2" src="img/admin-logo.png" alt=""
+								style="width: 40px; height: 40px" /> <span
+								class="d-none d-lg-inline-flex">Admin</span>
+							</a>
+							<div
+								class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
+								<a href="profile.html" class="dropdown-item">Profile</a> <a
+									href="signin.html" class="dropdown-item">Log Out</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</nav>
+			<!-- Navbar End -->
+
+			<!-- Form Start -->
+			<div class="container-fluid mt-3">
+				<div class="row "  style="margin-left:13px;margin-right:13px;">
+					<div class="card bg-secondary">
+						<div class="card-header text-center mt-4">
+							<!-- <button class="btn btn-outline-info text-center">Change Price</button> -->
+							<button type="button"
+								class="btn btn-outline-dark text-center me-5"
+								data-bs-toggle="modal" data-bs-target="#changePrice">
+								Change Price</button>
+							<button type="button" class="btn btn-outline-dark text-center"
+								data-bs-toggle="modal" data-bs-target="#addPrice">Add
+								Price</button>
+						</div>
+						<div class="card-body my-3">
+							<div class="row text-center">
+								<div class="col-lg-4">
+									<h5>
+										Total Cost : <span class="text-info" th:text="${totalPrice}"></span>
+									</h5>
+								</div>
+								<div class="col-lg-4">
+									<h5>
+										DAT Cost : <span class="text-info" th:text="${datPrice}"></span>
+									</h5>
+								</div>
+								<div class="col-lg-4">
+									<h5>
+										Staff Cost : <span class="text-info" th:text="${staffPrice}"></span>
+									</h5>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3" style="margin-left:1px;margin-right:1px;">
+					<div class="col-lg-6">
+						<div class="card bg-secondary">
+							<form th:action="@{import_menu}" method="POST"
+								enctype="multipart/form-data">
+								<div class="card-header text-center mt-4">
+									<label class="my-4 fs-5">Import Menu for Current Week</label> <br>
+									<div th:if="${message != null}" th:text="${message}"
+										style="color: red"></div>
+									<input class="form-control form-control-lg bg-info fs-6 w-75 ms-5"
+										id="pdfFile" type="file" name="pdfFile" />
+								
+								<button class="btn btn-outline-dark text-center mt-3" type="submit"><i class="fa-solid fa-plus text-white fs-5 me-2"></i>Import
+										</button>
+								</div>
+
+							</form>
+
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="card bg-secondary">
+							<form th:action="@{import_menu2}" method="POST"
+								enctype="multipart/form-data">
+								<div class="card-header text-center mt-4">
+									<label class="my-4 fs-5">Import Menu for Next Week</label> <input
+										class="form-control form-control-lg bg-info fs-6 w-75 ms-5"
+										id="pdfFile2" type="file" name="pdfFile2" />
+								<button class="btn btn-outline-dark text-center mt-3" type="submit"><i class="fa-solid fa-plus text-white fs-5 me-2"></i>Import
+										</button>
+								</div>
+							
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--Menu import and change price section end -->
+
+			<!-- change price modal  start-->
+			<div class="modal fade bg-gradient" id="addPrice" tabindex="-1"
+				aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" style="width:400px;">
+					<div class="modal-content bg-secondary">
+						<div class="modal-header">
+							<h3 class="modal-title ms-4 text-dark" id="exampleModalLabel"
+								style="color: black">Add Price for lunch</h3>
+							<!-- <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button> -->
+						</div>
+						<form action="#" th:action="@{/add_price}" th:object="${addprice}"
+							method="POST">
+							<div class="modal-body">
+								<div class="row g-3 align-items-center mt-2 ms-3 me-3">
+									<input type="hidden" th:field="*{price_ID}" />
+									<div class="col-md-4">
+										<label for="" class="col-form-label text-center text-dark">Total
+											Cost :</label>
+									</div>
+									<div class="col-md-8">
+										<input type="number" th:field="*{total_price}" id="totalprice"
+											class="form-control bg-white border"
+											style="border: 1px solid white;"
+											aria-describedby="passwordHelpInline">
+									</div>
+								</div>
+								<div class="row g-3 align-items-center mt-3 mx-3">
+									<div class="col-md-4">
+										<label for="" class="col-form-label text-center text-dark">DAT
+											Cost :</label>
+									</div>
+									<div class="col-md-8">
+										<input type="number" th:field="*{DAT_price}" id="datprice"
+											class="form-control bg-white"
+											aria-describedby="passwordHelpInline">
+									</div>
+								</div>
+								
+							</div>
+							<div class="float-end mb-4 me-4">
+								<button type="button" class="btn btn-outline-danger"
+									data-bs-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-outline-dark ">Add</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<!-- change price modal end -->
+			<div class="modal fade bg-gradient "  id="changePrice" tabindex="-1"
+				aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered " style="width:400px;">
+					<div class="modal-content bg-secondary">
+						<div class="modal-header">
+							<h3 class="modal-title ms-4 text-dark" id="exampleModalLabel"
+								style="color: black">Change Price for lunch</h3>
+							<!-- <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button> -->
+						</div>
+						<div class="modal-body">
+							<div class="row g-3 align-items-center mt-2 ms-3 me-3">
+								<div class="btn-group">
+									<div class="col-md-4">
+										<label for="" class="col-form-label text-center text-dark">Total
+											Price :</label>
+									</div>
+
+									<form class="w-100" action="#" th:action="@{/change_price}"
+										method="POST">
+										<select name="priceList" class="custom-select py-2 rounded mb-4"
+											style="width: 100%;">
+											<option th:each="priceList : ${priceList}"
+												th:value="${priceList.price_ID}"
+												th:text="${priceList.total_price}" ></option>
+										</select>
+										<button type="button" class="btn btn-outline-danger mb-2"
+								data-bs-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-outline-dark mb-2">Save
+											changes</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			<!-- Menu List start -->
+			<div class="container-fluid pt-4 px-4">
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="card bg-secondary">
+							<div class="card-header">
+								<h3 class="py-2">Current Week Menu</h3>
+							</div>
+							<div class="card-body">
+								<div th:if="${pdf}">
+									<embed th:attr="src='data:application/pdf;base64,' + ${pdf}"
+										type="application/pdf" width="100%" height="700" />
+								</div>
+								<div th:unless="${pdf}">
+									<h6>This is Current Week Menu</h6>
+									<span>Please select file</span>
+								</div>
+							</div>
+							<!-- <div class="card-footer"
+								style="color: black; text-align: center; font-size: 13px;">
+								<span>DAT price : </span> <span>Staff Price: 1000</span> <span>Total
+									Price : 2300</span>
+							</div> -->
+						</div>
+
+					</div>
+					<div class="col-lg-6">
+						<div class="card bg-secondary">
+							<div class="card-header">
+								<h3 class="py-2">Next Week Menu</h3>
+							</div>
+							<div class="card-body">
+								<div th:if="${pdf1}">
+									<embed th:attr="src='data:application/pdf;base64,' + ${pdf1}"
+										type="application/pdf" width="100%" height="700" />
+								</div>
+								<div th:unless="${pdf}">
+									<h6>This is Next Week Menu</h6>
+									<span>Please select file</span>
+								</div>
+							</div>
+							<!-- <div class="card-footer"
+								style="color: white; text-align: center; font-size: 13px;">
+								<span>DAT price : 1300</span> <span>Staff Price: 1000</span> <span>Total
+									Price : 2300</span>
+							</div> -->
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<!-- Menu List end -->
+
+			<!-- avoid meat start-->
+			<div class="container-fluid my-4">
+				<div class="row "  style="margin-left:1px;margin-right:1px;">
+					<div class="col-lg-5">
+						<div class="card bg-secondary">
+							<div class="card-header text-center mt-4">
+								<h2 class="text-center">Avoid Meat List</h2>
+							</div>
+
+							<div class="card-body my-2">
+								<div class="row text-center">
+									<form action="#" th:action="@{saveAvoidMeat}" th:object="${avoidmeat}"
+										method="POST">
+										<input type="hidden" th:field="*{avoidmeat_ID}" />
+										<div class="col-md-8 text-center">
+											<input type="text" th:field="*{type}"
+												class="form-control bg-white" placeholder="Add New Meat" /><br>
+											<span th:if="${#fields.hasErrors('type')}"
+												th:errors="*{type}" class="badge badge-danger ml-2 mb-4"></span>
+										</div>
+										<!-- <div>
+											<span th:if="${message !=null}" th:text=${message}></span>
+										</div> -->
+
+										<div class="col-md-4">
+											<button type="submit" class="btn btn-outline-info mb-3">Confirm</button>
+										</div>
+									</form>
+
+								</div>
+								<!-- 	<hr style="height: 3px; color: blue;"> -->
+								<div class="row ms-4">
+
+									<span class="fs-5 ms-2 mb-2">Type</span>
+
+									<ul style="list-style-type: none;">
+										<li th:each="tempAvoidMeat, iterStat : ${avoidmeats}"
+											class="mb-2"><span th:text="${iterStat.count}"
+											class="me-2"></span> <span th:text="${tempAvoidMeat.type}"></span></li>
+									</ul>
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="col-lg-7">
+						<div class="h-100 bg-secondary rounded">
+							<div class="mb-4">
+								<h2 class=" ms-4 py-5 text-center">Calendar</h2>
+							</div>
+							<div id="calender"></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<!-- avoid meat end -->
+
+			<!-- Footer Start -->
+			<div class="container-fluid pt-4 px-4 ">
+				<div class="bg-secondary rounded-top p-4 ">
+					<div class="row ">
+						<div class="col-12 col-sm-6 text-center text-sm-start ">
+							&copy; <a href="#" style="color: rgb(8, 50, 238);">Catering
+								Service Management System</a>, All Right Reserved.
+						</div>
+						<div class="col-12 col-sm-6 text-center text-sm-end">
+							<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal ". Thank you for your support. ***/-->
+							Designed By <a href="" style="color: rgb(8, 50, 238);">TEAM
+								ASCII</a>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Footer End -->
+		</div>
+		<!-- Content End -->
+
+
+		<!-- Back to Top -->
+		<a href="#" class="btn btn-lg btn-info btn-lg-square back-to-top"><i
+			class="bi bi-arrow-up"></i></a>
+	</div>
+
+	<!-- JavaScript Libraries -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="lib/chart/chart.min.js"></script>
+	<script src="lib/easing/easing.min.js"></script>
+	<script src="lib/waypoints/waypoints.min.js"></script>
+	<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+	<script src="lib/tempusdominus/js/moment.min.js"></script>
+	<script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+	<script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+	<!-- Template Javascript -->
+	<script src="js/main.js"></script>
+</body>
+
+</html>
