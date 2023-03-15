@@ -72,7 +72,7 @@ public class Staff {
     @JoinTable(name = "staff_avoid_meat",
                joinColumns = @JoinColumn(name = "staff_id"),
                inverseJoinColumns = @JoinColumn(name = "avoidmeat_id"))
-    private List<Avoidmeat> avoidmeats;
+    private List<AvoidMeat> avoidmeats;
 	
 	public Staff() {
 		super();
@@ -93,7 +93,7 @@ public class Staff {
 	public Staff(String staff_ID, String division, String name, int doorLogNo, String dept, String team,
 			String email, Byte email_noti, String password, String role, int suggestion_count, LocalDateTime created_date,
 			String created_by, LocalDateTime modify_date, String modify_by, LocalDateTime delete_date, String delete_by, Byte enabled,
-			List<Avoidmeat> avoidmeats) {
+			List<AvoidMeat> avoidmeats) {
 		super();
 		this.staffID = staff_ID;
 		this.division = division;
@@ -260,11 +260,11 @@ public class Staff {
 		this.enabled = status;
 	}
 
-	public List<Avoidmeat> getAvoidmeats() {
+	public List<AvoidMeat> getAvoidmeats() {
 		return avoidmeats;
 	}
 
-	public void setAvoidmeats(List<Avoidmeat> avoidmeats) {
+	public void setAvoidmeats(List<AvoidMeat> avoidmeats) {
 		this.avoidmeats = avoidmeats;
 	}
 }

@@ -37,7 +37,6 @@ public class DataSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.antMatchers("/admin/**").hasRole("admin")
-			.antMatchers("/admin/suggestion").hasRole("admin")
 			.antMatchers("/employee/**").hasRole("operator")
 			.antMatchers("/resources/**").permitAll()
 			.and()
@@ -45,14 +44,14 @@ public class DataSecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginPage("/showMyLoginPage")
 				.loginProcessingUrl("/authenticateTheUser")
 				.permitAll()
-				.and()
+			.and()
 			.logout()
-				.logoutUrl("/logout") 
-				.invalidateHttpSession(true) // invalidate the user's session
-				.deleteCookies("JSESSIONID") // delete the JSESSIONID cookie
-				.logoutSuccessUrl("/showMyLoginPage?logout")
-				.permitAll()
-				.and()
+			.logoutUrl("/logout") 
+			.invalidateHttpSession(true) // invalidate the user's session
+			.deleteCookies("JSESSIONID") // delete the JSESSIONID cookie
+			.logoutSuccessUrl("/showMyLoginPage?logout")
+			.permitAll()
+			.and()
 			.exceptionHandling().accessDeniedPage("/access-denied");
 	}
 	
