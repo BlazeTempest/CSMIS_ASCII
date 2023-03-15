@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -269,37 +270,6 @@ public class HomeController {
             model.addAttribute("error", "An error occurred while uploading the file" + e.toString());
             return "admin/employee-list";
         }
-	}
-	
-	@GetMapping("/dashboard")
-	public String showDashboard(Model theModel, Authentication authentication) {
-		
-	    try {
-		    String role = authentication.getAuthorities().toArray()[0].toString();
-		    if (role.equals("admin")) {
-		        
-		        Staff staff = staffService.getStaffById(authentication.getName());
-		        theModel.addAttribute("name", staff.getName());
-		        System.out.println("======> ADMIN DASHBOARD!!!!");
-		        return "admin/adminDashboard";
-		        
-		        
-		    } else if (role.equals("operator")) {
-		       
-		    	Staff staff = staffService.getStaffById(authentication.getName());
-		        theModel.addAttribute("name", staff.getName());
-		        
-		        System.out.println("---------> HELLO EMPLOYEE DASHBOARD !!!");
-		        return "employee/employeeDashboard";
-		    } else {
-		    	
-		        return "redirect:/access-denied";
-		    }
-	    }catch(NullPointerException e){
-	    return "redirect:/showMyLoginPage";
-	    	
-	    }  
-	    
 	}
 	
 	@GetMapping("/editStaffForm")
