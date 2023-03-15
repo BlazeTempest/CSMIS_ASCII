@@ -32,18 +32,64 @@ th {
 
 td {
 	text-align: center;
-	padding: 10px;
+	padding: 8px;
 }
 
-label {
-	display: block;
-	margin-bottom: 5px;
+span {
+	display: inline-block;
+	padding: 10px;
+	background-color: #eee;
+	transition: background-color 0.3s ease-in-out;
+	cursor: pointer;
 }
 
 input[type="checkbox"] {
-	margin-right: 5px;
+	display: none;
 }
 
+input[type="checkbox"]:not(:checked)+span:hover {
+	background-color: aqua;
+	transform: translateX(-2px);
+}
+
+input[type="checkbox"]:not(:checked)+label:active {
+	transform: translateY(0);
+}
+
+input[type="checkbox"]:checked+span {
+	transition: background-color 0.5s ease-in-out;
+	transform: rotate(0deg) scale(1);
+	/*   background-color: #ff0; */
+}
+input:disabled {
+  cursor: none;
+}
+
+input[type="checkbox"]:checked+span:before {
+	content: "\2714";
+	position: absolute;
+	top: 2;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	font-size: 1.5rem;
+	line-height: 1;
+	text-align: center;
+	color: red;
+	animation: grow-and-turn 1s ease-in-out forwards;
+}
+
+@keyframes grow-and-turn {
+  0% {
+    transform: rotate(0deg) scale(1);
+    width: 0%;
+  }
+  50% {
+    transform: rotate(90deg) scale(1.5);
+    width: 50%;
+  }
+  
+}
 i.fa-solid {
 	font-size: 25px;
 	cursor: pointer;
@@ -129,28 +175,24 @@ i.fa-solid {
 						class="fas fa-users me-2"></i>Employee List</a>
 					<div class="nav-item dropdown">
 						<a href="#" class="nav-link dropdown-toggle"
-							data-bs-toggle="dropdown"><i
-							class="fa fa-laptop me-2"></i>Report</a>
+							data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Report</a>
 						<div class="dropdown-menu bg-transparent border-0">
 							<a href="registered-list.html" class="dropdown-item">Monthly
 								Registered List</a> <a href="register-eat-list.html"
-								class="dropdown-item">Registered & Eat
-								List</a> <a href="register-not-eat-list.html" class="dropdown-item">Registered
+								class="dropdown-item">Registered & Eat List</a> <a
+								href="register-not-eat-list.html" class="dropdown-item">Registered
 								& Not Eat List</a> <a href="not-registereed-eat-list.html"
-								class="dropdown-item">Not Registered &
-								Eat List</a>
+								class="dropdown-item">Not Registered & Eat List</a>
 						</div>
 					</div>
 					<a href="lunch-register.html" class="nav-item nav-link active"><i
 						class="fas fa-pen me-2"></i>Lunch Register</a> <a href="menu.html"
-						class="nav-item nav-link"><i
-						class="fas fa-hamburger me-2"></i>Menu</a> <a href="restaurant.html"
-						class="nav-item nav-link"><i
+						class="nav-item nav-link"><i class="fas fa-hamburger me-2"></i>Menu</a>
+					<a href="restaurant.html" class="nav-item nav-link"><i
 						class="fas fa-home me-2"></i>Restaurant</a>
 					<div class="nav-item dropdown">
 						<a href="#" class="nav-link dropdown-toggle"
-							data-bs-toggle="dropdown"><i
-							class="fas fa-file me-2"></i>Invoice</a>
+							data-bs-toggle="dropdown"><i class="fas fa-file me-2"></i>Invoice</a>
 						<div class="dropdown-menu bg-transparent border-0">
 							<a href="weekly-invoice.html" class="dropdown-item">Weekly
 								Invoice</a> <a href="monthly-invoice.html" class="dropdown-item">Monthly
@@ -223,19 +265,28 @@ i.fa-solid {
 
 						<form th:action="@{register}">
 							<h3 th:text="${currentMonth}"></h3>
-    						<table>
-    							<thead>
-    								<tr>
-    									<td th:each="header:${headers}" th:text=${header}></td>
-    								</tr>
-    								<tr th:each="week:${month}">
-    									<td th:each="day:${week}">
-    									<input th:if="${day!=null}" type="checkbox" th:name="${#temporals.format(day, 'dd-MM-yyyy')}" th:checked="${day.getDayOfWeek().getValue() <= 5}"/>
-  										<span th:text="${#temporals.format(day, 'dd')}"></span></td>
-    								</tr>
-    							</thead>
-    						</table>
-    						<input type="submit" value="Register" class="btn btn-outline-dark float-end mt-3">
+							<table>
+								<thead>
+									<tr>
+										<td th:each="header:${headers}" th:text=${header}></td>
+									</tr>
+									<tr th:each="week:${month}">
+										<td th:each="day:${week}">
+										 <label>
+										<input
+												th:if="${day!=null}" type="checkbox"
+												th:name="${#temporals.format(day, 'dd-MM-yyyy')}"
+												th:checked="${day.getDayOfWeek().getValue() < 6}" 
+												th:disabled="${day.getDayOfWeek().getValue() >= 6}"/> <span
+												
+												th:text="${#temporals.format(day, 'dd')}"></span>
+										</label></td>
+									</tr>
+
+								</thead>
+							</table>
+							<input type="submit" value="Register"
+								class="btn btn-outline-dark float-end mt-3">
 						</form>
 					</div>
 
