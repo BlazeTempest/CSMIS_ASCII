@@ -155,7 +155,7 @@ public class MenuController {
 		return "redirect:/menu";
 	}
 
-	@PostMapping("/save")
+	@PostMapping("/saveAvoidMeat")
 	public String saveAvoidMeat(@ModelAttribute("avoidmeat") @Valid AvoidMeat theAvoidMeat, BindingResult br,
 			Model theModel) {
 
