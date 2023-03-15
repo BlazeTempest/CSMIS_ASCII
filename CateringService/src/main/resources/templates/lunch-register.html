@@ -45,7 +45,7 @@ input[type="checkbox"] {
 }
 
 i.fa-solid {
-	font-size: 25\px;
+	font-size: 25px;
 	cursor: pointer;
 	user-select: none;
 	color: white;
@@ -210,7 +210,6 @@ i.fa-solid {
 				</div>
 			</nav>
 			<!-- Navbar End -->
-
 			<!-- Sale & Revenue Start -->
 			<div class="container-fluid pt-4 px-4">
 				<div
@@ -223,21 +222,19 @@ i.fa-solid {
 						<hr>
 
 						<form th:action="@{register}">
-							<h1 th:text="${currentMonth}"></h1>
-    <table>
-        <thead>
-            <tr>
-                <th th:each="dayOfWeek : ${daysOfWeek}" th:text="${dayOfWeek}"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="weekNumber : ${#numbers.sequence(0, (daysOfMonth.size() - 1) / 7)}">
-                <td th:each="dayOfMonth : ${daysOfMonth}" th:class="${dayOfMonth == 1 or (weekNumber == 0 and dayOfMonth < firstDayOfMonth) or (weekNumber > 0 and dayOfMonth > daysOfMonth[(weekNumber - 1) * 7])} ? 'grayed-out'">
-                    <span th:text="${dayOfMonth}"></span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+							<h3 th:text="${currentMonth}"></h3>
+    						<table>
+    							<thead>
+    								<tr>
+    									<td th:each="header:${headers}" th:text=${header}></td>
+    								</tr>
+    								<tr th:each="week:${month}">
+    									<td th:each="day:${week}">
+    									<input th:if="${day!=null}" type="checkbox" th:name="${#temporals.format(day, 'yyyy-MM-dd')}" />
+  										<span th:text="${#temporals.format(day, 'dd')}"></span></td>
+    								</tr>
+    							</thead>
+    						</table>
 						</form>
 					</div>
 

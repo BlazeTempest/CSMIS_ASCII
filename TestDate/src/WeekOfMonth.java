@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +34,15 @@ public class WeekOfMonth {
             }
             weeks.add(daysOfWeek);
         }
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
         // print out the days of each week
         for (int i = 0; i < weeks.size(); i++) {
-            System.out.println("Week " + (i+firstWeekNumber) + ": " + weeks.get(i));
+            for(LocalDate day:weeks.get(i)) {
+            	if(day==null) {
+            		System.out.println("Week" + (i+1) + ": " + day);
+            	}else
+            	System.out.println("Week" + (i+1) + ": " + day.format(formatter));
+            }
         }
     }
 }
