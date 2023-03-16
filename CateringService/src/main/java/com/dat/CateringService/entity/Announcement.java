@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class Announcement {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int announe_ID;
+	private int announce_ID;
 	
 	@Column(name="description")
 	private String description;
@@ -31,13 +31,21 @@ public class Announcement {
 	@Column(name="modify_by")
 	private Date modify_by;
 
+	public int getAnnounce_ID() {
+		return announce_ID;
+	}
+
+	public void setAnnounce_ID(int announce_ID) {
+		this.announce_ID = announce_ID;
+	}
+
 	public Announcement() {
 		super();
 	}
 
-	public Announcement(int announe_ID, String description) {
+	public Announcement(int announce_ID, String description) {
 		super();
-		this.announe_ID = announe_ID;
+		this.announce_ID = announce_ID;
 		this.description = description;
 	}
 
@@ -46,10 +54,10 @@ public class Announcement {
 		this.description = description;
 	}
 
-	public Announcement(int announe_ID, String description, Date created_date, String created_by, Date modify_date,
+	public Announcement(int announce_ID, String description, Date created_date, String created_by, Date modify_date,
 			Date modify_by) {
 		super();
-		this.announe_ID = announe_ID;
+		this.announce_ID = announce_ID;
 		this.description = description;
 		this.created_date = created_date;
 		this.created_by = created_by;
@@ -57,13 +65,7 @@ public class Announcement {
 		this.modify_by = modify_by;
 	}
 
-	public int getAnnoune_ID() {
-		return announe_ID;
-	}
-
-	public void setAnnoune_ID(int announe_ID) {
-		this.announe_ID = announe_ID;
-	}
+	
 
 	public String getDescription() {
 		return description;

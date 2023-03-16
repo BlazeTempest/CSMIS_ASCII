@@ -145,10 +145,31 @@ i.fa-solid {
 		<!-- Navbar End -->
 
 		<!-- Dashboard Start -->
-		<div class="greeting">
-			<h4 class="mb-3 mt-3 text-center ms-5">"Dear Employee, Please
-				set your Lunch Plan and Enjoy your Lunch!"</h4>
-		</div>
+			<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mt-3" style="background-color: #e6e9ee;">
+            <div class="card ">
+                <div class="card-header">
+                    <h4 class="card-title">Announcements</h4>
+                </div>
+                
+                    <div th:if="${not #lists.isEmpty(announcements)}">
+                        <ul class="list-group ">
+                            <li class="list-group-item border-0" th:each="announcement : ${announcements}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span th:text="${announcement.description}"></span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div th:if="${#lists.isEmpty(announcements)}">
+                        <p>No announcements found</p>
+                    </div>
+                
+            </div>
+        </div>
+    </div>
+</div> 
 		<!-- Dashboard End -->
 		<!-- Carousel  start-->
 		<div id="carousel-section">

@@ -223,18 +223,22 @@
             </div>
         </div>
         <!-- Sale & Revenue End -->
-        <div class="container-fluid">
-            <div class="row bg-secondary mt-5 ms-2 me-2 rounded">
-                <div class="offset-1 col-lg-8 mb-3">
+         <div class="container-fluid">
+        <div class="row bg-secondary mt-5 ms-2 me-2 rounded">
+            <div class="offset-1 col-lg-8 mb-3">
+            
+                <form th:object="${announcement}" th:action="@{/announcement}" method="POST">
+                <input type="hidden" th:field="*{announce_ID}">
                     <div class="form-outline mt-4 mb-2">
-                        <textarea class="form-control bg-white" style="height: 50px;" id="textAreaExample1" placeholder="Something you want to announce..." rows="4"></textarea>
+                        <textarea class="form-control bg-white" style="height: 50px;" id="textAreaExample1"
+                                  placeholder="Something you want to announce..." rows="4" th:field="*{description}" ></textarea>
                     </div>
-                </div>
-                <div class="col-lg-2 text-sm-end">
-                    <button type="button" class="btn btn-lg mt-4 btn-outline-dark">Announce</button>
-                </div>
+                    <button type="submit" class="btn btn-lg mt-4 btn-outline-dark">Announce</button>
+                </form>
+                
             </div>
         </div>
+    </div>
         <!-- Department List-->
         <div class="container-fluid px-4 py-4">
             <div class="bg-secondary text-center rounded p-4">
