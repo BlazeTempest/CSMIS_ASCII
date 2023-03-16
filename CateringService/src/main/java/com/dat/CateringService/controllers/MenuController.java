@@ -36,7 +36,7 @@ import com.dat.CateringService.service.StaffService;
 public class MenuController {
 	@Autowired
 	private StaffService staffService;
-	
+
 	@Autowired
 	private MenuPdfService menuPdfService;
 
@@ -61,89 +61,85 @@ public class MenuController {
 		}
 		price.setStatus((byte) 1);
 		priceService.save(price);
-		/*
-		 * if(status !=null) { price.setStatus(status); } priceService.save(price);
-		 */
-
 		redirectAttrsl.addAttribute("totalPrice", price.getTotal_price());
-		/*
-		 * System.out.println(price.getTotal_price());
-		 */
 		redirectAttrsl.addAttribute("datPrice", price.getDAT_price());
-		// System.out.println(price.getDAT_price());
-
 		redirectAttrsl.addAttribute("staffPrice", price.getStaff_price());
-		// System.out.println(price.getStaff_price());
-
 		return "redirect:/menu";
 	}
 
 	@GetMapping("/menu")
-	public String showMenu(Model theModel, @RequestParam(name = "totalPrice", required = false) Integer totalPrice,
+	public String showMenu(Model theModel, Authentication authentication,
+			@RequestParam(name = "totalPrice", required = false) Integer totalPrice,
 			@RequestParam(name = "datPrice", required = false) Integer datPrice,
 			@RequestParam(name = "staffPrice", required = false) Integer staffPrice) {
+		try {
+			String role = authentication.getAuthorities().toArray()[0].toString();
+			if (role.equals("admin")) {
+				AvoidMeat theAvoidMeat = new AvoidMeat();
+				theModel.addAttribute("avoidmeat", theAvoidMeat);
 
-		AvoidMeat theAvoidMeat = new AvoidMeat();
-		theModel.addAttribute("avoidmeat", theAvoidMeat);
+				Price addPrice = new Price();
+				theModel.addAttribute("addprice", addPrice);
 
-		Price addPrice = new Price();
-		theModel.addAttribute("addprice", addPrice);
+				List<Price> priceList = priceService.findAll();
+				theModel.addAttribute("priceList", priceList);
 
-		List<Price> priceList = priceService.findAll();
-		theModel.addAttribute("priceList", priceList);
+				List<AvoidMeat> avoidmeat = avoidMeatService.findAll();
+				System.out.println(avoidmeat);
+				if (avoidmeat.isEmpty()) {
+					theModel.addAttribute("avoidMessage", "Please add an option");
+				} else {
+					theModel.addAttribute("avoidmeats", avoidmeat);
+				}
+			
+				Price activePrice = priceService.findActivePrice();
+				System.out.println(activePrice);
+				if (activePrice == null) {
+					System.out.println("No price");
+					theModel.addAttribute("priceMessage", "Please set a price");
+				} else {
+					Byte status = activePrice.getStatus();
+					if (status != null || status.equals(1)) {
+						
+						// perform actions when status is equal to myByteObject
+						theModel.addAttribute("totalPrice", activePrice.getTotal_price());
 
-		List<AvoidMeat> avoidmeat = avoidMeatService.findAll();
-		System.out.println(avoidmeat);
-		if(avoidmeat.isEmpty()) {
-			theModel.addAttribute("avoidMessage", "Please add an option");
-		}else {
-			theModel.addAttribute("avoidmeats", avoidmeat);
-		}
-		/* Price activePrice = priceService.findActivePrice(); */
-		Price activePrice = priceService.findActivePrice();
-		System.out.println(activePrice);
-		if(activePrice==null) {
-			System.out.println("No price");
-			theModel.addAttribute("priceMessage", "Please set a price");
-		}else {
-			Byte status = activePrice.getStatus();
-			if (status != null || status.equals(1)) {
-				// perform actions when status is equal to myByteObject
-				theModel.addAttribute("totalPrice", activePrice.getTotal_price());
+						theModel.addAttribute("datPrice", activePrice.getDAT_price());
+						theModel.addAttribute("staffPrice", activePrice.getStaff_price());
+					}
+				}
 
-				theModel.addAttribute("datPrice", activePrice.getDAT_price());
-				theModel.addAttribute("staffPrice", activePrice.getStaff_price());
-			}
-		}
-		
-		
-		
-		
-		String pdfFileName = "currentweek.pdf";
+				String pdfFileName = "currentweek.pdf";
+				if (pdfFileName != null) {
+					try {
+						String encodedPdf = menuPdfService.getPdfAsByteString(pdfFileName);
+						theModel.addAttribute("pdf", encodedPdf);
 
-		if (pdfFileName != null) {
-			try {
-				String encodedPdf = menuPdfService.getPdfAsByteString(pdfFileName);
-				theModel.addAttribute("pdf", encodedPdf);
+					} catch (NoSuchFileException e) {
+						return "admin/menu";
+					} catch (IOException e) {
+						System.err.println("Error reading file: " + e.getMessage());
+					}
+				}
 
-			} catch (NoSuchFileException e) {
+				String pdfFileName2 = "nextweek.pdf";
+				if (pdfFileName2 != null) {
+					try {
+						String encodedPdf1 = menuPdfService.getPdfAsByteString(pdfFileName2);
+						theModel.addAttribute("pdf1", encodedPdf1);
+					} catch (NoSuchFileException e) {
+						return "admin/menu";
+					} catch (IOException e) {
+						System.err.println("Error reading file: " + e.getMessage());
+					}
+				}
 				return "admin/menu";
-			} catch (IOException e) {
-				System.err.println("Error reading file: " + e.getMessage());
 			}
+			return "404";
+		} catch (NullPointerException e) {
+
+			return "redirect:/showMyLoginPage";
 		}
-		String pdfFileName2 = "nextweek.pdf";
-		if (pdfFileName2 != null) {
-			try {
-				String encodedPdf1 = menuPdfService.getPdfAsByteString(pdfFileName2);
-				theModel.addAttribute("pdf1", encodedPdf1);
-			} catch (NoSuchFileException e) {
-				return "admin/menu";
-			} catch (IOException e) {
-				System.err.println("Error reading file: " + e.getMessage());
-			}
-		}
-		return "admin/menu";
 	}
 
 	@PostMapping("/add_price")
@@ -152,13 +148,11 @@ public class MenuController {
 		for (Price tempPrice : prices) {
 			tempPrice.setStatus((byte) 0);
 		}
-		
 		int staff_price = thePrice.getTotal_price() - thePrice.getDAT_price();
 		thePrice.setStaff_price(staff_price);
 		thePrice.setCreated_date(LocalDateTime.now());
 		thePrice.setStatus((byte) 1);
 		thePrice.setCreated_by(staffService.getStaffById(authentication.getName()).getName());
-		
 		priceService.save(thePrice);
 		return "redirect:/menu";
 	}
@@ -171,14 +165,12 @@ public class MenuController {
 			System.out.println(br);
 			return "redirect:/menu";
 		}
-
 		AvoidMeat existingAvoidMeat = avoidMeatRepository.findByType(theAvoidMeat.getType());
 		System.out.println(existingAvoidMeat);
 
 		if (existingAvoidMeat != null) {
 			theModel.addAttribute("message", "Nani nani is already exist.");
 		}
-
 		theAvoidMeat.setCreated_date(LocalDateTime.now());
 		avoidMeatService.save(theAvoidMeat);
 		return "redirect:/menu";
@@ -187,17 +179,14 @@ public class MenuController {
 
 	@PostMapping("/import_menu")
 	public String uploadPdf(@RequestParam("pdfFile") MultipartFile pdfFile, Model model) throws IOException {
-		
+
 		String message = "";
 		try {
 			// Get the filename of the PDF file
 			String fileName = StringUtils.cleanPath(pdfFile.getOriginalFilename());
-
 			String pdfOldFileName = new File(fileName).getName();
-
 			String pdfNewFileName = "currentweek.pdf";
 
-			/* System.out.println(fileName); */
 			// Create a Path object for the resource directory
 			Path resourceDirectory = Paths.get("src", "main", "resources", "pdfs");
 
@@ -208,23 +197,20 @@ public class MenuController {
 
 			// Create a Path object for the PDF file
 			Path pdfPath = resourceDirectory.resolve(pdfNewFileName);
-
 			if (pdfFile.getBytes().length == 0) {
 				message = "Failed to upload file: the file is empty.";
 
 			} else {
 				// Write the PDF file to the resource directory
 				Files.write(pdfPath, pdfFile.getBytes());
-
 				message = "File uploaded successfully: " + pdfNewFileName;
-				/* System.out.println(message); */
+
 			}
 
 		} catch (IOException e) {
 			message = "Failed to upload file: " + e.getMessage();
 		}
 		model.addAttribute("message", message);
-
 		// retrive pdf from resources folder
 
 		return "redirect:/menu";
@@ -232,17 +218,6 @@ public class MenuController {
 
 	@PostMapping("/import_menu2")
 	public String uploadPdf1(@RequestParam("pdfFile2") MultipartFile pdfFile2, Model model) throws IOException {
-
-		/*
-		 * AvoidMeat theAvoidMeat = new AvoidMeat(); model.addAttribute("avoidmeat",
-		 * theAvoidMeat);
-		 */
-
-		/*
-		 * String pdfFileName = "currentweek.pdf"; String encodedPdf =
-		 * menuPdfService.getPdfAsByteString(pdfFileName); model.addAttribute("pdf",
-		 * encodedPdf);
-		 */
 
 		String message = "";
 		try {
@@ -253,7 +228,6 @@ public class MenuController {
 
 			String pdfNewFileName = "nextweek.pdf";
 
-			/* System.out.println(fileName); */
 			// Create a Path object for the resource directory
 			Path resourceDirectory = Paths.get("src", "main", "resources", "pdfs");
 

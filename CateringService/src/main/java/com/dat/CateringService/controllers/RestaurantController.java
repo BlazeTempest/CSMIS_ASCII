@@ -27,16 +27,13 @@ public class RestaurantController {
 	}
 
 	//	 add mapping for "/list"
-
 	@GetMapping("/restaurant")
 	public String listRestaurants(Model theModel) {
-
 		// get restaurants from db
 				List<Restaurant> theRestaurant = restaurantService.findAll();
 
 				// add to the spring model
 				theModel.addAttribute("restaurant", theRestaurant);
-				
 				Restaurant restaurants=new Restaurant();
 				theModel.addAttribute("restaurants", restaurants);
 				
