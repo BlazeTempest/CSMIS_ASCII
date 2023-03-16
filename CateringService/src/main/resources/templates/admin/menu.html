@@ -184,7 +184,10 @@ i.fa-solid {
 								data-bs-toggle="modal" data-bs-target="#addPrice">Add
 								Price</button>
 						</div>
-						<div class="card-body my-3">
+						<div th:if="${priceMessage!=null}" class="card-body my-3">
+							<div class="alert alert-danger" th:text="${priceMessage}"></div>
+						</div>
+						<div th:if="${priceMessage==null}" class="card-body my-3">
 							<div class="row text-center">
 								<div class="col-lg-4">
 									<h5>
@@ -213,10 +216,8 @@ i.fa-solid {
 								enctype="multipart/form-data">
 								<div class="card-header text-center mt-4">
 									<label class="my-4 fs-5">Import Menu for Current Week</label> <br>
-									<div th:if="${message != null}" th:text="${message}"
-										style="color: red"></div>
 									<input class="form-control form-control-lg bg-info fs-6 w-75 ms-5"
-										id="pdfFile" type="file" name="pdfFile" />
+										id="pdfFile" type="file" name="pdfFile" required/>
 								
 								<button class="btn btn-outline-dark text-center mt-3" type="submit"><i class="fa-solid fa-plus text-white fs-5 me-2"></i>Import
 										</button>
@@ -233,8 +234,8 @@ i.fa-solid {
 								<div class="card-header text-center mt-4">
 									<label class="my-4 fs-5">Import Menu for Next Week</label> <input
 										class="form-control form-control-lg bg-info fs-6 w-75 ms-5"
-										id="pdfFile2" type="file" name="pdfFile2" />
-								<button class="btn btn-outline-dark text-center mt-3" type="submit"><i class="fa-solid fa-plus text-white fs-5 me-2"></i>Import
+										id="pdfFile2" type="file" name="pdfFile2" required/>
+									<button class="btn btn-outline-dark text-center mt-3" type="submit"><i class="fa-solid fa-plus text-white fs-5 me-2"></i>Import
 										</button>
 								</div>
 							
@@ -397,7 +398,7 @@ i.fa-solid {
 							<div class="card-body my-2">
 								<div class="row text-center">
 									<form action="#" th:action="@{saveAvoidMeat}" th:object="${avoidmeat}"
-										method="POST">
+										method="POST" class="row">
 										<input type="hidden" th:field="*{avoidmeat_ID}" />
 										<div class="col-md-8 text-center">
 											<input type="text" th:field="*{type}"
@@ -405,10 +406,6 @@ i.fa-solid {
 											<span th:if="${#fields.hasErrors('type')}"
 												th:errors="*{type}" class="badge badge-danger ml-2 mb-4"></span>
 										</div>
-										<!-- <div>
-											<span th:if="${message !=null}" th:text=${message}></span>
-										</div> -->
-
 										<div class="col-md-4">
 											<button type="submit" class="btn btn-outline-info mb-3">Confirm</button>
 										</div>
@@ -417,11 +414,10 @@ i.fa-solid {
 								</div>
 								<!-- 	<hr style="height: 3px; color: blue;"> -->
 								<div class="row ms-4">
-
-									<span class="fs-5 ms-2 mb-2">Type</span>
-
+									<span class="alert alert-danger text-center" style="width:200px;" th:if="${avoidMessage!=null}" th:text="${avoidMessage}"></span>
 									<ul style="list-style-type: none;">
-										<li th:each="tempAvoidMeat, iterStat : ${avoidmeats}"
+										
+										<li th:unless="${avoidMessage==null}" th:each="tempAvoidMeat, iterStat : ${avoidmeats}"
 											class="mb-2"><span th:text="${iterStat.count}"
 											class="me-2"></span> <span th:text="${tempAvoidMeat.type}"></span></li>
 									</ul>

@@ -263,13 +263,16 @@ i.fa-solid {
 						</div>
 						<hr>
 
-						<form th:action="@{register}">
+						<form th:action="@{/saveRegister}"
+							method="POST">
 							<h3 th:text="${currentMonth}"></h3>
 							<table>
 								<thead>
 									<tr>
-										<td th:each="header:${headers}" th:text=${header}></td>
+										<th th:each="header:${headers}" th:text=${header}></th>
 									</tr>
+								</thead>
+								<tbody>
 									<tr th:each="week:${month}">
 										<td th:each="day:${week}">
 										 <label>
@@ -282,8 +285,7 @@ i.fa-solid {
 												th:text="${#temporals.format(day, 'dd')}"></span>
 										</label></td>
 									</tr>
-
-								</thead>
+								</tbody>
 							</table>
 							<input type="submit" value="Register"
 								class="btn btn-outline-dark float-end mt-3">

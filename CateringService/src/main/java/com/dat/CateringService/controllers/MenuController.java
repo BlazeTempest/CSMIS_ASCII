@@ -12,6 +12,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -29,10 +30,13 @@ import com.dat.CateringService.entity.Price;
 import com.dat.CateringService.service.AvoidMeatService;
 import com.dat.CateringService.service.MenuPdfService;
 import com.dat.CateringService.service.PriceService;
+import com.dat.CateringService.service.StaffService;
 
 @Controller
 public class MenuController {
-
+	@Autowired
+	private StaffService staffService;
+	
 	@Autowired
 	private MenuPdfService menuPdfService;
 
@@ -89,32 +93,32 @@ public class MenuController {
 		theModel.addAttribute("priceList", priceList);
 
 		List<AvoidMeat> avoidmeat = avoidMeatService.findAll();
-		theModel.addAttribute("avoidmeats", avoidmeat);
-
+		System.out.println(avoidmeat);
+		if(avoidmeat.isEmpty()) {
+			theModel.addAttribute("avoidMessage", "Please add an option");
+		}else {
+			theModel.addAttribute("avoidmeats", avoidmeat);
+		}
 		/* Price activePrice = priceService.findActivePrice(); */
 		Price activePrice = priceService.findActivePrice();
-		System.out.println();
-		Byte status = activePrice.getStatus();
+		System.out.println(activePrice);
+		if(activePrice==null) {
+			System.out.println("No price");
+			theModel.addAttribute("priceMessage", "Please set a price");
+		}else {
+			Byte status = activePrice.getStatus();
+			if (status != null || status.equals(1)) {
+				// perform actions when status is equal to myByteObject
+				theModel.addAttribute("totalPrice", activePrice.getTotal_price());
 
-		if (status != null || status.equals(1)) {
-			// perform actions when status is equal to myByteObject
-			theModel.addAttribute("totalPrice", activePrice.getTotal_price());
-
-			theModel.addAttribute("datPrice", activePrice.getDAT_price());
-			theModel.addAttribute("staffPrice", activePrice.getStaff_price());
+				theModel.addAttribute("datPrice", activePrice.getDAT_price());
+				theModel.addAttribute("staffPrice", activePrice.getStaff_price());
+			}
 		}
-		// Set the default values if the status is active
-		/*
-		 * else {
-		 * 
-		 * if (totalPrice != null) { theModel.addAttribute("totalPrice", totalPrice); }
-		 * 
-		 * if (datPrice != null) { theModel.addAttribute("datPrice", datPrice); }
-		 * 
-		 * if (staffPrice != null) { theModel.addAttribute("staffPrice", staffPrice); }
-		 * 
-		 * }
-		 */
+		
+		
+		
+		
 		String pdfFileName = "currentweek.pdf";
 
 		if (pdfFileName != null) {
@@ -143,14 +147,18 @@ public class MenuController {
 	}
 
 	@PostMapping("/add_price")
-	public String savePrice(@ModelAttribute("addprice") Price thePrice) {
-
+	public String savePrice(@ModelAttribute("addprice") Price thePrice, Authentication authentication) {
+		List<Price> prices = priceService.findAll();
+		for (Price tempPrice : prices) {
+			tempPrice.setStatus((byte) 0);
+		}
+		
 		int staff_price = thePrice.getTotal_price() - thePrice.getDAT_price();
 		thePrice.setStaff_price(staff_price);
 		thePrice.setCreated_date(LocalDateTime.now());
-		thePrice.setStatus((byte) 0);
-		thePrice.setCreated_by("Mg Mg");
-
+		thePrice.setStatus((byte) 1);
+		thePrice.setCreated_by(staffService.getStaffById(authentication.getName()).getName());
+		
 		priceService.save(thePrice);
 		return "redirect:/menu";
 	}
@@ -179,16 +187,7 @@ public class MenuController {
 
 	@PostMapping("/import_menu")
 	public String uploadPdf(@RequestParam("pdfFile") MultipartFile pdfFile, Model model) throws IOException {
-		/*
-		 * AvoidMeat theAvoidMeat = new AvoidMeat(); model.addAttribute("avoidmeat",
-		 * theAvoidMeat);
-		 */
-
-		/*
-		 * String pdfFileName = "currentweek.pdf"; String encodedPdf =
-		 * menuPdfService.getPdfAsByteString(pdfFileName); model.addAttribute("pdf",
-		 * encodedPdf);
-		 */
+		
 		String message = "";
 		try {
 			// Get the filename of the PDF file

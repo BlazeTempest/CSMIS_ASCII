@@ -16,11 +16,11 @@ public class Registered_list {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int reg_ID;
 	
-	@Column(name="staff_ID")
-	private String staff_ID;
+	@Column(name="staffID")
+	private String staffID;
 	
 	@Column(name="dine")
-	private String dine;
+	private Byte dine;
 	
 	@Column(name="dineDate")
 	private Date dineDate;
@@ -41,18 +41,18 @@ public class Registered_list {
 		super();
 	}
 
-	public Registered_list(String staff_ID, String dine, Date dineDate) {
+	public Registered_list(String staff_ID, Byte dine, Date dineDate) {
 		super();
-		this.staff_ID = staff_ID;
+		this.staffID = staff_ID;
 		this.dine = dine;
 		this.dineDate = dineDate;
 	}
 
-	public Registered_list(int reg_ID, String staff_ID, String dine, Date dineDate, Date created_date,
+	public Registered_list(int reg_ID, String staff_ID, Byte dine, Date dineDate, Date created_date,
 			String created_by, Date modify_date, Date modify_by) {
 		super();
 		this.reg_ID = reg_ID;
-		this.staff_ID = staff_ID;
+		this.staffID = staff_ID;
 		this.dine = dine;
 		this.dineDate = dineDate;
 		this.created_date = created_date;
@@ -69,19 +69,19 @@ public class Registered_list {
 		this.reg_ID = reg_ID;
 	}
 
-	public String getStaff_ID() {
-		return staff_ID;
+	public String getStaffID() {
+		return staffID;
 	}
 
-	public void setStaff_ID(String staff_ID) {
-		this.staff_ID = staff_ID;
+	public void setStaffID(String staff_ID) {
+		this.staffID = staff_ID;
 	}
 
-	public String getDine() {
+	public Byte getDine() {
 		return dine;
 	}
 
-	public void setDine(String dine) {
+	public void setDine(Byte dine) {
 		this.dine = dine;
 	}
 
