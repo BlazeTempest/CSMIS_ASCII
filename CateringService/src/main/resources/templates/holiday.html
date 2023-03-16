@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 <meta charset="utf-8" />
@@ -186,7 +186,7 @@ i.fa-solid {
 							</div>
 							<div class="row">
 								<form method="post" th:action="@{/importHoliday}"
-									enctype="multipart/form-data">
+									enctype="multipart/form-data" class="row">
 									<div class="card-body my-2 text-center offset-1 col-7">
 										<input class="form-control form-control-lg bg-white fs-6"
 											id="formFileLg" accept="xlsx" type="file" name="file" />
@@ -198,12 +198,7 @@ i.fa-solid {
 									</div>
 								</form>
 							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Holiday list show -->
-			<div class="card mt-3">
+							<div class="card mt-3">
 				<h5 class="card-header">Holiday in This Year :</h5>
 				<div class="card-body bg-white">
 					<table class="card-text table table-striped">
@@ -218,6 +213,12 @@ i.fa-solid {
 					</table>
 				</div>
 			</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Holiday list show -->
+			
 			<!--End Holiday list show -->
 			<!-- Footer Start -->
 			<div class="container-fluid pt-4 px-4">
