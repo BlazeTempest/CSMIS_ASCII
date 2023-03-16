@@ -28,6 +28,8 @@ public class HolidayController {
 
 	@GetMapping("/holiday")
 	public String Holiday(Model theModel) {
+		
+		
 		List<Holidays> totalHolidays = holidayService.getAll();
 		theModel.addAttribute("totalHolidays",totalHolidays);
 		return "holiday";

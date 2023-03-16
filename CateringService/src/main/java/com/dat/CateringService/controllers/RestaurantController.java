@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,16 +29,26 @@ public class RestaurantController {
 
 	//	 add mapping for "/list"
 	@GetMapping("/restaurant")
-	public String listRestaurants(Model theModel) {
-		// get restaurants from db
+	public String listRestaurants(Model theModel,Authentication authentication) {
+		try {
+			String role = authentication.getAuthorities().toArray()[0].toString();
+			if (role.equals("admin")) {
+				
+				// get restaurants from db
 				List<Restaurant> theRestaurant = restaurantService.findAll();
 
 				// add to the spring model
 				theModel.addAttribute("restaurant", theRestaurant);
 				Restaurant restaurants=new Restaurant();
 				theModel.addAttribute("restaurants", restaurants);
-				
 			return "admin/restaurant-list";
+				
+			}return"redirect:/showMyLoginPage";
+		}catch(NullPointerException e) {
+			
+			return"404";
+		}
+		
 	}
 
 	@GetMapping("/showFormForAdd")
