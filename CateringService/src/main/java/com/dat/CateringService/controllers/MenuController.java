@@ -65,6 +65,10 @@ public class MenuController {
 		}
 		price.setStatus((byte) 1);
 		priceService.save(price);
+<<<<<<< Updated upstream
+=======
+		
+>>>>>>> Stashed changes
 		redirectAttrsl.addAttribute("totalPrice", price.getTotal_price());
 		redirectAttrsl.addAttribute("datPrice", price.getDATprice());
 		redirectAttrsl.addAttribute("staffPrice", price.getStaff_price());
@@ -126,6 +130,7 @@ public class MenuController {
 					}
 				}
 
+<<<<<<< Updated upstream
 				String pdfFileName2 = "nextweek.pdf";
 				if (pdfFileName2 != null) {
 					try {
@@ -137,6 +142,20 @@ public class MenuController {
 						System.err.println("Error reading file: " + e.getMessage());
 					}
 				}
+=======
+			theModel.addAttribute("datPrice", activePrice.getDAT_price());
+			theModel.addAttribute("staffPrice", activePrice.getStaff_price());
+		}
+		
+		String pdfFileName = "currentweek.pdf";
+
+		if (pdfFileName != null) {
+			try {
+				String encodedPdf = menuPdfService.getPdfAsByteString(pdfFileName);
+				theModel.addAttribute("pdf", encodedPdf);
+
+			} catch (NoSuchFileException e) {
+>>>>>>> Stashed changes
 				return "admin/menu";
 			}
 			return "404";
@@ -197,8 +216,13 @@ public class MenuController {
 	}
 
 	@PostMapping("/import_menu")
+<<<<<<< Updated upstream
 	public String uploadPdf(@RequestParam("pdfFile") MultipartFile pdfFile, Model model, RedirectAttributes redirectAttributes) throws IOException {
 
+=======
+	public String uploadPdf(@RequestParam("pdfFile") MultipartFile pdfFile, Model model) throws IOException {
+	
+>>>>>>> Stashed changes
 		String message = "";
 		try {
 			// Get the filename of the PDF file
@@ -206,6 +230,10 @@ public class MenuController {
 			String pdfOldFileName = new File(fileName).getName();
 			String pdfNewFileName = "currentweek.pdf";
 
+<<<<<<< Updated upstream
+=======
+		
+>>>>>>> Stashed changes
 			// Create a Path object for the resource directory
 			Path resourceDirectory = Paths.get("src", "main", "resources", "pdfs");
 
