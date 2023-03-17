@@ -2,21 +2,18 @@ package com.dat.CateringService.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
+<<<<<<< Updated upstream
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.time.LocalDate;
+=======
+>>>>>>> Stashed changes
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.csv.CSVFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -31,18 +28,26 @@ import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.importHelper.ExcelImporter;
 import com.dat.CateringService.service.AnnouncementService;
 import com.dat.CateringService.service.StaffService;
+<<<<<<< Updated upstream
 import com.dat.CateringService.service.SuggestionService;
 import com.opencsv.exceptions.CsvException;
+=======
+>>>>>>> Stashed changes
 
 @Controller
 public class HomeController {
 	@Autowired
 	private StaffService staffService;
+<<<<<<< Updated upstream
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	// count total number of staffs
+=======
+	
+	//count total number of staffs
+>>>>>>> Stashed changes
 	public int countStaff(List<Staff> staffs) {
 		int totalNum = 0;
 		for (Staff staff : staffs) {
