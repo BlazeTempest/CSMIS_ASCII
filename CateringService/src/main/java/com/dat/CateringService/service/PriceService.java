@@ -9,4 +9,5 @@ public interface PriceService {
 	public void save(Price thePrice);
 	public Price findById(int theId);
 	Price findActivePrice();
+	Price findByDAT_price(int totalPrice, int DATprice);
 }

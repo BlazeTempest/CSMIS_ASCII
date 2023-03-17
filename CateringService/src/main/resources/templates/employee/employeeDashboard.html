@@ -99,8 +99,9 @@ i.fa-solid {
 						href="employee-profile.html" class="nav-item nav-link"><i
 						class="fas fa-user-tie me-2"></i>Profile</a>
 				</div>
+			</nav>
 		</div>
-		</nav>
+
 	</div>
 	<!-- Sidebar End -->
 
@@ -132,44 +133,45 @@ i.fa-solid {
 							class="d-none d-lg-inline-flex mt-2 btn-outline-secondary bg-secodary" >Logout</span>
 
 					</form> -->
-					  <form action="#" th:action="@{/logout}" method="POST">
+					<form action="#" th:action="@{/logout}" method="POST">
 
-                                    <input type="submit" value="Logout"
-                                        class="btn btn-outline-link bg-white fw-bold mt-1"
-                                        style="color: rgb(0, 0, 0); width: 100%; height: 45px;" />
+						<input type="submit" value="Logout"
+							class="btn btn-outline-link bg-white fw-bold mt-1"
+							style="color: rgb(0, 0, 0); width: 100%; height: 45px;" />
 
-                                </form>
+					</form>
 				</div>
 			</div>
 		</nav>
 		<!-- Navbar End -->
 
 		<!-- Dashboard Start -->
-			<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12 mt-3" style="background-color: #e6e9ee;">
-            <div class="card ">
-                <div class="card-header">
-                    <h4 class="card-title">Announcements</h4>
-                </div>
-                
-                    <div th:if="${not #lists.isEmpty(announcements)}">
-                        <ul class="list-group ">
-                            <li class="list-group-item border-0" th:each="announcement : ${announcements}">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span th:text="${announcement.description}"></span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div th:if="${#lists.isEmpty(announcements)}">
-                        <p>No announcements found</p>
-                    </div>
-                
-            </div>
-        </div>
-    </div>
-</div> 
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 mt-3" style="background-color: #e6e9ee;">
+					<div class="card ">
+						<div class="card-header">
+							<h4 class="card-title">Announcements</h4>
+						</div>
+
+						<div th:if="${not #lists.isEmpty(announcements)}">
+							<ul class="list-group ">
+								<li class="list-group-item border-0"
+									th:each="announcement : ${announcements}">
+									<div class="d-flex justify-content-between align-items-center">
+										<span th:text="${announcement.description}"></span>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div th:if="${#lists.isEmpty(announcements)}">
+							<p>No announcements found</p>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
 		<!-- Dashboard End -->
 		<!-- Carousel  start-->
 		<div id="carousel-section">
@@ -235,7 +237,14 @@ i.fa-solid {
 							<h3 class="py-2">Current Week Menu</h3>
 						</div>
 						<div class="card-body">
-							<img src="img/menu.png" class="img-fluid w-100">
+							<div th:if="${pdf}">
+								<embed th:attr="src='data:application/pdf;base64,' + ${pdf}"
+									type="application/pdf" width="100%" height="700" />
+							</div>
+							<div th:unless="${pdf}">
+								<h6>This is Current Week Menu</h6>
+								<span>Please select file</span>
+							</div>
 						</div>
 						<div class="card-footer"
 							style="color: #06324d; text-align: center; font-size: 13px;">
@@ -252,7 +261,14 @@ i.fa-solid {
 							<h3 class="py-2">Next Week Menu</h3>
 						</div>
 						<div class="card-body">
-							<img src="img/menu.png" class="img-fluid w-100">
+							<div th:if="${pdf1}">
+								<embed th:attr="src='data:application/pdf;base64,' + ${pdf1}"
+									type="application/pdf" width="100%" height="700" />
+							</div>
+							<div th:unless="${pdf}">
+								<h6>This is Next Week Menu</h6>
+								<span>Please select file</span>
+							</div>
 						</div>
 						<div class="card-footer"
 							style="color: #06324d; text-align: center; font-size: 13px;">

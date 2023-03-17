@@ -48,4 +48,10 @@ public class PriceServiceImpl implements PriceService {
 	public Price findActivePrice() {
 		return priceRepository.findActivePrice();
 	}
+
+	@Override
+	public Price findByDAT_price(int totalPrice, int DATprice) {
+		// TODO Auto-generated method stub
+		return priceRepository.findUniquePrice(totalPrice, DATprice);
+	}
 }

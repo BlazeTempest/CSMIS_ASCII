@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dat.CateringService.daos.AvoidMeatRepository;
+import com.dat.CateringService.daos.PriceRepository;
 import com.dat.CateringService.entity.AvoidMeat;
 import com.dat.CateringService.entity.Price;
 import com.dat.CateringService.service.AvoidMeatService;
@@ -47,6 +48,9 @@ public class MenuController {
 		avoidMeatService = theAvoidMeatService;
 		priceService = thePriceService;
 	}
+	
+	@Autowired
+	private PriceRepository priecPriceRepository;
 
 	@Autowired
 	private AvoidMeatRepository avoidMeatRepository;
@@ -62,7 +66,7 @@ public class MenuController {
 		price.setStatus((byte) 1);
 		priceService.save(price);
 		redirectAttrsl.addAttribute("totalPrice", price.getTotal_price());
-		redirectAttrsl.addAttribute("datPrice", price.getDAT_price());
+		redirectAttrsl.addAttribute("datPrice", price.getDATprice());
 		redirectAttrsl.addAttribute("staffPrice", price.getStaff_price());
 		return "redirect:/menu";
 	}
@@ -104,7 +108,7 @@ public class MenuController {
 						// perform actions when status is equal to myByteObject
 						theModel.addAttribute("totalPrice", activePrice.getTotal_price());
 
-						theModel.addAttribute("datPrice", activePrice.getDAT_price());
+						theModel.addAttribute("datPrice", activePrice.getDATprice());
 						theModel.addAttribute("staffPrice", activePrice.getStaff_price());
 					}
 				}
@@ -143,22 +147,35 @@ public class MenuController {
 	}
 
 	@PostMapping("/add_price")
-	public String savePrice(@ModelAttribute("addprice") Price thePrice, Authentication authentication) {
+	public String savePrice(@ModelAttribute("addprice") Price thePrice, Authentication authentication, RedirectAttributes redirect) {
 		List<Price> prices = priceService.findAll();
 		for (Price tempPrice : prices) {
 			tempPrice.setStatus((byte) 0);
 		}
-		int staff_price = thePrice.getTotal_price() - thePrice.getDAT_price();
-		thePrice.setStaff_price(staff_price);
-		thePrice.setCreated_date(LocalDateTime.now());
-		thePrice.setStatus((byte) 1);
-		thePrice.setCreated_by(staffService.getStaffById(authentication.getName()).getName());
-		priceService.save(thePrice);
+		
+		Price existingDATPrice=priecPriceRepository.findUniquePrice(thePrice.getTotal_price(), thePrice.getDATprice());
+		System.out.println(existingDATPrice);
+		System.out.println(thePrice.getDATprice());
+		if(existingDATPrice !=null)
+		{
+			System.out.println(existingDATPrice.getDATprice() + "Price already existed");
+			redirect.addFlashAttribute("unique", "Added Price already existed!");
+		}
+		else {
+			
+			int staff_price = thePrice.getTotal_price() - thePrice.getDATprice();
+			thePrice.setStaff_price(staff_price);
+			thePrice.setCreated_date(LocalDateTime.now());
+			thePrice.setStatus((byte) 1);
+			thePrice.setCreated_by(staffService.getStaffById(authentication.getName()).getName());
+			priceService.save(thePrice);
+			System.out.println("Added new price!");
+		 } 
 		return "redirect:/menu";
 	}
 
 	@PostMapping("/saveAvoidMeat")
-	public String saveAvoidMeat(@ModelAttribute("avoidmeat") @Valid AvoidMeat theAvoidMeat, BindingResult br,
+	public String saveAvoidMeat(@ModelAttribute("avoidmeat") @Valid AvoidMeat theAvoidMeat,RedirectAttributes redirectAttrsl, BindingResult br,
 			Model theModel) {
 
 		if (br.hasErrors()) {
@@ -166,19 +183,21 @@ public class MenuController {
 			return "redirect:/menu";
 		}
 		AvoidMeat existingAvoidMeat = avoidMeatRepository.findByType(theAvoidMeat.getType());
+		
 		System.out.println(existingAvoidMeat);
 
 		if (existingAvoidMeat != null) {
-			theModel.addAttribute("message", "Nani nani is already exist.");
-		}
+			redirectAttrsl.addFlashAttribute("avoidMeatMessage",theAvoidMeat.getType()+ " already existed!");
+		}else {
 		theAvoidMeat.setCreated_date(LocalDateTime.now());
 		avoidMeatService.save(theAvoidMeat);
+		}
 		return "redirect:/menu";
 
 	}
 
 	@PostMapping("/import_menu")
-	public String uploadPdf(@RequestParam("pdfFile") MultipartFile pdfFile, Model model) throws IOException {
+	public String uploadPdf(@RequestParam("pdfFile") MultipartFile pdfFile, Model model, RedirectAttributes redirectAttributes) throws IOException {
 
 		String message = "";
 		try {
@@ -203,6 +222,7 @@ public class MenuController {
 			} else {
 				// Write the PDF file to the resource directory
 				Files.write(pdfPath, pdfFile.getBytes());
+				redirectAttributes.addFlashAttribute("currentweek" , "File successfully uploaded!");
 				message = "File uploaded successfully: " + pdfNewFileName;
 
 			}
@@ -217,7 +237,7 @@ public class MenuController {
 	}
 
 	@PostMapping("/import_menu2")
-	public String uploadPdf1(@RequestParam("pdfFile2") MultipartFile pdfFile2, Model model) throws IOException {
+	public String uploadPdf1(@RequestParam("pdfFile2") MultipartFile pdfFile2, Model model, RedirectAttributes redirectAttributes) throws IOException {
 
 		String message = "";
 		try {
@@ -245,6 +265,7 @@ public class MenuController {
 			} else {
 				// Write the PDF file to the resource directory
 				Files.write(pdfPath, pdfFile2.getBytes());
+				redirectAttributes.addFlashAttribute("nextweek" , "File successfully uploaded!");
 				message = "File uploaded successfully: " + pdfNewFileName;
 			}
 
