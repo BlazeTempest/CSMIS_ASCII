@@ -32,4 +32,14 @@ public class AvoidMeatServiceImpl implements AvoidMeatService {
 		
 	}
 
+	@Override
+	public AvoidMeat getAvoidMeatByType(String type) {
+		return avoidMeatRepository.findByType(type);
+	}
+
+	@Override
+	public AvoidMeat findById(int id) {
+		return avoidMeatRepository.getById(id);
+	}
+
 }

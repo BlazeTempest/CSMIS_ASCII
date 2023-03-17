@@ -1,6 +1,7 @@
 package com.dat.CateringService.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -68,12 +69,21 @@ public class Staff {
 	@Column(name="enabled")
 	private Byte enabled;
 	
-	@ManyToMany
-    @JoinTable(name = "staff_avoid_meat",
-               joinColumns = @JoinColumn(name = "staff_id"),
-               inverseJoinColumns = @JoinColumn(name = "avoidmeat_id"))
-    private List<AvoidMeat> avoidmeats;
+	@Column(name="avoidMeatIds")
+    private String avoidMeatIds;
 	
+	public String getAvoidMeatIds() {
+		return avoidMeatIds;
+	}
+
+	public void setAvoidMeatIds(String avoidMeatIds) {
+		this.avoidMeatIds = avoidMeatIds;
+	}
+
+	public void setEnabled(Byte enabled) {
+		this.enabled = enabled;
+	}
+
 	public Staff() {
 		super();
 	}
@@ -93,7 +103,7 @@ public class Staff {
 	public Staff(String staff_ID, String division, String name, int doorLogNo, String dept, String team,
 			String email, Byte email_noti, String password, String role, int suggestion_count, LocalDateTime created_date,
 			String created_by, LocalDateTime modify_date, String modify_by, LocalDateTime delete_date, String delete_by, Byte enabled,
-			List<AvoidMeat> avoidmeats) {
+			String avoidmeats) {
 		super();
 		this.staffID = staff_ID;
 		this.division = division;
@@ -113,7 +123,7 @@ public class Staff {
 		this.delete_date = delete_date;
 		this.delete_by = delete_by;
 		this.enabled = enabled;
-		this.avoidmeats = avoidmeats;
+		this.avoidMeatIds = avoidmeats;
 	}
 
 	public String getStaffID() {
@@ -258,13 +268,5 @@ public class Staff {
 
 	public void setStatus(Byte status) {
 		this.enabled = status;
-	}
-
-	public List<AvoidMeat> getAvoidmeats() {
-		return avoidmeats;
-	}
-
-	public void setAvoidmeats(List<AvoidMeat> avoidmeats) {
-		this.avoidmeats = avoidmeats;
 	}
 }

@@ -47,6 +47,11 @@ td {
 	cursor: pointer;
 }
 
+#avoid {
+	display: inline-block;
+	cursor: pointer;
+}
+
 input[type="checkbox"] {
 	display: none;
 }
@@ -186,10 +191,9 @@ i.fa-solid {
 								class="dropdown-item">Not Registered & Eat List</a>
 						</div>
 					</div>
-					<a href="lunch-register.html" class="nav-item nav-link active"><i
-						class="fas fa-pen me-2"></i>Lunch Register</a> <a href="menu.html"
-						class="nav-item nav-link"><i class="fas fa-hamburger me-2"></i>Menu</a>
-					<a href="restaurant.html" class="nav-item nav-link"><i
+					<a href="lunch-register.html" class="nav-item nav-link active"><i class="fas fa-pen me-2"></i>Lunch Register</a> 
+					<a th:href="@{/menu}" class="nav-item nav-link"><i class="fas fa-hamburger me-2"></i>Menu</a>
+					<a th:href="restaurant" class="nav-item nav-link"><i
 						class="fas fa-home me-2"></i>Restaurant</a>
 					<div class="nav-item dropdown">
 						<a href="#" class="nav-link dropdown-toggle"
@@ -295,10 +299,13 @@ i.fa-solid {
 									</tr>
 								</tbody>
 							</table>
+							<label th:each="avoidmeat:${avoidmeats}">
+								<input type="checkbox" th:checked="${#lists.contains(checkedMeats, avoidmeat)}" th:value="${avoidmeat.avoidmeat_ID}" th:text="${avoidmeat.type}" id="avoid" name="avoidMeats">
+							</label>
+							
 							<input type="hidden" th:value="${disabledDates}" name="disabledDates">
 							<input type="hidden" th:value="${status}" name="status">
-							<input type="submit" th:value="${status}"
-								class="btn btn-outline-dark float-end mt-3">
+							<input type="submit" th:value="${status}" class="btn btn-outline-dark float-end mt-3">
 						</form>
 					</div>
 
@@ -325,10 +332,6 @@ i.fa-solid {
 			<!-- Footer End -->
 		</div>
 		<!-- Content End -->
-
-		<!-- Back to Top -->
-		<a href="#" class="btn btn-lg btn-info btn-lg-square back-to-top"><i
-			class="bi bi-arrow-up "></i></a>
 	</div>
 
 	<!-- JavaScript Libraries -->

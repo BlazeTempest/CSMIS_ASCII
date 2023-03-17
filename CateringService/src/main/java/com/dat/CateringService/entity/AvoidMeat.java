@@ -1,11 +1,16 @@
 package com.dat.CateringService.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -16,7 +21,6 @@ public class AvoidMeat {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	/* @Column(name="avoidMeat_ID") */
 	private int avoidmeat_ID;
 
 	@Column(name="type")
@@ -25,8 +29,6 @@ public class AvoidMeat {
 
 	@Column(name="created_date")
 	private LocalDateTime created_date;
-	
-	
 
 	public AvoidMeat() {
 		super();
