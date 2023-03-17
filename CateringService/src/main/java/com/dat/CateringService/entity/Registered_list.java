@@ -1,5 +1,6 @@
 package com.dat.CateringService.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -22,43 +23,62 @@ public class Registered_list {
 	@Column(name="dine")
 	private Byte dine;
 	
-	@Column(name="dineDate")
-	private Date dineDate;
+	@Column(name="dine_date")
+	private LocalDate dineDate;
 	
 	@Column(name="registered_date")
-	private Date created_date;
-	
-	@Column(name="registered_by")
-	private String created_by;
+	private LocalDate created_date;
 	
 	@Column(name="modify_date")
-	private Date modify_date;
+	private LocalDate modify_date;
 	
-	@Column(name="modify_by")
-	private Date modify_by;
+	@Column(name="door_log_no")
+	private int doorlogno;
+
+	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDate created_date, int doorlogno) {
+		super();
+		this.staffID = staffID;
+		this.dine = dine;
+		this.dineDate = dineDate;
+		this.created_date = created_date;
+		this.doorlogno = doorlogno;
+	}
+
+	public int getDoorlogno() {
+		return doorlogno;
+	}
+
+	public void setDoorlogno(int doorlogno) {
+		this.doorlogno = doorlogno;
+	}
+
+	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDate created_date) {
+		super();
+		this.staffID = staffID;
+		this.dine = dine;
+		this.dineDate = dineDate;
+		this.created_date = created_date;
+	}
 
 	public Registered_list() {
 		super();
 	}
 
-	public Registered_list(String staff_ID, Byte dine, Date dineDate) {
+	public Registered_list(String staff_ID, Byte dine, LocalDate dineDate) {
 		super();
 		this.staffID = staff_ID;
 		this.dine = dine;
 		this.dineDate = dineDate;
 	}
 
-	public Registered_list(int reg_ID, String staff_ID, Byte dine, Date dineDate, Date created_date,
-			String created_by, Date modify_date, Date modify_by) {
-		super();
+	public Registered_list(int reg_ID, String staff_ID, Byte dine, LocalDate dineDate, LocalDate created_date,
+			LocalDate modify_date) {
 		this.reg_ID = reg_ID;
 		this.staffID = staff_ID;
 		this.dine = dine;
 		this.dineDate = dineDate;
 		this.created_date = created_date;
-		this.created_by = created_by;
 		this.modify_date = modify_date;
-		this.modify_by = modify_by;
 	}
 
 	public int getReg_ID() {
@@ -85,43 +105,27 @@ public class Registered_list {
 		this.dine = dine;
 	}
 
-	public Date getDineDate() {
+	public LocalDate getDineDate() {
 		return dineDate;
 	}
 
-	public void setDineDate(Date dineDate) {
+	public void setDineDate(LocalDate dineDate) {
 		this.dineDate = dineDate;
 	}
 
-	public Date getCreated_date() {
+	public LocalDate getCreated_date() {
 		return created_date;
 	}
 
-	public void setCreated_date(Date created_date) {
+	public void setCreated_date(LocalDate created_date) {
 		this.created_date = created_date;
 	}
 
-	public String getCreated_by() {
-		return created_by;
-	}
-
-	public void setCreated_by(String created_by) {
-		this.created_by = created_by;
-	}
-
-	public Date getModify_date() {
+	public LocalDate getModify_date() {
 		return modify_date;
 	}
 
-	public void setModify_date(Date modify_date) {
+	public void setModify_date(LocalDate modify_date) {
 		this.modify_date = modify_date;
-	}
-
-	public Date getModify_by() {
-		return modify_by;
-	}
-
-	public void setModify_by(Date modify_by) {
-		this.modify_by = modify_by;
 	}
 }

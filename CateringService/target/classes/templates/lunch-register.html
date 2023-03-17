@@ -35,7 +35,11 @@ td {
 	padding: 8px;
 }
 
-span {
+.holiday {
+	 color: red;
+}
+
+#date {
 	display: inline-block;
 	padding: 10px;
 	background-color: #eee;
@@ -46,26 +50,23 @@ span {
 input[type="checkbox"] {
 	display: none;
 }
-
-input[type="checkbox"]:not(:checked)+span:hover {
-	background-color: aqua;
-	transform: translateX(-2px);
+[type="checkbox"]:not(:checked)+#date:hover {
+	background-color: #215971;
+	color: white;
 }
 
 input[type="checkbox"]:not(:checked)+label:active {
 	transform: translateY(0);
 }
 
-input[type="checkbox"]:checked+span {
+input[type="checkbox"]:checked+#date {
 	transition: background-color 0.5s ease-in-out;
 	transform: rotate(0deg) scale(1);
-	/*   background-color: #ff0; */
-}
-input:disabled {
-  cursor: none;
+	background-color: darkblue;
+	color: white; 
 }
 
-input[type="checkbox"]:checked+span:before {
+input[type="checkbox"]:checked+#date:before {
 	content: "\2714";
 	position: absolute;
 	top: 2;
@@ -75,7 +76,7 @@ input[type="checkbox"]:checked+span:before {
 	font-size: 1.5rem;
 	line-height: 1;
 	text-align: center;
-	color: red;
+	color: #71DFD4;
 	animation: grow-and-turn 1s ease-in-out forwards;
 }
 
@@ -259,35 +260,44 @@ i.fa-solid {
 
 					<div class="rounded py-4">
 						<div class="row w-100">
-							<h2 class="text-center">Lunch Registration</h2>
+							<h2 class="text-center">Lunch Plan Registration</h2>
 						</div>
 						<hr>
-
+						<div class="alert alert-success" role="alert" th:text="${message}" th:if="${message}"></div>
 						<form th:action="@{/saveRegister}"
 							method="POST">
-							<h3 th:text="${currentMonth}"></h3>
+							<h3 th:text="${currentMonth} + ' ' + ${currentYear}"></h3>
 							<table>
 								<thead>
 									<tr>
-										<th th:each="header:${headers}" th:text=${header}></th>
+										<th th:each="header:${headers}" th:text=${header} class="text-center"></th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr th:each="week:${month}">
 										<td th:each="day:${week}">
-										 <label>
-										<input
-												th:if="${day!=null}" type="checkbox"
-												th:name="${#temporals.format(day, 'dd-MM-yyyy')}"
-												th:checked="${day.getDayOfWeek().getValue() < 6}" 
-												th:disabled="${day.getDayOfWeek().getValue() >= 6}"/> <span
-												
-												th:text="${#temporals.format(day, 'dd')}"></span>
-										</label></td>
+											<label>
+											
+												<input th:if="${day!=null && not #lists.isEmpty(checkedDates)}" type="checkbox"
+													th:checked="${day.getDayOfWeek().getValue() < 6 && day.getMonth==currentMonth && not #lists.contains(holidays, day) && #lists.contains(checkedDates, day)}" 
+													th:disabled="${day.getDayOfWeek().getValue() >= 6 || day.getMonth!=currentMonth || #lists.contains(holidays, day) || #lists.contains(disabledDates, day)}"
+													id="dates" name="dates" th:value="${day}"/>
+													
+												<input th:if="${day!=null && #lists.isEmpty(checkedDates)}" type="checkbox"
+													th:checked="${day.getDayOfWeek().getValue() < 6 && day.getMonth==currentMonth && not #lists.contains(holidays, day) || #lists.contains(checkedDates, day)}" 
+													th:disabled="${day.getDayOfWeek().getValue() >= 6 || day.getMonth!=currentMonth || #lists.contains(holidays, day) || #lists.contains(disabledDates, day)}"
+													id="dates" name="dates" th:value="${day}"/>
+													
+												<span th:text="${#temporals.format(day, 'dd')}" id="date" class="" th:classappend="${#lists.contains(holidays, day) || day.getDayOfWeek().getValue() >= 6} ? holiday : normal"></span>
+											</label>
+											<input th:if="${day.getDayOfWeek().getValue() < 6 && day.getMonth==currentMonth && not #lists.contains(holidays, day)}" type="hidden" id="month" name="month" th:value="${day}">
+										</td>
 									</tr>
 								</tbody>
 							</table>
-							<input type="submit" value="Register"
+							<input type="hidden" th:value="${disabledDates}" name="disabledDates">
+							<input type="hidden" th:value="${status}" name="status">
+							<input type="submit" th:value="${status}"
 								class="btn btn-outline-dark float-end mt-3">
 						</form>
 					</div>
