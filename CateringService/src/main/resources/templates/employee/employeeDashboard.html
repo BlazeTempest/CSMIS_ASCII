@@ -92,12 +92,9 @@ i.fa-solid {
 				</div>
 
 				<div class="navbar-nav w-100">
-					<a href="employeeDashboard.html" class="nav-item nav-link active"><i
-						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
-						href="employee-lunch-register.html" class="nav-item nav-link"><i
-						class="fas fa-hamburger me-2"></i>Lunch Register</a> <a
-						href="employee-profile.html" class="nav-item nav-link"><i
-						class="fas fa-user-tie me-2"></i>Profile</a>
+					<a th:href="@{dashboard}" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a> 
+					<a th:href="@{registration}" class="nav-item nav-link"><i class="fas fa-hamburger me-2"></i>Lunch Register</a> 
+					<a th:href="@{profile}" class="nav-item nav-link"><i class="fas fa-user-tie me-2"></i>Profile</a>
 				</div>
 			</nav>
 		</div>
@@ -110,7 +107,7 @@ i.fa-solid {
 		<!-- Navbar Start -->
 		<nav
 			class="navbar navbar-expand bg-secondary-nav navbar-dark sticky-top px-4 py-2">
-			<a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+			<a th:href="@{dashboard}" class="navbar-brand d-flex d-lg-none me-4">
 				<h2 class="text-primary mb-0">
 					<i class="fa fa-user-edit"></i>
 				</h2>

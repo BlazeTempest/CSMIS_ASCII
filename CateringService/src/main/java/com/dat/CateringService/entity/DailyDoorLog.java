@@ -1,6 +1,6 @@
 package com.dat.CateringService.entity;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,46 +14,68 @@ import javax.persistence.Table;
 public class DailyDoorLog {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int door_ID;
+	private int daily_door_id;
 	
-	@Column(name="doorLogNo")
-	private int doorlog_no;
+	@Column(name="door_log_no")
+	private int doorLogNo;
 	
-	@Column(name="timedate")
-	private Timestamp datetime;
+	@Column(name="staffID")
+	private String staffID;
+	
+	@Column(name="imported_by")
+	private String imported_by;
+	
+	@Column(name="imported_date")
+	private LocalDate imported_date;
+
+	public LocalDate getImported_date() {
+		return imported_date;
+	}
+
+	public void setImported_date(LocalDate imported_date) {
+		this.imported_date = imported_date;
+	}
+
+	public String getImported_by() {
+		return imported_by;
+	}
+
+	public void setImported_by(String imported_by) {
+		this.imported_by = imported_by;
+	}
 
 	public DailyDoorLog() {
 		super();
 	}
 
-	public DailyDoorLog(int door_ID, int doorlog_no, Timestamp datetime) {
+	public DailyDoorLog(int door_ID, int doorlog_no, String staffID) {
 		super();
-		this.door_ID = door_ID;
-		this.doorlog_no = doorlog_no;
-		this.datetime = datetime;
+		this.daily_door_id = door_ID;
+		this.doorLogNo = doorlog_no;
+		this.staffID = staffID;
 	}
 
-	public int getDoor_ID() {
-		return door_ID;
+	public int getDaily_door_id() {
+		return daily_door_id;
 	}
 
-	public void setDoor_ID(int door_ID) {
-		this.door_ID = door_ID;
+	public void setDaily_door_id(int door_ID) {
+		this.daily_door_id = door_ID;
 	}
 
-	public int getDoorlog_no() {
-		return doorlog_no;
+	public int getDoorLogNo() {
+		return doorLogNo;
 	}
 
-	public void setDoorlog_no(int doorlog_no) {
-		this.doorlog_no = doorlog_no;
+	public void setDoorLogNo(int door_log_no) {
+		this.doorLogNo = door_log_no;
 	}
 
-	public Timestamp getDatetime() {
-		return datetime;
+	public String getStaffID() {
+		return staffID;
 	}
 
-	public void setDatetime(Timestamp datetime) {
-		this.datetime = datetime;
+	public void setStaffID(String staffID) {
+		this.staffID = staffID;
 	}
 }

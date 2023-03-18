@@ -119,8 +119,6 @@ public class RegistrationController {
         	for (int i = 1; i <= nextMonthDaysToAdd; i++) {
         	    daysOfLastWeek.add(nextMonthFirstDay.plusDays(i - 1));
         	}
-        	
-//        	List<Registered_list> currentMonthRegisteredList = registeredService.getRegisteredListByStaffID(authentication.getName(), firstDayOfMonth, lastDayOfMonth);
         	status = "Register";
     	}else {
 	    	// add days from previous month to first week
@@ -158,13 +156,7 @@ public class RegistrationController {
 	    	for (int i = 1; i <= nextMonthDaysToAdd; i++) {
 	    	    daysOfLastWeek.add(nextMonthFirstDay.plusDays(i - 1));
 	    	}
-	    	
-	//    	List<Registered_list> currentMonthRegisteredList = registeredService.getRegisteredListByStaffID(authentication.getName(), firstDayOfMonth, lastDayOfMonth);
 	    	status = "Register";
-	    	
-	    	
-	//    	System.out.println(LocalDate.now());
-	    	
     	}
     	
     	List<Registered_list> currentMonthRegisteredList = registeredService.getByStaffID(authentication.getName());
@@ -195,11 +187,16 @@ public class RegistrationController {
     	
     	List<AvoidMeat> avoidMeats = avoidMeatService.findAll();
     	String staffAvoidMeats = staffService.getStaffById(authentication.getName()).getAvoidMeatIds();
-    	List<String> Meats = Arrays.asList(staffAvoidMeats.split(","));
     	List<AvoidMeat> checkedMeats = new ArrayList<>();
-    	for(String id:Meats) {
-    		int tempId = Integer.parseInt(id);
-    		checkedMeats.add(avoidMeatService.findById(tempId));
+    	if(staffAvoidMeats!=null) {
+    		List<String> Meats = Arrays.asList(staffAvoidMeats.split(","));
+        	if(!staffAvoidMeats.equals("")) {
+        		for(String id:Meats) {
+            		int tempId = Integer.parseInt(id);
+            		checkedMeats.add(avoidMeatService.findById(tempId));
+            	}
+        		
+        	}
     	}
     	
     	model.addAttribute("checkedMeats", checkedMeats);
@@ -216,11 +213,10 @@ public class RegistrationController {
 	}
 	
 	@PostMapping("/saveRegister")
-	public String saveRegister(@RequestParam("avoidMeats")List<String> avoidMeats, @RequestParam("disabledDates")List<String> disabledDates , @RequestParam("dates")List<String> dates, @RequestParam("month")List<String> month, @RequestParam("status")String status, Model model , Authentication authentication, RedirectAttributes redirAttrs) {
+	public String saveRegister(@RequestParam(value = "avoidMeats", required = false)List<String> avoidMeats, @RequestParam("disabledDates")List<String> disabledDates , @RequestParam("dates")List<String> dates, @RequestParam("month")List<String> month, @RequestParam("status")String status, Model model , Authentication authentication, RedirectAttributes redirAttrs) {
 		List<LocalDate> checkedDates = new ArrayList<>();
 		List<LocalDate> uncheckedDates = new ArrayList<>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		System.out.println(status);
 		for(String date : month) {
 			if(dates.contains(date)) {
 				checkedDates.add(LocalDate.parse(date, formatter));
@@ -234,14 +230,14 @@ public class RegistrationController {
 		Staff staff = staffService.getStaffById(authentication.getName());
 		if(status.equalsIgnoreCase("Update")) {
 			for(LocalDate dineDate : checkedDates) {
-				Registered_list registered = registeredService.getbyDineDate(dineDate);
+				Registered_list registered = registeredService.getbyStaffIDAndDineDate(staff.getStaffID(), dineDate);
 				registered.setDine((byte)1);
 				registered.setModify_date(LocalDate.now());
 				registeredService.addRegisteredDate(registered);
 				System.out.println("updated");
 			}
 			for(LocalDate dineDate : uncheckedDates) {
-				Registered_list registered = registeredService.getbyDineDate(dineDate);
+				Registered_list registered = registeredService.getbyStaffIDAndDineDate(staff.getStaffID(), dineDate);
 				registered.setDine((byte)0);
 				registered.setModify_date(LocalDate.now());
 				registeredService.addRegisteredDate(registered);
@@ -262,17 +258,22 @@ public class RegistrationController {
 			redirAttrs.addFlashAttribute("message", "Your Lunch plan is registered successfully!");
 		}
 		String avoidMeatList = "";
-		for(String avoidMeat:avoidMeats) {
-			System.out.println(avoidMeat);
-			if(avoidMeatList.isEmpty() || avoidMeatList.isBlank()) {
-				avoidMeatList = avoidMeat;
-			}else {
-				avoidMeatList = avoidMeatList + "," +avoidMeat;
+		if(avoidMeats!=null) {
+			
+			for(String avoidMeat:avoidMeats) {
+				System.out.println(avoidMeat);
+				if(avoidMeatList.isEmpty() || avoidMeatList.isBlank()) {
+					avoidMeatList = avoidMeat;
+				}else {
+					avoidMeatList = avoidMeatList + "," +avoidMeat;
+				}
 			}
+			
 		}
-		System.out.println(avoidMeatList);
+		
 		staff.setAvoidMeatIds(avoidMeatList);
 		staffService.addStaff(staff);
+		
 		return "redirect:/registration";
 	}
 }

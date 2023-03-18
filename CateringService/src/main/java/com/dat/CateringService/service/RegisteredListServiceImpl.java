@@ -35,8 +35,18 @@ public class RegisteredListServiceImpl implements RegisteredListService {
 	}
 
 	@Override
-	public Registered_list getbyDineDate(LocalDate date) {
-		return repository.findByDineDateContainsAllIgnoreCase(date);
+	public Registered_list getbyStaffIDAndDineDate(String staffID, LocalDate date) {
+		return repository.findByStaffIDContainsAndDineDateContainsAllIgnoreCase(staffID, date);
+	}
+
+	@Override
+	public List<Registered_list> getAllRegisteredStaff() {
+		return repository.findAll();
+	}
+
+	@Override
+	public List<Registered_list> getRegisteredStaffByDate(LocalDate start, LocalDate end) {
+		return repository.getRegisteredStaffByDate(start, end);
 	}
 	
 	
