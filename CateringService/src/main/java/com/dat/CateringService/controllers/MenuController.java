@@ -80,6 +80,7 @@ public class MenuController {
 		try {
 			String role = authentication.getAuthorities().toArray()[0].toString();
 			if (role.equals("admin")) {
+				
 				AvoidMeat theAvoidMeat = new AvoidMeat();
 				theModel.addAttribute("avoidmeat", theAvoidMeat);
 
@@ -145,7 +146,7 @@ public class MenuController {
 			
 		} catch (NullPointerException e) {
 
-			return "admin/menu";
+			return "admin/showMyLoginPage";
 		}
 		
 	}
