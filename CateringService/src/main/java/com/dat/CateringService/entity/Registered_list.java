@@ -34,6 +34,52 @@ public class Registered_list {
 	
 	@Column(name="door_log_no")
 	private int doorlogno;
+	
+	@Column(name="name")
+	private String name;
+	
+	@Column(name="division")
+	private String division;
+	
+	@Column(name="dept")
+	private String dept;
+
+	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDate created_date, int doorlogno,
+			String name, String division, String dept) {
+		super();
+		this.staffID = staffID;
+		this.dine = dine;
+		this.dineDate = dineDate;
+		this.created_date = created_date;
+		this.doorlogno = doorlogno;
+		this.name = name;
+		this.division = division;
+		this.dept = dept;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDivision() {
+		return division;
+	}
+
+	public void setDivision(String division) {
+		this.division = division;
+	}
+
+	public String getDept() {
+		return dept;
+	}
+
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
 
 	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDate created_date, int doorlogno) {
 		super();

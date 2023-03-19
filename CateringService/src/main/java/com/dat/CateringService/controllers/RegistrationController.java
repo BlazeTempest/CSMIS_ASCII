@@ -246,12 +246,12 @@ public class RegistrationController {
 			redirAttrs.addFlashAttribute("message", "Your changes Lunch plan is updated successfully!");
 		}else if(status.equalsIgnoreCase("Register")) {
 			for(LocalDate dineDate : checkedDates) {
-				Registered_list registered = new Registered_list(staff.getStaffID(), (byte)1, dineDate, LocalDate.now(), staff.getDoorLogNo());
+				Registered_list registered = new Registered_list(staff.getStaffID(), (byte)0, dineDate, LocalDate.now(), staff.getDoorLogNo(), staff.getName(), staff.getDivision(), staff.getDept());
 				registeredService.addRegisteredDate(registered);
 				System.out.println("Added");
 			}
 			for(LocalDate dineDate : uncheckedDates) {
-				Registered_list registered = new Registered_list(staff.getStaffID(), (byte)0, dineDate, LocalDate.now(), staff.getDoorLogNo());
+				Registered_list registered = new Registered_list(staff.getStaffID(), (byte)0, dineDate, LocalDate.now(), staff.getDoorLogNo(), staff.getName(), staff.getDivision(), staff.getDept());
 				registeredService.addRegisteredDate(registered);
 				System.out.println("Added");
 			}

@@ -38,17 +38,33 @@ public class ReportController {
 	private RegisteredListService registeredService;
 	
 	@GetMapping("/registered-list")
-	public String plannedList(Model model) {
+	public String plannedList(Model model, RedirectAttributes redirect) {
 //		List<Registered_list> registeredStaffs = registeredService.getRegisteredStaffByDate(LocalDate.now(), LocalDate.now());
 		List<Staff> registeredStaffs = new ArrayList<>();
-		List<String> ids = new ArrayList<>();
-		for(Registered_list temp:registeredService.getRegisteredStaffByDate(LocalDate.now(), LocalDate.now())){
-			ids.add(temp.getStaffID());
+		for(Registered_list temp:registeredService.getRegisteredStaffByDate(LocalDate.now(), LocalDate.now())) {
+			registeredStaffs.add(staffService.getStaffById(temp.getStaffID()));
 		}
-		for(String id:ids) {
-			registeredStaffs.add(staffService.getStaffById(id));
-		}
+		
+		model.addAttribute("divs", staffService.getDivNames());
+		model.addAttribute("depts", staffService.getDeptNames());
 		model.addAttribute("registeredStaffs", registeredStaffs);
+		return "admin/registered-list";
+	}
+	
+	@GetMapping("/searchRegistered")
+	public String searchRegistered(@RequestParam(name="start", required=false)String start, @RequestParam(name="end", required=false)String end, @RequestParam(name="name", required=false)String name, @RequestParam(name="id", required=false)String id, @RequestParam(name="division", required=false)String div, @RequestParam(name="dept", required=false)String dept, Model model) {
+		List<Registered_list> registeredList = new ArrayList<>();
+		if(start!=null && end!=null) {
+			registeredList = registeredService.getRegisteredStaffByDate(LocalDate.parse(start), LocalDate.parse(end));
+		}else if(id.trim().isEmpty() && name.trim().isEmpty() && div.trim().isEmpty() && dept.trim().isEmpty()) {
+			return "redirect:/registered-list";
+		}else if(id!=null || name!=null || div!=null || dept!=null) {
+			registeredList = registeredService.getByStaffIDAndNameAndDivisionAndDept(id, name, div, dept);
+		}
+		
+		model.addAttribute("divs", staffService.getDivNames());
+		model.addAttribute("depts", staffService.getDeptNames());
+		model.addAttribute("registeredStaffs", registeredList);
 		return "admin/registered-list";
 	}
 	
