@@ -288,7 +288,7 @@ i.fa-solid {
 													id="dates" name="dates" th:value="${day}"/>
 													
 												<input th:if="${day!=null && #lists.isEmpty(checkedDates)}" type="checkbox"
-													th:checked="${day.getDayOfWeek().getValue() < 6 && day.getMonth==currentMonth && not #lists.contains(holidays, day) || #lists.contains(checkedDates, day)}" 
+													th:checked="${day.getDayOfWeek().getValue() < 6 && day.getMonth==currentMonth && not #lists.contains(holidays, day) && not #lists.contains(disabledDates, day)}" 
 													th:disabled="${day.getDayOfWeek().getValue() >= 6 || day.getMonth!=currentMonth || #lists.contains(holidays, day) || #lists.contains(disabledDates, day)}"
 													id="dates" name="dates" th:value="${day}"/>
 													

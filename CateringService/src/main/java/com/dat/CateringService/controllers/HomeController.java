@@ -227,14 +227,19 @@ public class HomeController {
 			// Change enabled to 0 (resigned operators)
 			if (ids != null) {
 				for (String id : ids) {
-					System.out.println("Inactive");
 					Staff staff = staffService.getStaffById(id);
-					staff.setStatus((byte) 0);
-					staff.setDelete_date(LocalDateTime.now());
-					staff.setDelete_by(adminName);
-					staff.setRole("operator");
-					staff.setPassword("$2a$04$WvPSakxEW208zFYymEfyFO90gtbmP5o.vrcEogJ0JRMLuK4Y0LxIi");
-					tempStaffs.add(staff);
+					if(staff.getStaffID()=="1" || staff.getName()=="Admin") {
+						continue;
+					}else {
+						System.out.println("Inactive");
+						
+						staff.setStatus((byte) 0);
+						staff.setDelete_date(LocalDateTime.now());
+						staff.setDelete_by(adminName);
+						staff.setRole("operator");
+						staff.setPassword("$2a$04$WvPSakxEW208zFYymEfyFO90gtbmP5o.vrcEogJ0JRMLuK4Y0LxIi");
+						tempStaffs.add(staff);
+					}
 				}
 			}
 			staffService.addAllStaff(tempStaffs);
@@ -252,8 +257,6 @@ public class HomeController {
 			return "admin/employee-list";
 		}
 	}
-
-	
 
 	@GetMapping("/editStaffForm")
 	public String editStaff(@RequestParam(name = "id", required = false) String id, Model model,Authentication authentication) {
