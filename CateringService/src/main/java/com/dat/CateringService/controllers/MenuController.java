@@ -65,7 +65,6 @@ public class MenuController {
 		}
 		price.setStatus((byte) 1);
 		priceService.save(price);
-		
 		redirectAttrsl.addAttribute("totalPrice", price.getTotal_price());
 		redirectAttrsl.addAttribute("datPrice", price.getDATprice());
 		redirectAttrsl.addAttribute("staffPrice", price.getStaff_price());
@@ -126,6 +125,7 @@ public class MenuController {
 						System.err.println("Error reading file: " + e.getMessage());
 					}
 				}
+				
 				String pdfFileName2 = "nextweek.pdf";
 				if (pdfFileName2 != null) {
 					try {
@@ -140,15 +140,17 @@ public class MenuController {
 			theModel.addAttribute("datPrice", activePrice.getDATprice());
 			theModel.addAttribute("staffPrice", activePrice.getStaff_price());
 			
-		}
+			}
 			return "admin/menu";
 			
-		} catch (NullPointerException e) {
-
-			return "admin/menu";
+		} 
+		catch (NullPointerException e) {
+			return "redirect:/showMyLoginPage";
 		}
 		
-	}
+}
+	
+	
 
 	@PostMapping("/add_price")
 	public String savePrice(@ModelAttribute("addprice") Price thePrice, Authentication authentication, RedirectAttributes redirect) {
@@ -202,12 +204,17 @@ public class MenuController {
 
 	@PostMapping("/import_menu")
 	public String uploadPdf(@RequestParam("pdfFile") MultipartFile pdfFile, Model model, RedirectAttributes redirectAttributes) throws IOException {
+
+
+	/*public String uploadPdf(@RequestParam("pdfFile") MultipartFile pdfFile, Model model) throws IOException {*/
+
 		String message = "";
 		try {
 			// Get the filename of the PDF file
 			String fileName = StringUtils.cleanPath(pdfFile.getOriginalFilename());
 			String pdfOldFileName = new File(fileName).getName();
 			String pdfNewFileName = "currentweek.pdf";
+
 			// Create a Path object for the resource directory
 			Path resourceDirectory = Paths.get("src", "main", "resources", "pdfs");
 

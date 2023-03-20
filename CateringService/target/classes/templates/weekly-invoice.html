@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8" />
@@ -201,13 +201,16 @@
 
                     </div>
                     <div class="modal-body bg-secondary">
-                        <form th:action="@{/saveInvoice}" th:object="${paymentVoucher}" method="get">
+                        <form th:action="@{/saveWeeklyInvoice}" th:object="${weeklyInvoice}" method="POST">
+                           <input type="hidden" th:field="*{voucher_ID}" th:value="${generateId}">
+                          
+                          
                             <div class="row mb-3">
                                 <label for="inputPassword3" class="col-sm-4 col-form-label text-dark"> Name</label>
                                 <div class="col-sm-8 ">
-                                    <input type="text" class="form-control bg-white text-primary" id="inputEmail3" placeholder="Restaurant Name">
+                                    <input type="text"    th:value="${restaurantName}" readonly  class="form-control bg-white text-primary" id="inputEmail3" >
                                 </div>
-                            </div>
+                            </div> 
                             <div class="row mb-3">
                                 <label for="inputPassword3" class="col-sm-4 col-form-label text-dark">Payment Date</label>
                                 <div class="col-sm-8">
@@ -217,29 +220,29 @@
                             <div class="row mb-3">
                                 <label for="inputPassword3" class="col-sm-4 col-form-label text-dark">Invoice for(Start Date)</label>
                                 <div class="col-sm-8">
-                                    <input type="date" th:field="*{from}" class="form-control bg-white" id="inputPassword3">
+                                    <input type="date" th:field="*{start_date}" class="form-control bg-white" id="inputPassword3">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputPassword3" class="col-sm-4 col-form-label text-dark">Invoice for(End Date)</label>
                                 <div class="col-sm-8">
-                                    <input type="date" class="form-control bg-white" id="inputPassword3">
+                                    <input type="date" th:field="*{end_date}" class="form-control bg-white" id="inputPassword3">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputPassword3" class="col-sm-4 col-form-label text-dark">Payment
                                       Method</label>
                                 <div class="col-sm-8 form-group">
-                                    <select class="form-control bg-white" id="exampleFormControlSelect1">
-                                          <option>Cash</option>
-                                          <option>Bank</option>   
+                                    <select class="form-control bg-white" th:field="*{payment_method}" id="exampleFormControlSelect1">
+                                          <option th:value="Cash" th:text="Cash">Cash</option>
+                                          <option th:value="Bank" th:text="Bank">Bank</option>   
                                       </select>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputPassword3" class="col-sm-4 col-form-label text-dark">Cashier</label>
                                 <div class="col-sm-8">
-                                    <input type="text" th:field="*{cashier}" class="form-control bg-white" id="inputPassword3" placeholder="Cashier name">
+                                    <input type="text" th:field="*{cashier}"  class="form-control bg-white" id="inputPassword3" placeholder="Cashier name">
                                 </div>
                             </div>
                             <div class="row mb-3">

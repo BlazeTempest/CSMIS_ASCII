@@ -13,5 +13,7 @@ public interface RestaurantService {
 	public void save(Restaurant theRestaurant);
 
 	public boolean isDuplicate(Restaurant theRestaurant);
+	
+	String findActiveRestaurantName();
 
 }

@@ -1,57 +1,73 @@
 package com.dat.CateringService.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
-@Table(name="payment_voucher")
+@Table(name = "payment_voucher")
 public class PaymentVoucher {
 	@Id
 	private String voucher_ID;
+
+	@Column(name = "restaurant_name")
+	private String restaurant_name;
+
+	@Column(name = "payment_date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate payment_date;
+
+	@Column(name = "from_date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate start_date;
+
+	@Column(name = "to_date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate end_date;
 	
-	@Column(name="restaurant_id")
-	private int restaurant_id;
-	
-	@Column(name="payment_date")
-	private Date payment_date;
-	
-	@Column(name="from_date")
-	private Date from;
-	
-	@Column(name="headcount_ID")
-	private int headcount_ID;
-	
-	@Column(name="cashier")
+	@Column(name="payment_method")
+	private String payment_method;
+
+	/*
+	 * @Column(name="headcount_ID") private int headcount_ID;
+	 */
+
+	@Column(name = "cashier")
 	private String cashier;
-	
-	@Column(name="received_by")
+
+	@Column(name = "received_by")
 	private String received_by;
-	
-	@Column(name="approved_by")
+
+	@Column(name = "approved_by")
 	private String approved_by;
-	
-	@Column(name="created_date")
-	private Date created_date;
-	
-	@Column(name="created_by")
+
+	@Column(name = "created_date")
+	private LocalDate created_date;
+
+	@Column(name = "created_by")
 	private String created_by;
 
 	public PaymentVoucher() {
 		super();
 	}
 
-	public PaymentVoucher(String voucher_ID, int restaurant_id, Date payment_date, Date from, int headcount_ID,
-			String cashier, String received_by, String approved_by, Date created_date, String created_by) {
+	public PaymentVoucher(String voucher_ID, String restaurant_name, String payment_method, LocalDate payment_date, LocalDate start_date,
+			LocalDate end_date, String cashier, String received_by, String approved_by, LocalDate created_date,
+			String created_by) {
 		super();
 		this.voucher_ID = voucher_ID;
-		this.restaurant_id = restaurant_id;
+	    this.restaurant_name = restaurant_name;
+	    this.payment_method=payment_method;
 		this.payment_date = payment_date;
-		this.from = from;
-		this.headcount_ID = headcount_ID;
+		this.start_date = start_date;
+		this.end_date = end_date;
+
 		this.cashier = cashier;
 		this.received_by = received_by;
 		this.approved_by = approved_by;
@@ -67,36 +83,46 @@ public class PaymentVoucher {
 		this.voucher_ID = voucher_ID;
 	}
 
-	public int getRestaurant_id() {
-		return restaurant_id;
+	public String getRestaurant_name() {
+		return restaurant_name;
 	}
 
-	public void setRestaurant_id(int restaurant_id) {
-		this.restaurant_id = restaurant_id;
+	public void setRestaurant_name(String restaurant_name) {
+		this.restaurant_name = restaurant_name;
 	}
 
-	public Date getPayment_date() {
+	public LocalDate getPayment_date() {
 		return payment_date;
 	}
 
-	public void setPayment_date(Date payment_date) {
+	public void setPayment_date(LocalDate payment_date) {
 		this.payment_date = payment_date;
 	}
+	
+	
 
-	public Date getFrom() {
-		return from;
+	public String getPayment_method() {
+		return payment_method;
 	}
 
-	public void setFrom(Date from) {
-		this.from = from;
+	public void setPayment_method(String payment_method) {
+		this.payment_method = payment_method;
 	}
 
-	public int getHeadcount_ID() {
-		return headcount_ID;
+	public LocalDate getStart_date() {
+		return start_date;
 	}
 
-	public void setHeadcount_ID(int headcount_ID) {
-		this.headcount_ID = headcount_ID;
+	public void setStart_date(LocalDate srart_date) {
+		this.start_date = srart_date;
+	}
+
+	public LocalDate getEnd_date() {
+		return end_date;
+	}
+
+	public void setEnd_date(LocalDate end_date) {
+		this.end_date = end_date;
 	}
 
 	public String getCashier() {
@@ -123,11 +149,11 @@ public class PaymentVoucher {
 		this.approved_by = approved_by;
 	}
 
-	public Date getCreated_date() {
+	public LocalDate getCreated_date() {
 		return created_date;
 	}
 
-	public void setCreated_date(Date created_date) {
+	public void setCreated_date(LocalDate created_date) {
 		this.created_date = created_date;
 	}
 
@@ -138,5 +164,5 @@ public class PaymentVoucher {
 	public void setCreated_by(String created_by) {
 		this.created_by = created_by;
 	}
-	
+
 }

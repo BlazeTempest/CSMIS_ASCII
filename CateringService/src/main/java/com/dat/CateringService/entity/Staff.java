@@ -69,7 +69,7 @@ public class Staff {
 	@Column(name="enabled")
 	private Byte enabled;
 	
-	@Column(name="avoidMeatIds")
+	@Column(name="avoid_meat_ids")
     private String avoidMeatIds;
 	
 	public String getAvoidMeatIds() {
