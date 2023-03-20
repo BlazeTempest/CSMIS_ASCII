@@ -95,17 +95,17 @@
                 ><i class="fa fa-laptop me-2"></i>Report</a
               >
               <div class="dropdown-menu bg-transparent border-0">
-                <a href="registered-list.html" class="dropdown-item"
-                  >Monthly Registered List</a
+                <a th:href="@{registered-list}" class="dropdown-item"
+                  >Registered List</a
                 >
-                <a href="register-eat-list.html" class="dropdown-item"
+                <a th:href="@{register-eat-list}" class="dropdown-item"
                   >Registered & Eat List</a
                 >
-                <a href="register-not-eat-list.html" class="dropdown-item"
+                <a th:href="@{register-not-eat-list}" class="dropdown-item"
                   >Registered & Not Eat List</a
                 >
-                <a href="not-registereed-eat-list.html" class="dropdown-item"
-                  >Not Registered & Eat List</a
+                <a th:href="@{not-registereed-eat-list}" class="dropdown-item"
+                  >Unregistered & Eat List</a
                 >
               </div>
             </div>
@@ -165,7 +165,7 @@
                         </a>
                        <div
                                 class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
-                                <a href="profile.html" class="dropdown-item fw-bold text-center">Profile</a>
+                                <a th:href="@{/userProfile}" class="dropdown-item fw-bold text-center">Profile</a>
 
                                 <form action="#" th:action="@{/logout}" method="POST">
 

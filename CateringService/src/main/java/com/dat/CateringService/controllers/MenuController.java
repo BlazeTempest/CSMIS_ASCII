@@ -79,6 +79,7 @@ public class MenuController {
 		try {
 			String role = authentication.getAuthorities().toArray()[0].toString();
 			if (role.equals("admin")) {
+				
 				AvoidMeat theAvoidMeat = new AvoidMeat();
 				theModel.addAttribute("avoidmeat", theAvoidMeat);
 

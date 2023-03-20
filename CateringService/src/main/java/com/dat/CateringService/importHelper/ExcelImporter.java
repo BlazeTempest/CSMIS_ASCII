@@ -54,8 +54,6 @@ public class ExcelImporter {
 	    return objects;
 	}
 
-
-
     public static List<Staff> readExcel(InputStream inputStream) throws IOException {
         List<Staff> objects = new ArrayList<>();
         Workbook workbook = WorkbookFactory.create(inputStream);
