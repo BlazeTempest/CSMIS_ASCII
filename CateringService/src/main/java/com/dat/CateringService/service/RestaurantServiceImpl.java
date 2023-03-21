@@ -54,5 +54,10 @@ public class RestaurantServiceImpl implements RestaurantService {
 		restaurantRepository.save(theRestaurant);
 	}
 
+	@Override
+	public String findActiveRestaurantName() {
+		Restaurant restaurant=restaurantRepository.findFirstByStatus("active");
+		return restaurant !=null ? restaurant.getRestaurant_name(): "";
+	}
 
 }

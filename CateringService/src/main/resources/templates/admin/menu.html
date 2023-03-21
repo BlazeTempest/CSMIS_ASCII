@@ -117,8 +117,8 @@ i.fa-solid {
 						<a href="#" class="nav-link dropdown-toggle"
 							data-bs-toggle="dropdown"><i class="fas fa-file me-2"></i>Report</a>
 						<div class="dropdown-menu bg-transparent border-0">
-							<a href="weekly-invoice.html" class="dropdown-item">Weekly
-								Invoice</a> <a href="monthly-invoice.html" class="dropdown-item">Monthly
+							<a th:href="@{weekly-invoice}" class="dropdown-item">Weekly
+								Invoice</a> <a th:href="@{monthly-invoice}" class="dropdown-item">Monthly
 								Invoice</a>
 						</div>
 					</div>
@@ -172,7 +172,7 @@ i.fa-solid {
 
 			<!-- Form Start -->
 			<div class="container-fluid mt-3">
-				<div class="row "  style="margin-left:13px;margin-right:13px;">
+				<div class="row " style="margin-left: 13px; margin-right: 13px;">
 					<div class="card bg-secondary">
 						<div class="card-header text-center mt-4">
 							<!-- <button class="btn btn-outline-info text-center">Change Price</button> -->
@@ -184,7 +184,8 @@ i.fa-solid {
 								data-bs-toggle="modal" data-bs-target="#addPrice">Add
 								Price</button>
 						</div>
-						<div class="alert alert-danger" th:text="${unique}" th:if="${unique}"></div>
+						<div class="alert alert-danger" th:text="${unique}"
+							th:if="${unique}"></div>
 						<div th:if="${priceMessage!=null}" class="card-body my-3">
 							<div class="alert alert-danger" th:text="${priceMessage}"></div>
 						</div>
@@ -192,17 +193,19 @@ i.fa-solid {
 							<div class="row text-center">
 								<div class="col-lg-4">
 									<h5>
-										Total Cost : <span style="color:#097aeb;" th:text="${totalPrice}"></span>
+										Total Cost : <span style="color: #097aeb;"
+											th:text="${totalPrice}"></span>
 									</h5>
 								</div>
 								<div class="col-lg-4">
 									<h5>
-										DAT Cost : <span style="color:#097aeb;" th:text="${datPrice}"></span>
+										DAT Cost : <span style="color: #097aeb;" th:text="${datPrice}"></span>
 									</h5>
 								</div>
 								<div class="col-lg-4">
 									<h5>
-										Staff Cost : <span style="color:#097aeb;" th:text="${staffPrice}"></span>
+										Staff Cost : <span style="color: #097aeb;"
+											th:text="${staffPrice}"></span>
 									</h5>
 								</div>
 
@@ -210,21 +213,26 @@ i.fa-solid {
 						</div>
 					</div>
 				</div>
-					<div class="alert alert-success mt-3" th:text="${currentweek}" th:if="${currentweek}"></div>
-				<div class="alert alert-success mt-3" th:text="${nextweek}" th:if="${nextweek}"></div>
-				<div class="row mt-3" style="margin-left:1px;margin-right:1px;">
+				<div class="alert alert-success mt-3" th:text="${currentweek}"
+					th:if="${currentweek}"></div>
+				<div class="alert alert-success mt-3" th:text="${nextweek}"
+					th:if="${nextweek}"></div>
+				<div class="row mt-3" style="margin-left: 1px; margin-right: 1px;">
 					<div class="col-lg-6">
 						<div class="card bg-secondary">
-						
+
 							<form th:action="@{import_menu}" method="POST"
 								enctype="multipart/form-data" class="row">
 								<div class="card-header text-center mt-4">
 									<label class="my-4 fs-5">Import Menu for Current Week</label> <br>
-									<input class="form-control form-control-lg bg-white fs-6 w-75 ms-5"
-										id="pdfFile" type="file" name="pdfFile" required/>
-								
-								<button class="btn btn-outline-dark text-center mt-3" type="submit"><i class="fa fa-plus"></i>&nbsp; Import
-										</button>
+									<input
+										class="form-control form-control-lg bg-white fs-6 w-75 ms-5"
+										id="pdfFile" type="file" name="pdfFile" required />
+
+									<button class="btn btn-outline-dark text-center mt-3"
+										type="submit">
+										<i class="fa fa-plus"></i>&nbsp; Import
+									</button>
 								</div>
 
 							</form>
@@ -233,17 +241,19 @@ i.fa-solid {
 					</div>
 					<div class="col-lg-6">
 						<div class="card bg-secondary">
-							
+
 							<form th:action="@{import_menu2}" method="POST"
 								enctype="multipart/form-data">
 								<div class="card-header text-center mt-4">
 									<label class="my-4 fs-5">Import Menu for Next Week</label> <input
 										class="form-control form-control-lg bg-white fs-6 w-75 ms-5"
-										id="pdfFile2" type="file" name="pdfFile2" required/>
-									<button class="btn btn-outline-dark text-center mt-3" type="submit"><i class="fa fa-plus"></i>&nbsp; Import
-										</button>
+										id="pdfFile2" type="file" name="pdfFile2" required />
+									<button class="btn btn-outline-dark text-center mt-3"
+										type="submit">
+										<i class="fa fa-plus"></i>&nbsp; Import
+									</button>
 								</div>
-							
+
 							</form>
 
 						</div>
@@ -255,7 +265,8 @@ i.fa-solid {
 			<!-- change price modal  start-->
 			<div class="modal fade bg-gradient" id="addPrice" tabindex="-1"
 				aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered" style="width:400px;">
+				<div class="modal-dialog modal-dialog-centered"
+					style="width: 400px;">
 					<div class="modal-content bg-secondary">
 						<div class="modal-header">
 							<h3 class="modal-title ms-4 text-dark" id="exampleModalLabel"
@@ -289,7 +300,7 @@ i.fa-solid {
 											aria-describedby="passwordHelpInline">
 									</div>
 								</div>
-								
+
 							</div>
 							<div class="float-end mb-4 me-4">
 								<button type="button" class="btn btn-outline-danger"
@@ -297,14 +308,15 @@ i.fa-solid {
 								<button type="submit" class="btn btn-outline-dark ">Add</button>
 							</div>
 						</form>
-						
+
 					</div>
 				</div>
 			</div>
 			<!-- change price modal end -->
-			<div class="modal fade bg-gradient "  id="changePrice" tabindex="-1"
+			<div class="modal fade bg-gradient " id="changePrice" tabindex="-1"
 				aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered " style="width:400px;">
+				<div class="modal-dialog modal-dialog-centered "
+					style="width: 400px;">
 					<div class="modal-content bg-secondary">
 						<div class="modal-header">
 							<h3 class="modal-title ms-4 text-dark" id="exampleModalLabel"
@@ -321,21 +333,21 @@ i.fa-solid {
 
 									<form class="w-100" action="#" th:action="@{/change_price}"
 										method="POST">
-										<select name="priceList" class="custom-select py-2 rounded mb-4"
-											style="width: 100%;">
+										<select name="priceList"
+											class="custom-select py-2 rounded mb-4" style="width: 100%;">
 											<option th:each="priceList : ${priceList}"
 												th:value="${priceList.price_ID}"
-												th:text="${priceList.total_price}" ></option>
+												th:text="${priceList.total_price}"></option>
 										</select>
 										<button type="button" class="btn btn-outline-danger mb-2"
-								data-bs-dismiss="modal">Close</button>
+											data-bs-dismiss="modal">Close</button>
 										<button type="submit" class="btn btn-outline-dark mb-2">Save
 											changes</button>
 									</form>
 								</div>
 							</div>
 						</div>
-						
+
 					</div>
 				</div>
 			</div>
@@ -357,7 +369,7 @@ i.fa-solid {
 									<span>Please select file</span>
 								</div>
 							</div>
-							
+
 						</div>
 
 					</div>
@@ -385,18 +397,19 @@ i.fa-solid {
 
 			<!-- avoid meat start-->
 			<div class="container-fluid my-4">
-				<div class="row "  style="margin-left:1px;margin-right:1px;">
+				<div class="row " style="margin-left: 1px; margin-right: 1px;">
 					<div class="col-lg-5">
 						<div class="card bg-secondary">
 							<div class="card-header text-center mt-4">
 								<h2 class="text-center">Avoid Meat List</h2>
 							</div>
-								<div class="alert alert-danger" th:text="${avoidMeatMessage}" th:if="${avoidMeatMessage}"></div>
+							<div class="alert alert-danger" th:text="${avoidMeatMessage}"
+								th:if="${avoidMeatMessage}"></div>
 							<div class="card-body my-2">
 								<div class="row text-center">
-									
-									<form action="#" th:action="@{saveAvoidMeat}" th:object="${avoidmeat}"
-										method="POST" class="row">
+
+									<form action="#" th:action="@{saveAvoidMeat}"
+										th:object="${avoidmeat}" method="POST" class="row">
 										<input type="hidden" th:field="*{avoidmeat_ID}" />
 										<div class="col-md-8 text-center">
 											<input type="text" th:field="*{type}"
@@ -412,9 +425,11 @@ i.fa-solid {
 								</div>
 								<!-- 	<hr style="height: 3px; color: blue;"> -->
 								<div class="row ms-4">
-									<span class="alert alert-danger text-center" style="width:200px;" th:if="${avoidMessage!=null}" th:text="${avoidMessage}"></span>
+									<span class="alert alert-danger text-center"
+										style="width: 200px;" th:if="${avoidMessage!=null}"
+										th:text="${avoidMessage}"></span>
 									<ul style="list-style-type: none;">
-										<li  th:each="tempAvoidMeat, iterStat : ${avoidmeats}"
+										<li th:each="tempAvoidMeat, iterStat : ${avoidmeats}"
 											class="mb-2"><span th:text="${iterStat.count}"
 											class="me-2"></span> <span th:text="${tempAvoidMeat.type}"></span></li>
 									</ul>
