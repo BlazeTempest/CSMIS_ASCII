@@ -1,6 +1,7 @@
 package com.dat.CateringService.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,6 +28,17 @@ public class DailyDoorLog {
 	
 	@Column(name="imported_date")
 	private LocalDate imported_date;
+	
+	@Column(name="dine_date")
+	private LocalDate dineDate;
+
+	public LocalDate getDineDate() {
+		return dineDate;
+	}
+
+	public void setDineDate(LocalDate dineDate) {
+		this.dineDate = dineDate;
+	}
 
 	public LocalDate getImported_date() {
 		return imported_date;

@@ -306,7 +306,7 @@
                         </form>
                     </div>
                     <hr class="mt-5">
-                    <h5 th:text="'Found ' + ${totalNum} + ' Employees'" class="text-end"></h5><hr style="background-color: rgb(79, 30, 192); height: 2px;">
+                    <h5 th:text="'Found ' + ${totalNum!=null ? totalNum : 0} + ' Employees'" class="text-end"></h5><hr style="background-color: rgb(79, 30, 192); height: 2px;">
 
                     <!-- Modal -->
                     <div id="myModal" class="modal fade" tabindex="-1">

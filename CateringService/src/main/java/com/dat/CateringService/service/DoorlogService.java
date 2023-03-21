@@ -10,4 +10,6 @@ public interface DoorlogService {
 	public void add(DailyDoorLog doorlog);
 	public List<DailyDoorLog> getAllDoorlog();
 	public List<DailyDoorLog> getDoorlogByImportedDate(LocalDate today);
+	public List<DailyDoorLog> getDoorlogByDineDate(LocalDate start, LocalDate end);
+	public DailyDoorLog getLastInserted();
 }

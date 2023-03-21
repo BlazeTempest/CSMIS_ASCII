@@ -2,6 +2,10 @@ package com.dat.CateringService.importHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +26,6 @@ public class DoorlogImporter {
         List<DailyDoorLog> objects = new ArrayList<>();
         Workbook workbook = WorkbookFactory.create(inputStream);
         Sheet sheet = workbook.getSheetAt(0); // assuming only one sheet in the workbook
-        DataFormatter formatter = new DataFormatter();
         Iterator<Row> iterator = sheet.iterator();
         while (iterator.hasNext()) {
             Row row = iterator.next();
@@ -37,13 +40,21 @@ public class DoorlogImporter {
                 int columnIndex = cell.getColumnIndex();
                 switch (columnIndex) {
 	                case 0:
-	                	object.setStaffID(formatter.formatCellValue(cell));
 	                	break;
                 	case 1:
                 		break;
                     case 2:
-                    	object.setDoorLogNo((int) cell.getNumericCellValue());
+                    	System.out.println(cell.getStringCellValue());
+                    	int doorlog = Integer.parseInt(cell.getStringCellValue());
+                    	object.setDoorLogNo(doorlog);
                         break;
+                    case 3:
+                    	System.out.println(cell.getStringCellValue());
+                    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/dd/yyyy H:mm:ss");
+                    	LocalDate date = LocalDate.parse(cell.getStringCellValue(), formatter);
+                    	System.out.println(date);
+                    	object.setDineDate(date);
+                    	break;
                     default:
                         break;
                 }

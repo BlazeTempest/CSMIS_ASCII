@@ -86,34 +86,40 @@
                 </div>
 
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
+                    <a th:href="@{dashboard}" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
             >
-            <a href="employee-list.html" class="nav-item nav-link"
+            <a th:href="@{/employee-list}" class="nav-item nav-link"
               ><i class="fas fa-users me-2"></i>Employee List</a
             >
             <div class="nav-item dropdown">
-              <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Report</a>
-                    <div class="dropdown-menu bg-transparent border-0">
-                        <a href="registered-list.html" class="dropdown-item active">Monthly Registered List</a
+              <a
+                href="#"
+                class="nav-link dropdown-toggle active"
+                data-bs-toggle="dropdown"
+                ><i class="fa fa-laptop me-2"></i>Report</a
+              >
+              <div class="dropdown-menu bg-transparent border-0">
+                <a th:href="@{registered-list}" class="dropdown-item active"
+                  >Registered List</a
                 >
-                <a href="register-eat-list.html" class="dropdown-item"
+                <a th:href="@{register-eat-list}" class="dropdown-item"
                   >Registered & Eat List</a
                 >
-                <a href="register-not-eat-list.html" class="dropdown-item"
+                <a th:href="@{register-not-eat-list}" class="dropdown-item"
                   >Registered & Not Eat List</a
                 >
-                <a href="not-registereed-eat-list.html" class="dropdown-item"
-                  >Not Registered & Eat List</a
+                <a th:href="@{not-registereed-eat-list}" class="dropdown-item"
+                  >Unregistered & Eat List</a
                 >
               </div>
             </div>
-            <a href="lunch-register.html" class="nav-item nav-link"
+            <a th:href="@{registration}" class="nav-item nav-link"
               ><i class="fas fa-pen me-2"></i>Lunch Register</a
             >
-            <a href="menu.html" class="nav-item nav-link"
+            <a th:href="@{menu}" class="nav-item nav-link"
               ><i class="fas fa-hamburger me-2"></i>Menu</a
             >
-            <a href="restaurant.html" class="nav-item nav-link"
+            <a th:href="@{restaurant}" class="nav-item nav-link"
               ><i class="fas fa-home me-2"></i>Restaurant</a
             >
             <div class="nav-item dropdown">
@@ -124,23 +130,21 @@
                 ><i class="fas fa-file me-2"></i>Invoice</a
               >
               <div class="dropdown-menu bg-transparent border-0">
-                <a href="weekly-invoice.html" class="dropdown-item"
+                <a th:href="@{/weekly-invoice}" class="dropdown-item"
                   >Weekly Invoice</a
                 >
-                <a href="monthly-invoice.html" class="dropdown-item"
+                <a th:href="@{/monthly_invoice}" class="dropdown-item"
                   >Monthly Invoice</a
                 >
               </div>
             </div>
             <div class="nav-item">
-              <a href="suggestion.html" class="nav-link"
-                ><i class="far fa-file-alt me-2"></i>Suggestions</a
-              >
-            </div>
-            <div class="nav-item">
-              <a href="holiday.html" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
-                    </div>
+              <a th:href="@{suggestion}" class="nav-link"><i class="far fa-file-alt me-2"></i>Suggestions</a>
                 </div>
+                <div class="nav-item">
+                    <a th:href="@{holiday}" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
+                </div>
+        </div>
             </nav>
         </div>
         <!-- Sidebar End -->
@@ -156,7 +160,7 @@
                     <div class="nav-item dropdown">
 
                         <i onclick="myFunction(this)" title="This is a mail notification on/off for lunch!" class="fa-solid fa-bell"></i>
-                        <span class="text-center text-white ms-2">Email </span>
+                        <span class="text-center text-white ms-2">Email</span>
                     </div>
                     <div class="nav-item">
 
@@ -193,27 +197,26 @@
 	        </div>
                 <div class="row bg-secondary rounded align-items-center justify-content-center mx-0">
                     <div class="bg-secondary rounded h-100 p-4">
-                        <h2 class="mb-4 text-center text-secondary">Monthly Register List
-                        </h2>
+                        <h2 class="mb-4 text-center text-secondary">Planned List</h2>
                         <div class="container-fluid">
                             <form th:action="@{/searchRegistered}" method="get" class="ms-5 row g-3">
 	                            <div class="col-md-3">
-	                            	<input class="form-control bg-white border-info" th:value=${name} name="name" type="search" placeholder="Search By Name">
+	                            	<input class="form-control bg-white border-info" th:value=${searchName} name="name" type="search" placeholder="Search By Name">
 	                            </div>
 	                            <div class="col-md-3">
 	                            	<input class="form-control bg-white border-info" th:value=${id} name="id" type="search" placeholder="Search By Id">
 		                        </div>
 		                        <div class="col-md-3">
-			                        <button type="submit" class="btn btn-outline-dark me-2"><i class="fa fa-search"></i>&nbsp;
-			                          Search</button>
-		                         </div>
-		                    </form>
-		                    <form th:action="@{/searchRegistered}" method="get" class="ms-5 row g-3">
+                            	<input class="form-control bg-white border-info" th:value=${team} list="teamList" name="team" type="search" placeholder="Search By Team">
+		                        	<datalist id="teamList">
+									  <option th:each=team:${teams} th:text=${team}>
+									</datalist>
+		                        </div>
 		                        <div class="col-md-3">
-	                            	<input class="form-control bg-white border-info" th:value=${start} name="start" type="date" required>
+	                            	<input class="form-control bg-white border-info" th:value=${start} name="start" type="date">
 	                            </div>
 	                            <div class="col-md-3">
-	                            	<input class="form-control bg-white border-info" th:value=${end} name="end" type="date" required>
+	                            	<input class="form-control bg-white border-info" th:value=${end} name="end" type="date">
 		                        </div>
 		                        <div class="col-md-3">
 			                        <button type="submit" class="btn btn-outline-dark me-2"><i class="fa fa-search"></i>&nbsp;
@@ -242,7 +245,10 @@
 	                        </div>               
                         </form>
                         </div>
-
+						
+						<hr class="mt-5">
+                    	<h5 th:text="'Found ' + ${totalNum!=null ? totalNum : 0} + ' Employees'" class="text-end"></h5><hr style="background-color: rgb(79, 30, 192); height: 2px;">
+						
                         <div class="table-responsive">
                             <table class="table rounded text-dark table-hover mt-4">
                                 <thead class="text-white">
@@ -251,6 +257,7 @@
                                         <th scope="col">Name</th>
                                         <th scope="col">Division</th>
                                         <th scope="col">Department</th>
+                                        <th scope="col">Planned Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -259,7 +266,7 @@
                                         <td th:text=${staff.name}></td>
                                         <td th:text=${staff.division}></td>
                                         <td th:text=${staff.dept}></td>
-                                        
+                                        <td th:text=${staff.dineDate}></td>
                                     </tr>
                                 </tbody>
                             </table>

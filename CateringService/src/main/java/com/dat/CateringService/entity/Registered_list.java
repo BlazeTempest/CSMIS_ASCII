@@ -1,7 +1,7 @@
 package com.dat.CateringService.entity;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,10 +27,10 @@ public class Registered_list {
 	private LocalDate dineDate;
 	
 	@Column(name="registered_date")
-	private LocalDate created_date;
+	private LocalDateTime created_date;
 	
 	@Column(name="modify_date")
-	private LocalDate modify_date;
+	private LocalDateTime modify_date;
 	
 	@Column(name="door_log_no")
 	private int doorlogno;
@@ -43,8 +43,48 @@ public class Registered_list {
 	
 	@Column(name="dept")
 	private String dept;
+	
+	@Column(name="team")
+	private String team;
 
-	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDate created_date, int doorlogno,
+	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDateTime created_date, int doorlogno,
+			String name, String division, String dept, String team) {
+		super();
+		this.staffID = staffID;
+		this.dine = dine;
+		this.dineDate = dineDate;
+		this.created_date = created_date;
+		this.doorlogno = doorlogno;
+		this.name = name;
+		this.division = division;
+		this.dept = dept;
+		this.team = team;
+	}
+
+	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDateTime created_date, LocalDateTime modify_date,
+			int doorlogno, String name, String division, String dept, String team) {
+		super();
+		this.staffID = staffID;
+		this.dine = dine;
+		this.dineDate = dineDate;
+		this.created_date = created_date;
+		this.modify_date = modify_date;
+		this.doorlogno = doorlogno;
+		this.name = name;
+		this.division = division;
+		this.dept = dept;
+		this.team = team;
+	}
+
+	public String getTeam() {
+		return team;
+	}
+
+	public void setTeam(String team) {
+		this.team = team;
+	}
+
+	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDateTime created_date, int doorlogno,
 			String name, String division, String dept) {
 		super();
 		this.staffID = staffID;
@@ -81,7 +121,7 @@ public class Registered_list {
 		this.dept = dept;
 	}
 
-	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDate created_date, int doorlogno) {
+	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDateTime created_date, int doorlogno) {
 		super();
 		this.staffID = staffID;
 		this.dine = dine;
@@ -98,7 +138,7 @@ public class Registered_list {
 		this.doorlogno = doorlogno;
 	}
 
-	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDate created_date) {
+	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDateTime created_date) {
 		super();
 		this.staffID = staffID;
 		this.dine = dine;
@@ -117,8 +157,8 @@ public class Registered_list {
 		this.dineDate = dineDate;
 	}
 
-	public Registered_list(int reg_ID, String staff_ID, Byte dine, LocalDate dineDate, LocalDate created_date,
-			LocalDate modify_date) {
+	public Registered_list(int reg_ID, String staff_ID, Byte dine, LocalDate dineDate, LocalDateTime created_date,
+			LocalDateTime modify_date) {
 		this.reg_ID = reg_ID;
 		this.staffID = staff_ID;
 		this.dine = dine;
@@ -159,19 +199,19 @@ public class Registered_list {
 		this.dineDate = dineDate;
 	}
 
-	public LocalDate getCreated_date() {
+	public LocalDateTime getCreated_date() {
 		return created_date;
 	}
 
-	public void setCreated_date(LocalDate created_date) {
+	public void setCreated_date(LocalDateTime created_date) {
 		this.created_date = created_date;
 	}
 
-	public LocalDate getModify_date() {
+	public LocalDateTime getModify_date() {
 		return modify_date;
 	}
 
-	public void setModify_date(LocalDate modify_date) {
+	public void setModify_date(LocalDateTime modify_date) {
 		this.modify_date = modify_date;
 	}
 }

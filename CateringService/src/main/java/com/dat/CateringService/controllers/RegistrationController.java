@@ -2,25 +2,20 @@ package com.dat.CateringService.controllers;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.YearMonth;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
-import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import org.jfree.data.time.Day;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -220,11 +215,9 @@ public class RegistrationController {
 		for(String date : month) {
 			if(dates.contains(date)) {
 				checkedDates.add(LocalDate.parse(date, formatter));
-				System.out.println("Checked: " + date);
 			}
 			else if(!dates.contains(date) && !disabledDates.contains(date)) {
 				uncheckedDates.add(LocalDate.parse(date, formatter));
-				System.out.println("Unchecked: " + date);
 			}
 		}
 		Staff staff = staffService.getStaffById(authentication.getName());
@@ -232,26 +225,26 @@ public class RegistrationController {
 			for(LocalDate dineDate : checkedDates) {
 				Registered_list registered = registeredService.getbyStaffIDAndDineDate(staff.getStaffID(), dineDate);
 				registered.setDine((byte)1);
-				registered.setModify_date(LocalDate.now());
+				registered.setModify_date(LocalDateTime.now());
 				registeredService.addRegisteredDate(registered);
 				System.out.println("updated");
 			}
 			for(LocalDate dineDate : uncheckedDates) {
 				Registered_list registered = registeredService.getbyStaffIDAndDineDate(staff.getStaffID(), dineDate);
 				registered.setDine((byte)0);
-				registered.setModify_date(LocalDate.now());
+				registered.setModify_date(LocalDateTime.now());
 				registeredService.addRegisteredDate(registered);
 				System.out.println("updated");
 			}
 			redirAttrs.addFlashAttribute("message", "Your changes Lunch plan is updated successfully!");
 		}else if(status.equalsIgnoreCase("Register")) {
 			for(LocalDate dineDate : checkedDates) {
-				Registered_list registered = new Registered_list(staff.getStaffID(), (byte)0, dineDate, LocalDate.now(), staff.getDoorLogNo(), staff.getName(), staff.getDivision(), staff.getDept());
+				Registered_list registered = new Registered_list(staff.getStaffID(), (byte)1, dineDate, LocalDateTime.now(), staff.getDoorLogNo(), staff.getName(), staff.getDivision(), staff.getDept(), staff.getTeam());
 				registeredService.addRegisteredDate(registered);
 				System.out.println("Added");
 			}
 			for(LocalDate dineDate : uncheckedDates) {
-				Registered_list registered = new Registered_list(staff.getStaffID(), (byte)0, dineDate, LocalDate.now(), staff.getDoorLogNo(), staff.getName(), staff.getDivision(), staff.getDept());
+				Registered_list registered = new Registered_list(staff.getStaffID(), (byte)0, dineDate, LocalDateTime.now(), staff.getDoorLogNo(), staff.getName(), staff.getDivision(), staff.getDept(), staff.getTeam());
 				registeredService.addRegisteredDate(registered);
 				System.out.println("Added");
 			}

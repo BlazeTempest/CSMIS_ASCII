@@ -33,6 +33,16 @@ public class DoorlogServiceImpl implements DoorlogService {
 	public List<DailyDoorLog> getDoorlogByImportedDate(LocalDate today) {
 		return repository.getDoorlogByImportedDate(today);
 	}
+
+	@Override
+	public List<DailyDoorLog> getDoorlogByDineDate(LocalDate start, LocalDate end) {
+		return repository.getDoorlogByDineDate(start, end);
+	}
+
+	@Override
+	public DailyDoorLog getLastInserted() {
+		return repository.getLastDoorlog();
+	}
 	
 	
 }
