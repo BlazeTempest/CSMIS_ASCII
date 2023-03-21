@@ -46,6 +46,17 @@ public class Registered_list {
 	
 	@Column(name="team")
 	private String team;
+	
+	@Column(name="status")
+	private Byte status;
+
+	public Byte getStatus() {
+		return status;
+	}
+
+	public void setStatus(Byte status) {
+		this.status = status;
+	}
 
 	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDateTime created_date, int doorlogno,
 			String name, String division, String dept, String team) {

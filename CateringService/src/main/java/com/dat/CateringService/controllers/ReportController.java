@@ -232,20 +232,25 @@ public class ReportController {
 			LocalDate start = ddl.getDineDate();
 			System.out.println(start);
 			List<Registered_list> registered = registeredService.getRegisteredStaffByStartDateAndEndDate(start, LocalDate.of(2023, 3, 28));
-			for(Registered_list temp : registered) {
-				System.out.println(temp.getName());
-			}
+
 			List<DailyDoorLog> doorlog = doorlogService.getDoorlogByDineDate(start, LocalDate.of(2023, 3, 28));
 			List<RegisteredEat> eatList = new ArrayList<>();
 			for(Registered_list register: registered) {
 				for(DailyDoorLog log : doorlog) {
 					if(log.getStaffID().equals(register.getStaffID())) {
-						RegisteredEat eat = new RegisteredEat(register.getStaffID(), register.getName(),register.getDivision(), register.getDept(), register.getDineDate(), register.getTeam());
-						eatList.add(eat);
+//						RegisteredEat eat = new RegisteredEat(register.getStaffID(), register.getName(),register.getDivision(), register.getDept(), register.getDineDate(), register.getTeam());
+//						eatList.add(eat);
+						register.setStatus((byte)1);
+						registeredService.addRegisteredDate(register);
+						registered.remove(registered.indexOf(register));
 					}
 				}
 			}
-			eatService.addAll(eatList);
+			for(Registered_list temp : registered) {
+				temp.setStatus((byte)0);
+				registeredService.addRegisteredDate(temp);
+			}
+//			eatService.addAll(eatList);
 			
 			model.addFlashAttribute("success", "Uploaded Successfully");
 			return "redirect:/registered-list";
