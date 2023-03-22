@@ -43,6 +43,11 @@ public class DoorlogServiceImpl implements DoorlogService {
 	public DailyDoorLog getLastInserted() {
 		return repository.getLastDoorlog();
 	}
+
+	@Override
+	public List<String> getStaffIDByDineDate(LocalDate dineDate) {
+		return repository.findByDineDate(dineDate);
+	}
 	
 	
 }

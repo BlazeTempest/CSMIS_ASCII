@@ -159,7 +159,7 @@ public class RegistrationController {
     	
     	if(!currentMonthRegisteredList.isEmpty()) {
         	for(Registered_list registered : currentMonthRegisteredList) {
-        		if(registered.getDine()==(byte)1 && registered.getDineDate().getMonthValue() == month) {
+        		if(registered.getDine()==true && registered.getDineDate().getMonthValue() == month) {
         			checkedDates.add(registered.getDineDate());
         		}
         	}
@@ -224,14 +224,14 @@ public class RegistrationController {
 		if(status.equalsIgnoreCase("Update")) {
 			for(LocalDate dineDate : checkedDates) {
 				Registered_list registered = registeredService.getbyStaffIDAndDineDate(staff.getStaffID(), dineDate);
-				registered.setDine((byte)1);
+				registered.setDine(true);
 				registered.setModify_date(LocalDateTime.now());
 				registeredService.addRegisteredDate(registered);
 				System.out.println("updated");
 			}
 			for(LocalDate dineDate : uncheckedDates) {
 				Registered_list registered = registeredService.getbyStaffIDAndDineDate(staff.getStaffID(), dineDate);
-				registered.setDine((byte)0);
+				registered.setDine(false);
 				registered.setModify_date(LocalDateTime.now());
 				registeredService.addRegisteredDate(registered);
 				System.out.println("updated");
@@ -239,12 +239,12 @@ public class RegistrationController {
 			redirAttrs.addFlashAttribute("message", "Your changes Lunch plan is updated successfully!");
 		}else if(status.equalsIgnoreCase("Register")) {
 			for(LocalDate dineDate : checkedDates) {
-				Registered_list registered = new Registered_list(staff.getStaffID(), (byte)1, dineDate, LocalDateTime.now(), staff.getDoorLogNo(), staff.getName(), staff.getDivision(), staff.getDept(), staff.getTeam());
+				Registered_list registered = new Registered_list(staff.getStaffID(), true, dineDate, LocalDateTime.now(), staff.getDoorLogNo(), staff.getName(), staff.getDivision(), staff.getDept(), staff.getTeam());
 				registeredService.addRegisteredDate(registered);
 				System.out.println("Added");
 			}
 			for(LocalDate dineDate : uncheckedDates) {
-				Registered_list registered = new Registered_list(staff.getStaffID(), (byte)0, dineDate, LocalDateTime.now(), staff.getDoorLogNo(), staff.getName(), staff.getDivision(), staff.getDept(), staff.getTeam());
+				Registered_list registered = new Registered_list(staff.getStaffID(), false, dineDate, LocalDateTime.now(), staff.getDoorLogNo(), staff.getName(), staff.getDivision(), staff.getDept(), staff.getTeam());
 				registeredService.addRegisteredDate(registered);
 				System.out.println("Added");
 			}

@@ -16,10 +16,15 @@ public interface RegisteredListService {
 	public List<Registered_list> searchByNameAndId(String name, String id, String team);
 	public List<Registered_list> filterByDivision(String division);
 	public List<Registered_list> filterByDept(String dept);
+	public List<Registered_list> filterByStatusAndDivision(Boolean status, String division);
+	public List<Registered_list> filterByStatusAndDept(Boolean status, String dept);
 	public List<Registered_list> getByStaffID(String id);
 	public Registered_list getbyStaffIDAndDineDate(String staffID, LocalDate date);
 	public List<Registered_list> getAllRegisteredStaff();
 	public List<Registered_list> getRegisteredStaffByStartDateAndEndDate(LocalDate start, LocalDate end);
 	public List<Registered_list> getRegisteredStaffByDate(LocalDate date);
-	
+	public List<Registered_list> getRegisteredStaffByStatusAndDate(Boolean status, LocalDate start, LocalDate end);
+	public List<Registered_list> getRegisteredStaffByStatusAndDineAndDate(Boolean status, Boolean dine, LocalDate start, LocalDate end);
+	public List<Registered_list> getRegisteredStaffByStatusAndNameAndID(Boolean status, String name, String id, String team);
+	public List<Registered_list> getRegisteredStaffByAll(Boolean status, LocalDate start, LocalDate end, String name, String id, String team);
 }

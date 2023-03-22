@@ -84,6 +84,38 @@ public class RegisteredListServiceImpl implements RegisteredListService {
 	public List<Registered_list> getRegisteredListByIdAndDate(String id, LocalDate startDate, LocalDate endDate) {
 		return repository.findByIdAndDate(id, startDate, endDate);
 	}
+
+	@Override
+	public List<Registered_list> getRegisteredStaffByStatusAndDate(Boolean status, LocalDate start, LocalDate end) {
+		return repository.findByStatusAndDineDateBetween(status, start, end);
+	}
+
+	@Override
+	public List<Registered_list> getRegisteredStaffByStatusAndNameAndID(Boolean status, String name, String id,
+			String team) {
+		return repository.findByStatusAndNameContainsAndStaffIDContainsAndTeamContainsAllIgnoreCase(status, name, id, team);
+	}
+
+	@Override
+	public List<Registered_list> getRegisteredStaffByAll(Boolean status, LocalDate start, LocalDate end, String name, String id, String team) {
+		return repository.findByStatusAndDineDateBetweenAndNameContainsAndStaffIDContainsAndTeamContainsAllIgnoreCase(status, start, end, name, id, team);
+	}
+
+	@Override
+	public List<Registered_list> filterByStatusAndDivision(Boolean status, String division) {
+		return repository.findByStatusAndDivisionContainsAllIgnoreCase(status, division);
+	}
+
+	@Override
+	public List<Registered_list> filterByStatusAndDept(Boolean status, String dept) {
+		return repository.findByStatusAndDeptContainsAllIgnoreCase(status, dept);
+	}
+
+	@Override
+	public List<Registered_list> getRegisteredStaffByStatusAndDineAndDate(Boolean status, Boolean dine, LocalDate start,
+			LocalDate end) {
+		return repository.findByStatusAndDineAndDineDateBetween(status, dine, start, end);
+	}
 	
 	
 }

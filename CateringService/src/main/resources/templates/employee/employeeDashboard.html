@@ -56,6 +56,61 @@ i.fa-solid {
 .fa-solid:hover {
 	color: rgb(250, 16, 75);
 }
+
+/* Style for the toggle switch */
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 34px;
+	margin: 10px;
+	border-radius: 17px;
+	background-color: #ccc;
+}
+
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border-radius: 17px;
+	background-color: #fff;
+	transition: .4s;
+}
+
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 26px;
+	width: 26px;
+	left: 4px;
+	bottom: 4px;
+	background-color: #ccc;
+	border-radius: 50%;
+	transition: .4s;
+}
+
+input:checked+.slider {
+	background-color: #2196F3;
+}
+
+input:focus+.slider {
+	box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+	transform: translateX(26px);
+	background-color: #fff;
+}
+/* end Style for the toggle switch */
 </style>
 <script>
 	function myFunction(x) {
@@ -92,11 +147,11 @@ i.fa-solid {
 				</div>
 
 				<div class="navbar-nav w-100">
-					<a href="employeeDashboard.html" class="nav-item nav-link active"><i
+					<a th:href="@{dashboard}" class="nav-item nav-link active"><i
 						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
-						href="employee-lunch-register.html" class="nav-item nav-link"><i
+						th:href="@{registration}" class="nav-item nav-link"><i
 						class="fas fa-hamburger me-2"></i>Lunch Register</a> <a
-						href="employee-profile.html" class="nav-item nav-link"><i
+						th:href="@{profile}" class="nav-item nav-link"><i
 						class="fas fa-user-tie me-2"></i>Profile</a>
 				</div>
 			</nav>
@@ -110,7 +165,7 @@ i.fa-solid {
 		<!-- Navbar Start -->
 		<nav
 			class="navbar navbar-expand bg-secondary-nav navbar-dark sticky-top px-4 py-2">
-			<a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+			<a th:href="@{dashboard}" class="navbar-brand d-flex d-lg-none me-4">
 				<h2 class="text-primary mb-0">
 					<i class="fa fa-user-edit"></i>
 				</h2>
@@ -120,8 +175,9 @@ i.fa-solid {
 			<form class="d-none d-md-flex ms-4"></form>
 			<div class="navbar-nav align-items-center ms-auto">
 				<div class="nav-item dropdown">
-
-					<i onclick="myFunction(this)"
+					<label class="switch"> <input type="checkbox" th:checked="${noti}"
+						id="toggle-switch" /> <span class="slider"></span>
+					</label> <i onclick="myFunction(this)"
 						title="This is a mail notification on/off for lunch!"
 						class="fa-solid fa-bell"></i> <span
 						class="text-center text-white ms-2">Email </span>
@@ -319,6 +375,39 @@ i.fa-solid {
 	<script src="lib/tempusdominus/js/moment.min.js"></script>
 	<script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
 	<script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+	<script>
+		// JavaScript code to handle the toggle switch event
+		var toggleSwitch = document.getElementById("toggle-switch");
+		toggleSwitch.addEventListener("change", function() {
+			var isChecked = this.checked;
+			console.log("Toggle switch is " + (isChecked ? "on" : "off"));
+			// Send HTTP request to server to update database
+			// ...
+			var xhttp = new XMLHttpRequest();
+			xhttp.open("GET", "/toggle-switch?isChecked=" + isChecked, true);
+			xhttp.setRequestHeader("Content-type",
+					"application/x-www-form-urlencoded");
+			xhttp.send("isChecked=" + isChecked);
+		});
+
+		//JavaScript code to handle the toggle switch event for bell icon
+		const checkbox = document.getElementById("my-checkbox");
+		const icon = document.querySelector(".icon");
+
+		checkbox
+				.addEventListener(
+						"change",
+						function() {
+							if (this.checked) {
+								icon.querySelector(".fa-bell").style.display = "none";
+								icon.querySelector(".fa-bell-slash").style.display = "inline-block";
+							} else {
+								icon.querySelector(".fa-bell").style.display = "inline-block";
+								icon.querySelector(".fa-bell-slash").style.display = "none";
+							}
+						});
+	</script>
 
 	<!-- Template Javascript -->
 	<script src="js/main.js"></script>

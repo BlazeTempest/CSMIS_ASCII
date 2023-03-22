@@ -188,10 +188,10 @@
         <div class="container-fluid pt-4 px-4">
             <div class="row bg-secondary rounded align-items-center justify-content-center mx-0">
                 <div class="bg-secondary rounded h-100 p-4">
-                    <h2 class="mb-4 text-center text-secondary">Planned & Eat List
+                    <h2 class="mb-4 text-center text-secondary">Planned & Completed Lunch List
                     </h2>
                     <div class="container-fluid">
-                            <form th:action="@{/searchRegistered}" method="get" class="ms-5 row g-3">
+                            <form th:action="@{/searchEat}" method="get" class="ms-5 row g-3">
 	                            <div class="col-md-3">
 	                            	<input class="form-control bg-white border-info" th:value=${searchName} name="name" type="search" placeholder="Search By Name">
 	                            </div>
@@ -221,7 +221,7 @@
 		                              class="bi bi-funnel"></i>&nbsp; Filter by Division</button>
 	                        	<ul class="dropdown-menu border-0 text-center"   aria-labelledby="filterDropdown">
 	                            	<li th:each=name:${divs}>
-										<a th:href="@{/filter(division=${name})}" th:text=${name} class="dropdown-item"></a>
+										<a th:href="@{/filterEat(division=${name})}" th:text=${name} class="dropdown-item"></a>
 									</li>
 		                        </ul>
 	                        </div>
@@ -231,7 +231,7 @@
 		                              class="bi bi-funnel"></i>Filter by Department</button>
 	                        	<ul class="dropdown-menu border-0 text-center" aria-labelledby="filterDropdown">
 	                            	<li th:each=name:${depts}>
-										<a th:href="@{/filter(dept=${name})}" th:text=${name} class="dropdown-item"></a>
+										<a th:href="@{/filterEat(dept=${name})}" th:text=${name} class="dropdown-item"></a>
 									</li>
 		                        </ul>
 	                        </div>               
@@ -248,6 +248,7 @@
                                 	<th scope="col">Name</th>
                                     <th scope="col">Division</th>
                                     <th scope="col">Department</th>
+                                    <th scope="col">Team</th>
                                     <th scope="col">Date</th>
                                 </tr>
                             </thead>
@@ -257,6 +258,7 @@
                                 	<td th:text=${staff.name}></td>
                                 	<td th:text=${staff.division}></td>
                                 	<td th:text=${staff.dept}></td>
+                                	<td th:text=${staff.team}></td>
                                 	<td th:text=${staff.dineDate}></td>
                                 </tr>
                             </tbody>
