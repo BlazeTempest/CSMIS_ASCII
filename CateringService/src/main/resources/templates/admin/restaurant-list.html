@@ -271,7 +271,7 @@
                                         <div class="row mb-3">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label text-dark">Address</label>
                                             <div class="col-sm-9">
-                                                <input type="text"  th:field="*{address}" class="form-control bg-white" placeholder="Address">
+                                                <input type="text"  th:field="*{address}"  class="form-control bg-white" placeholder="Address" required="required">
                                             
                                              <!-- Add error message (if present) -->
 											<span th:if="${#fields.hasErrors('address')}"
