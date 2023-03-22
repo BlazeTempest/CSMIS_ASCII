@@ -146,7 +146,7 @@ public class MenuController {
 			
 		} 
 		catch (NullPointerException e) {
-			return "redirect:/showMyLoginPage";
+			return "admin/menu";
 		}
 		
 }

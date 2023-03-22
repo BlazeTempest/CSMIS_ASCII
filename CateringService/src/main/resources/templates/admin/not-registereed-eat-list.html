@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8" />
@@ -27,9 +27,6 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet" />
-
     <!-- font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
@@ -55,6 +52,8 @@
         }
     </script>
 
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet" />
     <style>
         table tr th {
             color: rgb(79, 30, 192);
@@ -87,9 +86,9 @@
                 </div>
 
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
+                    <a th:href="@{dashboard}" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
             >
-            <a href="employee-list.html" class="nav-item nav-link"
+            <a th:href="@{employee-list}" class="nav-item nav-link"
               ><i class="fas fa-users me-2"></i>Employee List</a
             >
             <div class="nav-item dropdown">
@@ -100,17 +99,17 @@
                 ><i class="fa fa-laptop me-2"></i>Report</a
               >
               <div class="dropdown-menu bg-transparent border-0">
-                <a href="registered-list.html" class="dropdown-item"
-                  >Monthly Registered List</a
+                <a th:href="@{registered-list}" class="dropdown-item"
+                  >Registered List</a
                 >
-                <a href="register-eat-list.html" class="dropdown-item"
+                <a th:href="@{register-eat-list}" class="dropdown-item"
                   >Registered & Eat List</a
                 >
-                <a href="register-not-eat-list.html" class="dropdown-item"
+                <a th:href="@{register-not-eat-list}" class="dropdown-item"
                   >Registered & Not Eat List</a
                 >
-                <a href="not-registereed-eat-list.html" class="dropdown-item active"
-                  >Not Registered & Eat List</a
+                <a th:href="@{not-registereed-eat-list}" class="dropdown-item active"
+                  >Unregistered & Eat List</a
                 >
               </div>
             </div>
@@ -120,7 +119,7 @@
             <a href="menu.html" class="nav-item nav-link"
               ><i class="fas fa-hamburger me-2"></i>Menu</a
             >
-            <a href="restaurant.html" class="nav-item nav-link"
+            <a href="table.html" class="nav-item nav-link"
               ><i class="fas fa-home me-2"></i>Restaurant</a
             >
             <div class="nav-item dropdown">
@@ -161,7 +160,10 @@
             </a>
             <div class="navbar-nav align-items-center ms-auto">
                 <div class="nav-item dropdown">
-
+                    <!-- <div id="mail-toggle" class="form-check form-switch">
+                <label class="form-check-label changes" style="color: whitesmoke;" for="flexSwitchCheckChecked"><i class="bi bi-bell me-lg-2"></i>Email</label>
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+              </div> -->
                     <i onclick="myFunction(this)" title="This is a mail notification on/off for lunch!" class="fa-solid fa-bell"></i>
                     <span class="text-center text-white ms-2">Email </span>
                 </div>
@@ -174,7 +176,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
                             <a href="profile.html" class="dropdown-item">Profile</a>
-                            <a href="signin.html" class="dropdown-item">Log Out</a>
+                            <a href="#" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
                 </div>
@@ -182,130 +184,82 @@
         </nav>
         <!-- Navbar End -->
 
-        <!-- Other Elements Start -->
+        <!-- Button Start -->
         <div class="container-fluid pt-4 px-4">
             <div class="row bg-secondary rounded align-items-center justify-content-center mx-0">
                 <div class="bg-secondary rounded h-100 p-4">
-                    <h2 class="mb-4 text-center text-secondary">Not Register & Eat List
+                    <h2 class="mb-4 text-center text-secondary">Unplanned & Completed Lunch List
                     </h2>
                     <div class="container-fluid">
-                        <form class="d-lg-inline-flex d-md-flex ms-4 m-2">
-                            <input class="form-control bg-white border-0" type="search" placeholder="Search by Name">
+                            <form th:action="@{/searchEat}" method="get" class="ms-5 row g-3">
+	                            <div class="col-md-3">
+	                            	<input class="form-control bg-white border-info" th:value=${searchName} name="name" type="search" placeholder="Search By Name">
+	                            </div>
+	                            <div class="col-md-3">
+	                            	<input class="form-control bg-white border-info" th:value=${id} name="id" type="search" placeholder="Search By Id">
+		                        </div>
+		                        <div class="col-md-3">
+                            	<input class="form-control bg-white border-info" th:value=${team} list="teamList" name="team" type="search" placeholder="Search By Team">
+		                        	<datalist id="teamList">
+									  <option th:each=team:${teams} th:text=${team}>
+									</datalist>
+		                        </div>
+		                        <div class="col-md-3">
+	                            	<input class="form-control bg-white border-info" th:value=${start} name="start" type="date">
+	                            </div>
+	                            <div class="col-md-3">
+	                            	<input class="form-control bg-white border-info" th:value=${end} name="end" type="date">
+		                        </div>
+		                        <div class="col-md-3">
+			                        <button type="submit" class="btn btn-outline-dark me-2"><i class="fa fa-search"></i>&nbsp;
+			                          Search</button>
+		                         </div>
+	                          
+	                       <!-- Filter By division -->
+	                       <div class="col-md-3">
+		                       <button class="btn btn-outline-dark dropdown-toggle me-2" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
+		                              class="bi bi-funnel"></i>&nbsp; Filter by Division</button>
+	                        	<ul class="dropdown-menu border-0 text-center"   aria-labelledby="filterDropdown">
+	                            	<li th:each=name:${divs}>
+										<a th:href="@{/filterEat(division=${name})}" th:text=${name} class="dropdown-item"></a>
+									</li>
+		                        </ul>
+	                        </div>
+	                        <!-- filter by department -->
+	                        <div class="col-md-3">
+		                        <button class="btn btn-outline-dark dropdown-toggle" style="width:200px;" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
+		                              class="bi bi-funnel"></i>Filter by Department</button>
+	                        	<ul class="dropdown-menu border-0 text-center" aria-labelledby="filterDropdown">
+	                            	<li th:each=name:${depts}>
+										<a th:href="@{/filterEat(dept=${name})}" th:text=${name} class="dropdown-item"></a>
+									</li>
+		                        </ul>
+	                        </div>               
                         </form>
-                        <button type="button" class="btn btn-outline-dark m-2"><i class="fa fa-search"></i>&nbsp;
-                          Search</button>
-                        <button class="btn btn-outline-dark dropdown-toggle m-2 float-end" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-funnel"></i>&nbsp;
-                          Filter</button>
-
-                        <ul class="dropdown-menu border-0" aria-labelledby="filterDropdown">
-                            <li><a class="dropdown-item" href="">Division</a></li>
-                            <li><a class="dropdown-item" href="">Department</a></li>
-                            <li><a class="dropdown-item" href="">Team</a></li>
-                        </ul>
                     </div>
 
-                    <!-- Modal -->
-                    <div id="myModal" class="modal fade" tabindex="-1">
-                        <div class="modal-dialog">
-
-                            <!-- Modal content-->
-                            <div class="modal-content bg-dark">
-                                <div class="modal-header">
-                                    <h4 style="color: rgb(0, 140, 255);" class="modal-title">Modal Header</h4>
-                                </div>
-                                <div class="modal-body text-white">
-                                    <p>Some text in the modal.</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- UpdateForm Modal -->
-                    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content bg-secondary">
-                                <div class="modal-header">
-                                    <h5 class="modal-title text-info" id="updateModalLabel">Update Record</h5>
-                                    <button type="button" class="btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body bg-secondary ">
-                                    <form id="updateForm">
-                                        <input type="hidden" id="recordId">
-                                        <div class="mb-3">
-                                            <label for="division" class="form-label text-white">Division</label>
-                                            <input type="text " class="form-control" id="division">
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="name" class="form-label text-white">Name</label>
-                                            <input type="text" class="form-control" id="name">
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="department" class="form-label text-white">Department</label>
-                                            <input type="text" class="form-control" id="department">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="team" class="form-label text-white">Team</label>
-                                            <input type="text" class="form-control" id="team">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="role" class="form-label text-white">Role</label>
-                                            <input type="text" class="form-control" id="role">
-                                        </div>
-
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-info" id="updateRecord">Save
-                                      changes</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <hr class="mt-5">
+                    <h5 th:text="'Found ' + ${totalNum!=null ? totalNum : 0} + ' Employees who unplanned & had Lunch'" class="text-end"></h5><hr style="background-color: rgb(79, 30, 192); height: 2px;">
                     <div class="table-responsive">
                         <table class="table rounded text-white table-hover mt-4">
                             <thead>
                                 <tr>
-                                    <th scope="col" width="50">Sr.</th>
+                                	<th scope="col">Staff ID</th>
+                                	<th scope="col">Name</th>
                                     <th scope="col">Division</th>
-                                    <th scope="col">Staff ID</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">DoorLogNo.</th>
                                     <th scope="col">Department</th>
                                     <th scope="col">Team</th>
-                                    <th scope="col">Role</th>
-                                    <th scope="col">Status</th>
-
+                                    <th scope="col">Date</th>
                                 </tr>
                             </thead>
                             <tbody class="text-dark">
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>DIV002</td>
-                                    <td>26-00070</td>
-                                    <td>Amy Htun</td>
-                                    <td>40042</td>
-                                    <td>Offshore Development Dept-1 </td>
-                                    <td>DOT</td>
-                                    <td>Operator</td>
-                                    <td>Active</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>DIV002</td>
-                                    <td>26-00070</td>
-                                    <td>Amy Htun</td>
-                                    <td>40042</td>
-                                    <td>Offshore Development Dept-1 </td>
-                                    <td>DOT</td>
-                                    <td>Operator</td>
-                                    <td>Active</td>
+                                <tr th:each="staff:${staffs}">
+                                	<td th:text=${staff.staffID}></td>
+                                	<td th:text=${staff.name}></td>
+                                	<td th:text=${staff.division}></td>
+                                	<td th:text=${staff.dept}></td>
+                                	<td th:text=${staff.team}></td>
+                                	<td th:text=${staff.dineDate}></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -313,7 +267,10 @@
                 </div>
             </div>
         </div>
-        <!-- Not Registor & Eat -->
+
+
+        <!--Registor & Eat List -->
+
 
         <!-- Content End -->
 
@@ -336,9 +293,11 @@
             </div>
         </div>
         <!-- Footer End -->
+    </div>
+    <!-- Content End -->
 
-        <a href="#" class="btn btn-lg btn-info btn-lg-square back-to-top"><i
-          class="bi bi-arrow-up"></i></a>
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-info btn-lg-square back-to-top"><i class="bi bi-arrow-up "></i></a>
     </div>
 
     <!-- JavaScript Libraries -->

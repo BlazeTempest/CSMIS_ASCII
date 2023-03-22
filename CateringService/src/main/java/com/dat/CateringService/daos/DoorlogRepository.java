@@ -18,4 +18,7 @@ public interface DoorlogRepository extends JpaRepository<DailyDoorLog, Integer> 
 	
 	@Query(value = "SELECT * FROM daily_doorlog ORDER BY daily_door_id DESC LIMIT 1", nativeQuery = true)
 	public DailyDoorLog getLastDoorlog();
+	
+	@Query(value = "SELECT DISTINCT staffID FROM daily_doorlog WHERE dine_date=:dineDate", nativeQuery = true)
+	public List<String> findByDineDate(@Param("dineDate")LocalDate dineDate);
 }

@@ -12,6 +12,12 @@ import com.dat.CateringService.entity.Staff;
 public class StaffServiceImpl implements StaffService {
 	@Autowired
 	private StaffRepository repository;
+	
+	@Override
+    public List<String> findActiveEmailNoti(boolean email_noti)
+    {
+        return repository.findActiveEmailNoti(email_noti);
+    }
 
 	@Override
 	public void addStaff(Staff staff) {

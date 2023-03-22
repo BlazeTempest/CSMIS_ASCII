@@ -26,4 +26,6 @@ public interface StaffRepository extends JpaRepository<Staff, String> {
 	public List<String> findDeptNames();
 	@Query(value="SELECT * FROM staff WHERE enabled = :statusParam", nativeQuery = true)
 	public List<Staff> findActiveStaffs(@Param("statusParam")int enabled);
+	@Query(value="SELECT email FROM staff WHERE email_noti=:email_noti", nativeQuery = true)
+    public List<String> findActiveEmailNoti(@Param("email_noti") boolean email_noti);
 }

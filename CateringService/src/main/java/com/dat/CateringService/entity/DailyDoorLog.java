@@ -27,7 +27,7 @@ public class DailyDoorLog {
 	private String imported_by;
 	
 	@Column(name="imported_date")
-	private LocalDate imported_date;
+	private LocalDateTime imported_date;
 	
 	@Column(name="dine_date")
 	private LocalDate dineDate;
@@ -40,11 +40,11 @@ public class DailyDoorLog {
 		this.dineDate = dineDate;
 	}
 
-	public LocalDate getImported_date() {
+	public LocalDateTime getImported_date() {
 		return imported_date;
 	}
 
-	public void setImported_date(LocalDate imported_date) {
+	public void setImported_date(LocalDateTime imported_date) {
 		this.imported_date = imported_date;
 	}
 

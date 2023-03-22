@@ -21,7 +21,7 @@ public class Registered_list {
 	private String staffID;
 	
 	@Column(name="dine")
-	private Byte dine;
+	private Boolean dine;
 	
 	@Column(name="dine_date")
 	private LocalDate dineDate;
@@ -48,17 +48,17 @@ public class Registered_list {
 	private String team;
 	
 	@Column(name="status")
-	private Byte status;
+	private Boolean status;
 
-	public Byte getStatus() {
+	public Boolean getStatus() {
 		return status;
 	}
 
-	public void setStatus(Byte status) {
+	public void setStatus(Boolean status) {
 		this.status = status;
 	}
 
-	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDateTime created_date, int doorlogno,
+	public Registered_list(String staffID, Boolean dine, LocalDate dineDate, LocalDateTime created_date, int doorlogno,
 			String name, String division, String dept, String team) {
 		super();
 		this.staffID = staffID;
@@ -72,7 +72,7 @@ public class Registered_list {
 		this.team = team;
 	}
 
-	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDateTime created_date, LocalDateTime modify_date,
+	public Registered_list(String staffID, Boolean dine, LocalDate dineDate, LocalDateTime created_date, LocalDateTime modify_date,
 			int doorlogno, String name, String division, String dept, String team) {
 		super();
 		this.staffID = staffID;
@@ -95,7 +95,7 @@ public class Registered_list {
 		this.team = team;
 	}
 
-	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDateTime created_date, int doorlogno,
+	public Registered_list(String staffID, Boolean dine, LocalDate dineDate, LocalDateTime created_date, int doorlogno,
 			String name, String division, String dept) {
 		super();
 		this.staffID = staffID;
@@ -132,7 +132,7 @@ public class Registered_list {
 		this.dept = dept;
 	}
 
-	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDateTime created_date, int doorlogno) {
+	public Registered_list(String staffID, Boolean dine, LocalDate dineDate, LocalDateTime created_date, int doorlogno) {
 		super();
 		this.staffID = staffID;
 		this.dine = dine;
@@ -149,7 +149,7 @@ public class Registered_list {
 		this.doorlogno = doorlogno;
 	}
 
-	public Registered_list(String staffID, Byte dine, LocalDate dineDate, LocalDateTime created_date) {
+	public Registered_list(String staffID, Boolean dine, LocalDate dineDate, LocalDateTime created_date) {
 		super();
 		this.staffID = staffID;
 		this.dine = dine;
@@ -161,14 +161,14 @@ public class Registered_list {
 		super();
 	}
 
-	public Registered_list(String staff_ID, Byte dine, LocalDate dineDate) {
+	public Registered_list(String staff_ID, Boolean dine, LocalDate dineDate) {
 		super();
 		this.staffID = staff_ID;
 		this.dine = dine;
 		this.dineDate = dineDate;
 	}
 
-	public Registered_list(int reg_ID, String staff_ID, Byte dine, LocalDate dineDate, LocalDateTime created_date,
+	public Registered_list(int reg_ID, String staff_ID, Boolean dine, LocalDate dineDate, LocalDateTime created_date,
 			LocalDateTime modify_date) {
 		this.reg_ID = reg_ID;
 		this.staffID = staff_ID;
@@ -194,11 +194,11 @@ public class Registered_list {
 		this.staffID = staff_ID;
 	}
 
-	public Byte getDine() {
+	public Boolean getDine() {
 		return dine;
 	}
 
-	public void setDine(Byte dine) {
+	public void setDine(Boolean dine) {
 		this.dine = dine;
 	}
 
