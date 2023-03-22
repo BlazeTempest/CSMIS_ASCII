@@ -84,7 +84,7 @@ public class RestaurantController {
 		theRestaurant.setStatus("active");
 	    restaurantService.save(theRestaurant);
 	    // Add a success message to the model
-	    model.addAttribute("message", "Restaurant saved successfully!");
+	    model.addAttribute("message","Restaurant saved successfully!");
 	    return "redirect:/restaurant";
 		}
 		

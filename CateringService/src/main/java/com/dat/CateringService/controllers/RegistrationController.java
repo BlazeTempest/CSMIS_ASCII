@@ -255,7 +255,7 @@ public class RegistrationController {
 			
 			for(String avoidMeat:avoidMeats) {
 				System.out.println(avoidMeat);
-				if(avoidMeatList.isEmpty() || avoidMeatList.isBlank()) {
+				if(avoidMeatList.isEmpty() || avoidMeatList.isEmpty()) {
 					avoidMeatList = avoidMeat;
 				}else {
 					avoidMeatList = avoidMeatList + "," +avoidMeat;
