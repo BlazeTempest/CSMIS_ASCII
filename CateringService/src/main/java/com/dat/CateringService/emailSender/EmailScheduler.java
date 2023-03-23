@@ -10,7 +10,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import com.dat.CateringService.entity.Staff;
 import org.springframework.stereotype.Service;
 
 import com.dat.CateringService.entity.Staff;
@@ -76,3 +78,4 @@ public class EmailScheduler {
 
 	}
 }
+

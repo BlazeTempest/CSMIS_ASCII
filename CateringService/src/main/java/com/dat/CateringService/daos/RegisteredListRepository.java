@@ -23,6 +23,9 @@ public interface RegisteredListRepository extends JpaRepository<Registered_list,
 	@Query(value = "SELECT * FROM registered_list WHERE name LIKE %:name% AND dine_date BETWEEN :start AND :end", nativeQuery = true)
 	public List<Registered_list> findByNameAndDate(@Param("name")String name, @Param("start")LocalDate startDate,  @Param("end")LocalDate endDate);
 	
+//	@Query(value = "SELECT * FROM registered_list WHERE team LIKE %:team% AND dine_date BETWEEN :start AND :end", nativeQuery = true)
+	public List<Registered_list> findByTeamContainsAndDineDateBetween(String team, LocalDate dineDateStart,  LocalDate dineDateEnd);
+	
 	@Query(value = "SELECT * FROM registered_list WHERE staffID LIKE %:id% AND dine_date BETWEEN :start AND :end", nativeQuery = true)
 	public List<Registered_list> findByIdAndDate(@Param("id")String id, @Param("start")LocalDate startDate,  @Param("end")LocalDate endDate);
 	

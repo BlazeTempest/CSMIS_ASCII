@@ -47,6 +47,7 @@ public class ReportController {
 	@GetMapping("/registered-list")
 	public String plannedList(Model model, RedirectAttributes redirect) {
 		List<Registered_list> registeredStaffs = registeredService.getRegisteredStaffByStartDateAndEndDate(LocalDate.now(), LocalDate.now());
+		System.out.println("Total registered list >>>>>>>>>>>"+registeredStaffs);
 		
 		model.addAttribute("teams", staffService.getTeamNames());
 		model.addAttribute("divs", staffService.getDivNames());

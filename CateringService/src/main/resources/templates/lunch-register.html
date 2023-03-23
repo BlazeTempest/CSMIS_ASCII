@@ -177,7 +177,7 @@ i.fa-solid {
 				<div class="navbar-nav w-100">
 					<a href="index.html" class="nav-item nav-link"><i
 						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
-						th:href="employee-list" class="nav-item nav-link"><i
+						th:href="@{/employee-list}" class="nav-item nav-link"><i
 						class="fas fa-users me-2"></i>Employee List</a>
 					<div class="nav-item dropdown">
 						<a href="#" class="nav-link dropdown-toggle"
@@ -191,25 +191,25 @@ i.fa-solid {
 								class="dropdown-item">Not Registered & Eat List</a>
 						</div>
 					</div>
-					<a href="lunch-register.html" class="nav-item nav-link active"><i class="fas fa-pen me-2"></i>Lunch Register</a> 
+					<a th:href="@{registration}" class="nav-item nav-link active"><i class="fas fa-pen me-2"></i>Lunch Register</a> 
 					<a th:href="@{/menu}" class="nav-item nav-link"><i class="fas fa-hamburger me-2"></i>Menu</a>
-					<a th:href="restaurant" class="nav-item nav-link"><i
+					<a th:href="@{restaurant}" class="nav-item nav-link"><i
 						class="fas fa-home me-2"></i>Restaurant</a>
 					<div class="nav-item dropdown">
 						<a href="#" class="nav-link dropdown-toggle"
 							data-bs-toggle="dropdown"><i class="fas fa-file me-2"></i>Invoice</a>
 						<div class="dropdown-menu bg-transparent border-0">
-							<a href="weekly-invoice.html" class="dropdown-item">Weekly
-								Invoice</a> <a href="monthly-invoice.html" class="dropdown-item">Monthly
+							<a th:href="@{/weekly-invoice}" class="dropdown-item">Weekly
+								Invoice</a> <a th:href="@{/monthly_invoice}" class="dropdown-item">Monthly
 								Invoice</a>
 						</div>
 					</div>
 					<div class="nav-item">
-						<a href="suggestion.html" class="nav-link"><i
+						<a th:href="@{suggestion}" class="nav-link"><i
 							class="far fa-file-alt me-2"></i>Suggestions</a>
 					</div>
 					<div class="nav-item">
-						<a href="holiday.html" class="nav-link"><i
+						<a th:href="@{holiday}" class="nav-link"><i
 							class="fa fa-mug-hot me-2"></i>Holidays</a>
 					</div>
 				</div>
@@ -243,7 +243,7 @@ i.fa-solid {
 							</a>
 							<div
 								class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
-								<a href="profile.html" class="dropdown-item">Profile</a>
+								<a th:href="@{/userProfile}" class="dropdown-item">Profile</a>
 								<form action="#" th:action="@{/logout}" method="POST">
 
 									<input type="submit" value="Logout"

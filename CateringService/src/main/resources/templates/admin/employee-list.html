@@ -100,7 +100,10 @@
                         <img class="sidebar-logo mt-0" src="img/dat logo.png" alt="DAT Logo" />
                     </div>
                     <div>
-                    	<h3 class="text-primary"><a href="/" class="navbar-brand mb-3">CSMIS</a></h3>
+                    	<!-- <h3 class="text-primary"><a href="/" class="navbar-brand mb-3">CSMIS</a></h3> -->
+                    	<a href="index.html" class="navbar-brand mb-3">
+                            <h3 class="text-primary">CSMIS</h3>
+                        </a>
                     </div>
                 </div>
 
@@ -118,27 +121,27 @@
                 ><i class="fa fa-laptop me-2"></i>Report</a
               >
               <div class="dropdown-menu bg-transparent border-0">
-                <a href="registered-list.html" class="dropdown-item"
-                  >Monthly Registered List</a
+                <a th:href="@{registered-list}" class="dropdown-item"
+                  >Registered List</a
                 >
-                <a href="register-eat-list.html" class="dropdown-item"
+                <a th:href="@{register-eat-list}" class="dropdown-item"
                   >Registered & Eat List</a
                 >
-                <a href="register-not-eat-list.html" class="dropdown-item"
+                <a th:href="@{register-not-eat-list}" class="dropdown-item"
                   >Registered & Not Eat List</a
                 >
-                <a href="not-registereed-eat-list.html" class="dropdown-item"
-                  >Not Registered & Eat List</a
+                <a th:href="@{not-registereed-eat-list}" class="dropdown-item"
+                  >Unregistered & Eat List</a
                 >
               </div>
             </div>
-            <a href="registration" class="nav-item nav-link"
+            <a th:href="@{registration}"  class="nav-item nav-link"
             ><i class="fas fa-pen me-2"></i>Lunch Register</a
           >
             <a th:href="@{/menu}" class="nav-item nav-link"
               ><i class="fas fa-hamburger me-2"></i>Menu</a
             >
-            <a href="restaurant.html" class="nav-item nav-link"
+            <a th:href="@{restaurant}" class="nav-item nav-link"
               ><i class="fas fa-home me-2"></i>Restaurant</a
             >
             <div class="nav-item dropdown">
@@ -194,7 +197,7 @@
                         </a>
                        <div
                                 class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
-                                <a href="profile.html" class="dropdown-item fw-bold text-center">Profile</a>
+                                <a th:href="@{/userProfile}" class="dropdown-item fw-bold text-center">Profile</a>
 
                                 <form action="#" th:action="@{/logout}" method="POST">
 
