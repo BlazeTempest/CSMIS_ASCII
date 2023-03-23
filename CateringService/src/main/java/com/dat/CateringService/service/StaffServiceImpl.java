@@ -12,12 +12,6 @@ import com.dat.CateringService.entity.Staff;
 public class StaffServiceImpl implements StaffService {
 	@Autowired
 	private StaffRepository repository;
-	
-	@Override
-    public List<String> findActiveEmailNoti(boolean email_noti)
-    {
-        return repository.findActiveEmailNoti(email_noti);
-    }
 
 	@Override
 	public void addStaff(Staff staff) {
@@ -91,22 +85,25 @@ public class StaffServiceImpl implements StaffService {
 
 	@Override
 	public List<String> getEmails() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Staff> filterByNameAndIdAndDivision(String name, String id, String division) {
-		return repository.findByNameContainsAndStaffIDContainsAndDivisionContainsAllIgnoreCase(name, id, division);
+	public List<Staff> getStaffByEmail(String email) {
+		return repository.findEmails(email);
 	}
-
+	
 	@Override
-	public List<Staff> filterByNameAndIdAndDept(String name, String id, String dept) {
-		return repository.findByNameContainsAndStaffIDContainsAndDeptContainsAllIgnoreCase(name, id, dept);
-	}
-
+    public List<String> findActiveEmailNoti(boolean email_noti)
+    {
+        return repository.findActiveEmailNoti(email_noti);
+    }
+	
 	@Override
 	public Staff getByDoorlog(int doorlog) {
 		return repository.findByDoorlog(doorlog);
 	}
+	
 
 }

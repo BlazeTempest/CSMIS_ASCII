@@ -117,6 +117,10 @@
 						</div>
 						
 					</form>
+					
+					  <div class="mb-4 text-center">
+                            <a type="button" class="link-danger text-decoration-underline fw-bold" data-bs-toggle="modal" data-bs-target="#forgetPasswordModal">Forget Password?</a>
+                        </div>
                         
                         
                         
@@ -136,29 +140,37 @@
                         <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body bg-secondary">
-                        <form>
+                        <form id="otpForm" th:action="@{/send-otp}" method="POST">
                             <div class="mb-3">
                                 <label for="forgetEmail" class="form-label text-dark">Email address</label>
-                                <input type="email" class="form-control text-dark bg-white" id="forgetEmail" aria-describedby="forgetEmailHelp">
+                                <input name="email" type="email" class="form-control text-dark bg-white" id="forgetEmail" aria-describedby="forgetEmailHelp">
                                 <div id="forgetEmailHelp" class="form-text text-dark">We'll send you instructions on how to reset your password.</div>
                             </div>
-                            <button type="button" class="btn btn-sm btn-primary" id="sendOTP">Send OTP</button>
+                            <button type="submit" class="btn btn-sm btn-primary" id="sendOtpBtn">Send OTP</button>
+                            </form>
+                            
+                            <form th:action="@{/resetPassword}" method="POST">
                             <div class="mb-3">
                                 <label for="otp" class="form-label text-dark mt-3">Enter OTP</label>
-                                <input type="text" class="form-control text-dark bg-white" id="otp" aria-describedby="otpHelp">
+                                <input name="otp" type="text" class="form-control text-dark bg-white" id="otp" aria-describedby="otpHelp">
                                 <div id="otpHelp" class="form-text text-dark">Enter the One Time Password sent to your email.</div>
                             </div>
+                            <!--  <div class="mb-3">
+    							<label for="staffId" class="form-label text-dark mt-3">Staff ID</label>
+							    <input name="staffId" type="text" class="form-control text-dark bg-white" id="staffId" aria-describedby="staffIdHelp">
+							    <div id="staffIdHelp" class="form-text text-dark">Enter your staff ID.</div>
+							</div> -->
                             <div class="mb-3">
                                 <label for="otp" class="form-label text-dark mt-3">Enter New Password</label>
-                                <input type="text" class="form-control text-dark bg-white" id="otp" aria-describedby="otpHelp">
+                                <input name="newPassword" type="text" class="form-control text-dark bg-white" id="otp" aria-describedby="otpHelp">
                                 <div id="otpHelp" class="form-text text-dark">Enter your new password.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="otp" class="form-label text-dark mt-3">Comfirm Password</label>
-                                <input type="text" class="form-control text-dark bg-white" id="otp" aria-describedby="otpHelp">
+                                <input name="confirmPassword" type="text" class="form-control text-dark bg-white" id="otp" aria-describedby="otpHelp">
                                 <div id="otpHelp" class="form-text text-dark">Confirm your new password.</div>
                             </div>
-                            <button type="button" class="btn btn-sm btn-primary float-end" id="sendOTP">Comfirm</button>
+                            <button type="submit" class="btn btn-sm btn-primary float-end" id="sendOTP">Comfirm</button>
 
                         </form>
                     </div>
@@ -178,6 +190,8 @@
     <script src="lib/tempusdominus/js/moment.min.js"></script>
     <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    
+
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
