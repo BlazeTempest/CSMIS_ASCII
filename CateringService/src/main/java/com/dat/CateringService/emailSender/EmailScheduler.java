@@ -10,12 +10,21 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 import org.springframework.stereotype.Service;
 
 import com.dat.CateringService.entity.Staff;
 >>>>>>> Stashed changes
+=======
+
+import org.springframework.stereotype.Service;
+
+import com.dat.CateringService.entity.Staff;
+
+
+>>>>>>> 5eddc6dc369ee0a1afae408f1136674f913b8b1b
 import com.dat.CateringService.service.StaffService;
 
 @Component
