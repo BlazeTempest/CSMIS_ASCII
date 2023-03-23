@@ -16,6 +16,14 @@ public interface RegisteredListRepository extends JpaRepository<Registered_list,
 	
 	@Query(value="SELECT * FROM registered_list WHERE dine_date = :date", nativeQuery = true)
 	public List<Registered_list> findByDate(@Param("date")LocalDate date);
+<<<<<<< Updated upstream
+=======
+	public List<Registered_list> findByDivisionContainsAllIgnoreCase(String division);
+	public List<Registered_list> findByDeptContainsAllIgnoreCase(String dept);
+	public List<Registered_list> findByNameContainsAndStaffIDContainsAndTeamContainsAllIgnoreCase(String name, String id, String team);
+	public List<Registered_list> findByStaffIDContainsAllIgnoreCase(String id);
+	public Registered_list findByStaffIDContainsAndDineDateContainsAllIgnoreCase(String staffID, LocalDate date);
+>>>>>>> Stashed changes
 	
 	@Query(value = "SELECT * FROM registered_list WHERE dine_date BETWEEN :start AND :end", nativeQuery = true)
 	public List<Registered_list> getRegisteredStaffByDate(@Param("start")LocalDate start, @Param("end")LocalDate end);
@@ -26,6 +34,7 @@ public interface RegisteredListRepository extends JpaRepository<Registered_list,
 	@Query(value = "SELECT * FROM registered_list WHERE staffID LIKE %:id% AND dine_date BETWEEN :start AND :end", nativeQuery = true)
 	public List<Registered_list> findByIdAndDate(@Param("id")String id, @Param("start")LocalDate startDate,  @Param("end")LocalDate endDate);
 	
+<<<<<<< Updated upstream
 	public List<Registered_list> findByStatusAndDivisionContainsAllIgnoreCase(Boolean status, String division);
 	
 	public List<Registered_list> findByDivisionContainsAllIgnoreCase(String division);
@@ -39,6 +48,10 @@ public interface RegisteredListRepository extends JpaRepository<Registered_list,
 	public List<Registered_list> findByStaffIDContainsAllIgnoreCase(String id);
 	
 	public Registered_list findByStaffIDContainsAndDineDateContainsAllIgnoreCase(String staffID, LocalDate date);
+=======
+//	@Query(value = "SELECT * FROM registered_list WHERE name LIKE %:name% AND staffID LIKE %:id% AND team LIKE %:team% AND dine_date BETWEEN :start AND :end", nativeQuery = true)
+//	public List<Registered_list> findByNameContainsAndStaffIDContainsAndTeamContainsAndDineDateBetween(@Param("name")String name, @Param("team")String team, @Param("id")String id, @Param("start")LocalDate startDate,  @Param("end")LocalDate endDate);
+>>>>>>> Stashed changes
 
 	public List<Registered_list> findByStatusAndDineDateBetween(Boolean status, LocalDate dineDateStart, LocalDate dineDateEnd);
 	

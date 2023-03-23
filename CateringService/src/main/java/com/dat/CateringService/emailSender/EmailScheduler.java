@@ -10,6 +10,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+<<<<<<< Updated upstream
+=======
+import org.springframework.stereotype.Service;
+
+import com.dat.CateringService.entity.Staff;
+>>>>>>> Stashed changes
 import com.dat.CateringService.service.StaffService;
 
 @Component
@@ -69,4 +75,8 @@ public class EmailScheduler {
 		}
 
 	}
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes

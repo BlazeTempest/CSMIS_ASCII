@@ -100,7 +100,10 @@
                         <img class="sidebar-logo mt-0" src="img/dat logo.png" alt="DAT Logo" />
                     </div>
                     <div>
-                    	<h3 class="text-primary"><a href="/" class="navbar-brand mb-3">CSMIS</a></h3>
+                    	<!-- <h3 class="text-primary"><a href="/" class="navbar-brand mb-3">CSMIS</a></h3> -->
+                    	<a href="index.html" class="navbar-brand mb-3">
+                            <h3 class="text-primary">CSMIS</h3>
+                        </a>
                     </div>
                 </div>
 
@@ -138,7 +141,7 @@
             <a th:href="@{/menu}" class="nav-item nav-link"
               ><i class="fas fa-hamburger me-2"></i>Menu</a
             >
-            <a href="restaurant.html" class="nav-item nav-link"
+            <a th:href="@{restaurant}" class="nav-item nav-link"
               ><i class="fas fa-home me-2"></i>Restaurant</a
             >
             <div class="nav-item dropdown">
@@ -194,7 +197,7 @@
                         </a>
                        <div
                                 class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
-                                <a href="profile.html" class="dropdown-item fw-bold text-center">Profile</a>
+                                <a th:href="@{/userProfile}" class="dropdown-item fw-bold text-center">Profile</a>
 
                                 <form action="#" th:action="@{/logout}" method="POST">
 

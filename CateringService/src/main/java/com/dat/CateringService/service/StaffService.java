@@ -37,4 +37,6 @@ public interface StaffService {
 	public void deleteById(String id);
 
 	public void addAllStaff(List<Staff> staffs);
+	
+	public List<String> findActiveEmailNoti(boolean email_noti);
 }

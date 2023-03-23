@@ -105,5 +105,13 @@ public class StaffServiceImpl implements StaffService {
 		return repository.findByDoorlog(doorlog);
 	}
 	
+<<<<<<< Updated upstream
+=======
+	@Override
+	public List<String> findActiveEmailNoti(boolean email_noti)
+	{
+		return repository.findActiveEmailNoti(email_noti);
+	}
+>>>>>>> Stashed changes
 
 }
