@@ -1,6 +1,10 @@
 package com.dat.CateringService.controllers;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +12,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dat.CateringService.entity.Announcement;
 import com.dat.CateringService.entity.Staff;
@@ -62,6 +69,7 @@ public class LoginController {
 
 				Staff staff = staffService.getStaffById(authentication.getName());
 				theModel.addAttribute("name", staff.getName());
+				theModel.addAttribute("noti", staff.getEmail_noti());
 				List<Announcement> announcements = announcementService.getAllAnnouncements();
 				theModel.addAttribute("announcements", announcements);
 				System.out.println("---------> HELLO EMPLOYEE DASHBOARD !!!");
@@ -92,5 +100,33 @@ public class LoginController {
 
 		}
 
+	}
+	
+	@RequestMapping("/toggle-switch")
+	@ResponseBody
+	public void handleToggleSwitch(@RequestParam("isChecked") boolean isChecked ,Authentication authentication) {
+
+		String staffId=authentication.getName();
+		System.out.println(staffId);
+		System.out.println("Toggle switch is " + (isChecked ? "on" : "off"));
+		// JDBC or an ORM to save the value of the toggle switch to the database
+		// Example using JDBC:
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csmis_service", "csmisadmin", "csmisdat")) {
+			
+			String sql = "UPDATE staff SET email_noti = ? WHERE staffID=?";
+			
+			PreparedStatement statement = conn.prepareStatement(sql);
+			 statement.setBoolean(1, isChecked);
+			 statement.setString(2, staffId);
+			 
+			 int rowsUpdated = statement.executeUpdate();
+			 System.out.println(rowsUpdated + " rows updated successfully.");
+
+			
+		} catch (SQLException e) {
+			
+			System.out.println("error");
+			e.printStackTrace();
+		}
 	}
 }

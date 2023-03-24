@@ -114,13 +114,13 @@
                 >
               </div>
             </div>
-            <a href="lunch-register.html" class="nav-item nav-link"
+            <a th:href="@{registration}" class="nav-item nav-link"
               ><i class="fas fa-pen me-2"></i>Lunch Register</a
             >
-            <a href="menu.html" class="nav-item nav-link"
+            <a th:href="@{menu}" class="nav-item nav-link"
               ><i class="fas fa-hamburger me-2"></i>Menu</a
             >
-            <a href="restaurant.html" class="nav-item nav-link"
+            <a th:href="@{restaurant}" class="nav-item nav-link"
               ><i class="fas fa-home me-2"></i>Restaurant</a
             >
             <div class="nav-item dropdown">
@@ -173,7 +173,7 @@
                             <span class="d-none d-lg-inline-flex">Admin</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
-                            <a href="profile.html" class="dropdown-item">Profile</a>
+                            <a th:href="@{/userProfile}" class="dropdown-item">Profile</a>
                             <a href="signin.html" class="dropdown-item">Log Out</a>
                         </div>
                     </div>

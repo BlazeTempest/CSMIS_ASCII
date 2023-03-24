@@ -1,5 +1,26 @@
+
+
+
 (function ($) {
   "use strict";
+  
+$(document).ready(function() {
+    $('#sendOtpBtn').click(function(e) {
+        e.preventDefault(); // prevent the default form submission behavior
+        $.ajax({
+            type: "POST",
+            url: "/send-otp",
+            data: $('#forgetPasswordModal form').serialize(), // serialize the form data
+            success: function() {
+                // handle the successful form submission
+            },
+            error: function() {
+                // handle the form submission error
+            }
+        });
+    });
+});
+
 
   // Spinner
   var spinner = function () {

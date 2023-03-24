@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dat.CateringService.entity.Restaurant;
 import com.dat.CateringService.service.RestaurantService;
@@ -61,6 +61,27 @@ public class RestaurantController {
 
 				return "admin/restaurant-list";
 	}
+	
+	@GetMapping("/updateRestaurant")
+	public String updateRestaurant(@RequestParam(name = "id", required = false) Integer id, Model model, Authentication authentication) {
+	    System.out.println("---->"+id);
+		try {
+	        String role = authentication.getAuthorities().toArray()[0].toString();
+	        if (role.equals("admin")) {
+	            Restaurant restaurant = restaurantService.findById(id);
+	            
+	            System.out.println("======>"+restaurantService.findById(id));
+	            
+	            model.addAttribute("restaurant", restaurant);
+	            System.out.println("ResID -----> "+restaurant.getRestaurant_ID());
+	            return "admin/editRestaurant";
+	        }
+	        return "404";
+
+	    } catch (NullPointerException e) {
+	        return "redirect:/showMyLoginPage";
+	    }
+	}
 
 
 
@@ -87,6 +108,6 @@ public class RestaurantController {
 	    model.addAttribute("message","Restaurant saved successfully!");
 	    return "redirect:/restaurant";
 		}
+	}
 		
-}
 }

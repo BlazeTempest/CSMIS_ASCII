@@ -12,9 +12,15 @@ public interface StaffService {
 	public List<Staff> getAllStaffs();
 	public List<Staff> getActiveStaffs(int status);
 	public Staff getStaffById(String id);
+
 	public Staff getByDoorlog(int doorlog);
 	
+
+	public List<Staff> getStaffByEmail(String email);
 	public List<String> findActiveEmailNoti(boolean email_noti);
+	public Staff getByDoorlog(int doorlog);
+
+
 	
 	//search
 	public List<Staff> searchBy(String name, String id, String team);
@@ -24,8 +30,6 @@ public interface StaffService {
 	public List<Staff> filterByDept(String dept);
 	public List<Staff> filterByStatus(int status);
 	public List<Staff> filterByRole(String role);
-	public List<Staff> filterByNameAndIdAndDivision(String name, String id, String division);
-	public List<Staff> filterByNameAndIdAndDept(String name, String id, String dept);
 	
 	//get name of divisions, departments and teams
 	public List<String> getTeamNames();

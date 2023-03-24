@@ -45,6 +45,7 @@ public class RegistrationController {
 	
 	@GetMapping("/registration")
 	public String showRegistrationForm(Model model, Authentication authentication) {
+		System.err.println("Authentication is >>>>>>>> "+authentication.getName());
         List<String> headers = new ArrayList<>(Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"));
         List<LocalDate> holidays = new ArrayList<>();
         List<Holidays> holidayEntity = holidayService.getAll();
