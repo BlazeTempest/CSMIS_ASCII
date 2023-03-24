@@ -12,8 +12,6 @@ public interface StaffService {
 	public List<Staff> getAllStaffs();
 	public List<Staff> getActiveStaffs(int status);
 	public Staff getStaffById(String id);
-
-	public Staff getByDoorlog(int doorlog);
 	
 
 	public List<Staff> getStaffByEmail(String email);
