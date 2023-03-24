@@ -188,7 +188,7 @@
         <div class="container-fluid pt-4 px-4">
             <div class="row bg-secondary rounded align-items-center justify-content-center mx-0">
                 <div class="bg-secondary rounded h-100 p-4">
-                    <h2 class="mb-4 text-center text-secondary">Planned & Completed Lunch List
+                    <h2 class="mb-4 text-center text-secondary">Canceled Lunch List
                     </h2>
                     <div class="container-fluid">
                             <form th:action="@{/searchCancel}" method="get" class="ms-5 row g-3">
@@ -221,7 +221,7 @@
 		                              class="bi bi-funnel"></i>&nbsp; Filter by Division</button>
 	                        	<ul class="dropdown-menu border-0 text-center"   aria-labelledby="filterDropdown">
 	                            	<li th:each=name:${divs}>
-										<a th:href="@{/filterEat(division=${name})}" th:text=${name} class="dropdown-item"></a>
+										<a th:href="@{/searchCancel(division=${name}, start=${start}, end=${end}, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item"></a>
 									</li>
 		                        </ul>
 	                        </div>
@@ -231,7 +231,7 @@
 		                              class="bi bi-funnel"></i>Filter by Department</button>
 	                        	<ul class="dropdown-menu border-0 text-center" aria-labelledby="filterDropdown">
 	                            	<li th:each=name:${depts}>
-										<a th:href="@{/filterEat(dept=${name})}" th:text=${name} class="dropdown-item"></a>
+										<a th:href="@{/searchCancel(dept=${name}, start=${start}, end=${end}, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item"></a>
 									</li>
 		                        </ul>
 	                        </div>               

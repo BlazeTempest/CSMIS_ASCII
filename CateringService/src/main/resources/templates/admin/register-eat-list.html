@@ -221,7 +221,7 @@
 		                              class="bi bi-funnel"></i>&nbsp; Filter by Division</button>
 	                        	<ul class="dropdown-menu border-0 text-center"   aria-labelledby="filterDropdown">
 	                            	<li th:each=name:${divs}>
-										<a th:href="@{/filterEat(division=${name})}" th:text=${name} class="dropdown-item"></a>
+										<a th:href="@{/searchEat(division=${name}, start=${start}, end=${end}, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item"></a>
 									</li>
 		                        </ul>
 	                        </div>
@@ -231,7 +231,7 @@
 		                              class="bi bi-funnel"></i>Filter by Department</button>
 	                        	<ul class="dropdown-menu border-0 text-center" aria-labelledby="filterDropdown">
 	                            	<li th:each=name:${depts}>
-										<a th:href="@{/filterEat(dept=${name})}" th:text=${name} class="dropdown-item"></a>
+										<a th:href="@{/searchEat(dept=${name}, start=${start}, end=${end}, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item"></a>
 									</li>
 		                        </ul>
 	                        </div>               

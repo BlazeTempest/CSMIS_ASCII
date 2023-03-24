@@ -31,6 +31,74 @@ public class DailyDoorLog {
 	
 	@Column(name="dine_date")
 	private LocalDate dineDate;
+	
+	@Column(name="registered")
+	private Boolean registered;
+	
+	@Column(name="division")
+	private String division;
+	
+	@Column(name="name")
+	private String name;
+	
+	@Column(name="department")
+	private String dept;
+	
+	@Column(name="team")
+	private String team;
+
+	public DailyDoorLog(int doorLogNo, String staffID, LocalDate dineDate, Boolean registered, String division,
+			String name, String dept, String team) {
+		super();
+		this.doorLogNo = doorLogNo;
+		this.staffID = staffID;
+		this.dineDate = dineDate;
+		this.registered = registered;
+		this.division = division;
+		this.name = name;
+		this.dept = dept;
+		this.team = team;
+	}
+
+	public String getDivision() {
+		return division;
+	}
+
+	public void setDivision(String division) {
+		this.division = division;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDept() {
+		return dept;
+	}
+
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+
+	public String getTeam() {
+		return team;
+	}
+
+	public void setTeam(String team) {
+		this.team = team;
+	}
+
+	public Boolean getRegistered() {
+		return registered;
+	}
+
+	public void setRegistered(Boolean registered) {
+		this.registered = registered;
+	}
 
 	public LocalDate getDineDate() {
 		return dineDate;

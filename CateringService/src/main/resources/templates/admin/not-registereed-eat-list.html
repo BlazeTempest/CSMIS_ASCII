@@ -191,7 +191,7 @@
                     <h2 class="mb-4 text-center text-secondary">Unplanned & Completed Lunch List
                     </h2>
                     <div class="container-fluid">
-                            <form th:action="@{/searchEat}" method="get" class="ms-5 row g-3">
+                            <form th:action="@{/searchUnregisteredEat}" method="get" class="ms-5 row g-3">
 	                            <div class="col-md-3">
 	                            	<input class="form-control bg-white border-info" th:value=${searchName} name="name" type="search" placeholder="Search By Name">
 	                            </div>
@@ -221,7 +221,7 @@
 		                              class="bi bi-funnel"></i>&nbsp; Filter by Division</button>
 	                        	<ul class="dropdown-menu border-0 text-center"   aria-labelledby="filterDropdown">
 	                            	<li th:each=name:${divs}>
-										<a th:href="@{/filterEat(division=${name})}" th:text=${name} class="dropdown-item"></a>
+										<a th:href="@{/searchUnregisteredEat(division=${name}, start=${start}, end=${end}, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item"></a>
 									</li>
 		                        </ul>
 	                        </div>
@@ -231,7 +231,7 @@
 		                              class="bi bi-funnel"></i>Filter by Department</button>
 	                        	<ul class="dropdown-menu border-0 text-center" aria-labelledby="filterDropdown">
 	                            	<li th:each=name:${depts}>
-										<a th:href="@{/filterEat(dept=${name})}" th:text=${name} class="dropdown-item"></a>
+										<a th:href="@{/searchUnregisteredEat(dept=${name}, start=${start}, end=${end}, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item"></a>
 									</li>
 		                        </ul>
 	                        </div>               

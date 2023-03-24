@@ -13,6 +13,7 @@ public interface RegisteredListService {
 	public List<Registered_list> getRegisteredListByNameAndStaffID(String name, String team, String staffID, LocalDate startDate, LocalDate endDate);
 	public List<Registered_list> getRegisteredListByNameAndDate(String name, LocalDate startDate, LocalDate endDate);
 	public List<Registered_list> getRegisteredListByIdAndDate(String id, LocalDate startDate, LocalDate endDate);
+	public List<Registered_list> getRegisteredListByTeamAndDate(String team, LocalDate startDate, LocalDate endDate);
 	public List<Registered_list> searchByNameAndId(String name, String id, String team);
 	public List<Registered_list> filterByDivision(String division);
 	public List<Registered_list> filterByDept(String dept);
@@ -23,6 +24,7 @@ public interface RegisteredListService {
 	public List<Registered_list> getAllRegisteredStaff();
 	public List<Registered_list> getRegisteredStaffByStartDateAndEndDate(LocalDate start, LocalDate end);
 	public List<Registered_list> getRegisteredStaffByDate(LocalDate date);
+	public List<Registered_list> getRegisteredStaffByDateAfter(LocalDate date);
 	public List<Registered_list> getRegisteredStaffByStatusAndDate(Boolean status, LocalDate start, LocalDate end);
 	public List<Registered_list> getRegisteredStaffByStatusAndDineAndDate(Boolean status, Boolean dine, LocalDate start, LocalDate end);
 	public List<Registered_list> getRegisteredStaffByStatusAndNameAndID(Boolean status, String name, String id, String team);
