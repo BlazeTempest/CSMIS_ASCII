@@ -266,7 +266,7 @@
 		                              class="bi bi-funnel"></i>&nbsp; Filter by Division</button>
 	                        	<ul class="dropdown-menu border-0 text-center"   aria-labelledby="filterDropdown">
 	                            	<li th:each=name:${divs}>
-										<a th:href="@{/filterDiv(division=${name})}" th:text=${name} class="dropdown-item">DIV001</a>
+										<a th:href="@{/search(division=${name}, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item">DIV001</a>
 									</li>
 		                        </ul>
 	                        </div>
@@ -276,7 +276,7 @@
 		                              class="bi bi-funnel"></i>Filter by Department</button>
 	                        	<ul class="dropdown-menu border-0 text-center" aria-labelledby="filterDropdown">
 	                            	<li th:each=name:${depts}>
-										<a th:href="@{/filterDept(dept=${name})}" th:text=${name} class="dropdown-item"></a>
+										<a th:href="@{/search(dept=${name}, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item"></a>
 									</li>
 		                        </ul>
 	                        </div>
@@ -286,10 +286,10 @@
 		                              class="bi bi-funnel"></i>&nbsp; Filter by Status</button>
 	                        	<ul class="dropdown-menu border-0 text-center" style="height:auto;" aria-labelledby="filterDropdown">                     	
 	                            	<li>
-										<a th:href="@{/filterStatus(enabled=1)}" class="dropdown-item">Active</a>
+										<a th:href="@{/search(dept=${name}, name=${searchName}, id=${id}, team=${team}, enabled=1)}" class="dropdown-item">Active</a>
 									</li>
 									<li>
-										<a th:href="@{/filterStatus(enabled=0)}" class="dropdown-item">Inactive</a>
+										<a th:href="@{/search(dept=${name}, name=${searchName}, id=${id}, team=${team}, enabled=0)}" class="dropdown-item">Inactive</a>
 									</li>
 		                        </ul>
 							</div>
@@ -299,10 +299,10 @@
 		                              class="bi bi-funnel"></i>&nbsp; Filter by Role</button>
 	                        	<ul class="dropdown-menu border-0 text-center" style="height:auto;" aria-labelledby="filterDropdown">
 	                            	<li>
-										<a th:href="@{/filterRole(role=admin)}" class="dropdown-item">Administrator</a>
+										<a th:href="@{/search(role=admin)}" class="dropdown-item">Administrator</a>
 									</li>
 									<li>
-										<a th:href="@{/filterRole(role=operator)}" class="dropdown-item">Operator</a>
+										<a th:href="@{/search(role=operator)}" class="dropdown-item">Operator</a>
 									</li>
 		                        </ul>
 	                        </div>                        

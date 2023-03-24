@@ -77,7 +77,7 @@ public class RegisteredListServiceImpl implements RegisteredListService {
 	@Override
 	public List<Registered_list> getRegisteredListByNameAndStaffID(String name, String team, String staffID, LocalDate startDate,
 			LocalDate endDate) {
-		return repository.findByNameContainsAndStaffIDContainsAndTeamContainsAndDineDateBetween(name, team, staffID, startDate, endDate);
+		return repository.findByNameAndDate(name, startDate, endDate);
 	}
 
 	@Override
@@ -115,6 +115,16 @@ public class RegisteredListServiceImpl implements RegisteredListService {
 	public List<Registered_list> getRegisteredStaffByStatusAndDineAndDate(Boolean status, Boolean dine, LocalDate start,
 			LocalDate end) {
 		return repository.findByStatusAndDineAndDineDateBetween(status, dine, start, end);
+	}
+
+	@Override
+	public List<Registered_list> getRegisteredListByTeamAndDate(String team, LocalDate startDate, LocalDate endDate) {
+		return repository.findByTeamContainsAndDineDateBetween(team, startDate, endDate);
+	}
+
+	@Override
+	public List<Registered_list> getRegisteredStaffByDateAfter(LocalDate date) {
+		return repository.findByDateAfter(date);
 	}
 	
 	

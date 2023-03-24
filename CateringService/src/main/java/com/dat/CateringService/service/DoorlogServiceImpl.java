@@ -48,6 +48,16 @@ public class DoorlogServiceImpl implements DoorlogService {
 	public List<String> getStaffIDByDineDate(LocalDate dineDate) {
 		return repository.findByDineDate(dineDate);
 	}
+
+	@Override
+	public List<DailyDoorLog> getByRegisteredAndStaffID(Boolean registered, LocalDate dineDateStart, LocalDate dineDateEnd) {
+		return repository.findByRegisteredAndDineDateBetween(registered, dineDateStart, dineDateEnd);
+	}
+
+	@Override
+	public List<DailyDoorLog> getByAll(Boolean registered, String name, String staffID, String team) {
+		return repository.findByRegisteredAndNameContainsAndStaffIDContainsAndTeamContainsAllIgnoreCase(registered, name, staffID, team);
+	}
 	
 	
 }

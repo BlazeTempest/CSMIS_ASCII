@@ -2,8 +2,6 @@ package com.dat.CateringService.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,33 +11,25 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.dat.CateringService.entity.Announcement;
+import com.dat.CateringService.entity.Registered_list;
 import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.importHelper.ExcelImporter;
-
+import com.dat.CateringService.service.RegisteredListService;
 import com.dat.CateringService.service.StaffService;
-import com.dat.CateringService.service.SuggestionService;
-import com.opencsv.exceptions.CsvException;
 
 @Controller
 public class HomeController {
 	@Autowired
 	private StaffService staffService;
-
-	public int countStaff(List<Staff> staffs) {
-		int totalNum = 0;
-		for (Staff staff : staffs) {
-			totalNum++;
-		}
-		return totalNum;
-	}
+	
+	@Autowired
+	private RegisteredListService registeredService;
 
 	@GetMapping("/employee-list")
 	public String empList(Model model, Authentication authentication) {
@@ -53,7 +43,7 @@ public class HomeController {
 				model.addAttribute("divs", staffService.getDivNames());
 				model.addAttribute("depts", staffService.getDeptNames());
 				model.addAttribute("staffs", staffs);
-				model.addAttribute("totalNum", countStaff(staffs));
+				model.addAttribute("totalNum", staffs.size());
 				return "admin/employee-list";
 			}
 			return "404";
@@ -65,22 +55,61 @@ public class HomeController {
 	}
 
 	@GetMapping("/search")
-	public String searchEmp(Authentication authentication, @RequestParam(name = "name", required = false) String name,@RequestParam(name = "id", required = false) String id,@RequestParam(name = "team", required = false) String team, Model model) {
+	public String searchEmp(Authentication authentication, @RequestParam(name = "dept", required = false) String dept, @RequestParam(name = "enabled", required = false) String status, @RequestParam(name = "name", required = false) String name, @RequestParam(name = "division", required = false) String division, @RequestParam(name = "id", required = false) String id,@RequestParam(name = "team", required = false) String team, Model model) {
 		try {
 			String role = authentication.getAuthorities().toArray()[0].toString();
 			if (role.equals("admin")) {
-				if (name.trim().isEmpty() && id.trim().isEmpty() && team.trim().isEmpty()) {
+				if (name.trim().isEmpty() && id.trim().isEmpty() && team.trim().isEmpty() && dept.trim().isEmpty() && division.trim().isEmpty() && status.trim().isEmpty()) {
 					return "redirect:/employee-list";
 				} else {
 					List<Staff> staffs = staffService.searchBy(name, id, team);
-					int totalNum = countStaff(staffs);
+					System.out.println(staffs);
+					if(division!="" && division!=null) {
+						List<Staff> toRemove = new ArrayList<>();
+						for(Staff temp : staffs) {
+							if(!temp.getDivision().equals(division)) {
+								toRemove.add(temp);
+							}
+						}
+						staffs.removeAll(toRemove);
+					}else if(dept!="" && dept!=null) {
+						List<Staff> toRemove = new ArrayList<>();
+						for(Staff temp : staffs) {
+							if(!temp.getDept().equals(dept)) {
+								toRemove.add(temp);
+							}
+						}
+						staffs.removeAll(toRemove);
+					}else if(status=="1" && status!="") {
+						if(staffs.isEmpty()) {
+							staffs = staffService.filterByStatus(1);
+						}
+						List<Staff> toRemove = new ArrayList<>();
+						for(Staff temp : staffs) {
+							if(temp.getEnabled()!=(byte)1) {
+								toRemove.add(temp);
+							}
+						}
+						staffs.removeAll(toRemove);
+					}else if(status=="0" && status!="") {
+						if(staffs.isEmpty() || staffs==null) {
+							staffs = staffService.filterByStatus(0);
+						}
+						List<Staff> toRemove = new ArrayList<>();
+						for(Staff temp : staffs) {
+							if(temp.getEnabled()!=(byte)0) {
+								toRemove.add(temp);
+							}
+						}
+						staffs.removeAll(toRemove);
+					}
 
 					model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 					model.addAttribute("divs", staffService.getDivNames());
 					model.addAttribute("depts", staffService.getDeptNames());
 					model.addAttribute("teams", staffService.getTeamNames());
 					model.addAttribute("staffs", staffs);
-					model.addAttribute("totalNum", totalNum);
+					model.addAttribute("totalNum", staffs.size());
 					model.addAttribute("searchName", name);
 					model.addAttribute("id", id);
 					model.addAttribute("team", team);
@@ -89,58 +118,12 @@ public class HomeController {
 			}
 			return "404";
 		} catch (NullPointerException e) {
-			return "redirect:/showMyLoginPage";
-		}
-	}
-
-	@GetMapping("/filterDiv")
-	public String filterbyDiv(Authentication authentication,@RequestParam(name = "division", required = false) String division, Model model) {
-		try {
-			String role = authentication.getAuthorities().toArray()[0].toString();
-
-			if (role.equals("admin")) {
-				List<Staff> staffs = staffService.filterByDivision(division);
-				model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
-				model.addAttribute("divs", staffService.getDivNames());
-				model.addAttribute("depts", staffService.getDeptNames());
-				model.addAttribute("teams", staffService.getTeamNames());
-				model.addAttribute("staffs", staffs);
-				model.addAttribute("totalNum", countStaff(staffs));
-				return "admin/employee-list";
-			}
 			return "404";
-
-		} catch (NullPointerException e) {
-
-			return "redirect:/showMyLoginPage";
-		}
-	}
-
-	@GetMapping("/filterDept")
-	public String filterByDept(Authentication authentication,@RequestParam(name = "dept", required = false) String dept, Model model) {
-		try {
-			String role = authentication.getAuthorities().toArray()[0].toString();
-			if (role.equals("admin")) {
-				List<Staff> staffs = staffService.filterByDept(dept);
-
-				model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
-				model.addAttribute("divs", staffService.getDivNames());
-				model.addAttribute("depts", staffService.getDeptNames());
-				model.addAttribute("teams", staffService.getTeamNames());
-				model.addAttribute("staffs", staffs);
-				model.addAttribute("totalNum", countStaff(staffs));
-				return "admin/employee-list";
-			}
-			return "404";
-
-		} catch (NullPointerException e) {
-
-			return "redirect:/showMyLoginPage";
 		}
 	}
 
 	@GetMapping("/filterStatus")
-	public String filterbyTeam(Authentication authentication,@RequestParam(name = "enabled", required = false) int status, Model model) {
+	public String filterbyTeam(Authentication authentication, @RequestParam(name = "enabled", required = false) int status, Model model) {
 		try {
 			String role = authentication.getAuthorities().toArray()[0].toString();
 			if (role.equals("admin")) {
@@ -151,7 +134,7 @@ public class HomeController {
 				model.addAttribute("depts", staffService.getDeptNames());
 				model.addAttribute("teams", staffService.getTeamNames());
 				model.addAttribute("staffs", staffs);
-				model.addAttribute("totalNum", countStaff(staffs));
+				model.addAttribute("totalNum", staffs.size());
 				return "admin/employee-list";
 			}
 			return "404";
@@ -173,7 +156,7 @@ public class HomeController {
 				model.addAttribute("depts", staffService.getDeptNames());
 				model.addAttribute("teams", staffService.getTeamNames());
 				model.addAttribute("staffs", staffs);
-				model.addAttribute("totalNum", countStaff(staffs));
+				model.addAttribute("totalNum", staffs.size());
 				return "admin/employee-list";
 			}
 			return "404";
@@ -232,7 +215,10 @@ public class HomeController {
 						continue;
 					}else {
 						System.out.println("Inactive");
-						
+						List<Registered_list> registered = registeredService.getRegisteredStaffByDateAfter(LocalDate.now());
+						for(Registered_list temp : registered) {
+							temp.setDine(false);
+						}
 						staff.setStatus((byte) 0);
 						staff.setDelete_date(LocalDateTime.now());
 						staff.setDelete_by(adminName);
@@ -245,7 +231,7 @@ public class HomeController {
 			staffService.addAllStaff(tempStaffs);
 			staffs = staffService.getActiveStaffs(1);
 			model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
-			model.addAttribute("totalNum", countStaff(staffs));
+			model.addAttribute("totalNum", staffs.size());
 			model.addAttribute("divs", staffService.getDivNames());
 			model.addAttribute("depts", staffService.getDeptNames());
 			model.addAttribute("teams", staffService.getTeamNames());
