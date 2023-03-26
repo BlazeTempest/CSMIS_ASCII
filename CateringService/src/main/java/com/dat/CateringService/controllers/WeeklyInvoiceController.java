@@ -3,7 +3,7 @@ package com.dat.CateringService.controllers;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,14 +40,18 @@ public class WeeklyInvoiceController {
 	}
 
 	@GetMapping("/weekly-invoice")
-	public String weeklyInvoice(Model model) {
-
-		PaymentVoucher weeklyInvoice = new PaymentVoucher();
+	public String weeklyInvoice(Model model, Authentication authentication) {
 		
-		model.addAttribute("restaurantName", restaurantService.findActiveRestaurantName());
-		model.addAttribute("weeklyInvoice", weeklyInvoice);
+		String role = authentication.getAuthorities().toArray()[0].toString();
+		if (role.equals("admin")) {
+			PaymentVoucher weeklyInvoice = new PaymentVoucher();
+			
+			model.addAttribute("restaurantName", restaurantService.findActiveRestaurantName());
+			model.addAttribute("weeklyInvoice", weeklyInvoice);
 
-		return "weekly-invoice";
+			return "weekly-invoice";
+		} return "redirect:/showMyLoginPage";
+	
 	}
 
 	@PostMapping("/saveWeeklyInvoice")

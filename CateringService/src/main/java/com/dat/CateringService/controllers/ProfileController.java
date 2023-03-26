@@ -71,11 +71,8 @@ public class ProfileController {
 	
 	
 	@GetMapping("/changePassword")
-	public String changePassword(Model model, Authentication authentication,
-			@RequestParam("oldPassword") String oldPassword,
-			@RequestParam("newPassword") String newPassword,
-			@RequestParam("confirmPassword") String confirmPassword) {
-		
+	public String changePassword(Model model, Authentication authentication,@RequestParam("oldPassword") String oldPassword,@RequestParam("newPassword") String newPassword,@RequestParam("confirmPassword") String confirmPassword) {
+	
 		if (authentication != null) {
 			String userId = authentication.getName();
 			

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,12 +28,16 @@ public class HolidayController {
 	}
 
 	@GetMapping("/holiday")
-	public String Holiday(Model theModel) {
+	public String Holiday(Model theModel,Authentication authentication) {
 		
+		String role = authentication.getAuthorities().toArray()[0].toString();
+		if (role.equals("admin")) {
+			List<Holidays> totalHolidays = holidayService.getAll();
+			theModel.addAttribute("totalHolidays",totalHolidays);
+			return "holiday";
+			
+		} return "redirect:/showMyLoginPage";
 		
-		List<Holidays> totalHolidays = holidayService.getAll();
-		theModel.addAttribute("totalHolidays",totalHolidays);
-		return "holiday";
 	}
 	
 	@PostMapping("/importHoliday")

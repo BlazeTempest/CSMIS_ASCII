@@ -45,167 +45,173 @@ public class RegistrationController {
 	
 	@GetMapping("/registration")
 	public String showRegistrationForm(Model model, Authentication authentication) {
-		System.err.println("Authentication is >>>>>>>> "+authentication.getName());
-        List<String> headers = new ArrayList<>(Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"));
-        List<LocalDate> holidays = new ArrayList<>();
-        List<Holidays> holidayEntity = holidayService.getAll();
-        for(Holidays d : holidayEntity) {
-        	holidays.add(d.getHoliday_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-        }
-        
-        LocalDate date = LocalDate.now(); // get the current date
-    	int month = date.getMonthValue();
-    	WeekFields weekFields = WeekFields.of(Locale.getDefault());
-    	List<List<LocalDate>> weeksInMonth = new ArrayList<>();
-    	
-    	// loop over the weeks of the month
-    	LocalDate firstDayOfMonth = date.withDayOfMonth(1);
-    	LocalDate lastDayOfMonth = date.withDayOfMonth(date.lengthOfMonth());
-        int firstWeekNumber = firstDayOfMonth.get(weekFields.weekOfWeekBasedYear());
-    	int lastWeekNumber = lastDayOfMonth.get(weekFields.weekOfWeekBasedYear());
-    	int currentWeeknumber = date.get(weekFields.weekOfWeekBasedYear());
-    	
-    	String status = "Register";
-    	
-    	if(currentWeeknumber==lastWeekNumber) {
-    		System.out.println(date.getMonthValue());
-    		LocalDate TempDate = date.plusMonths(1);
-    		date = LocalDate.of(date.getYear(), TempDate.getMonth(), 1);
-    		firstDayOfMonth = date.withDayOfMonth(1);
-    		lastDayOfMonth = date.withDayOfMonth(date.lengthOfMonth());
-    		firstWeekNumber = firstDayOfMonth.get(weekFields.weekOfWeekBasedYear());
-    		lastWeekNumber = lastDayOfMonth.get(weekFields.weekOfWeekBasedYear());
-    		currentWeeknumber = date.get(weekFields.weekOfWeekBasedYear());
-    		// add days from previous month to first week
-        	List<LocalDate> daysOfFirstWeek = new ArrayList<>();
-        	LocalDate prevMonthLastDay = firstDayOfMonth.minusDays(1);
-        	int prevMonthDaysToAdd = firstDayOfMonth.getDayOfWeek().getValue() % 7;
-        	for (int i = prevMonthDaysToAdd - 1; i >= 0; i--) {
-        	    daysOfFirstWeek.add(prevMonthLastDay.minusDays(i));
-        	}
+		String role = authentication.getAuthorities().toArray()[0].toString();
+		if (role.equals("admin")) {
+			
+			System.err.println("Authentication is >>>>>>>> "+authentication.getName());
+	        List<String> headers = new ArrayList<>(Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"));
+	        List<LocalDate> holidays = new ArrayList<>();
+	        List<Holidays> holidayEntity = holidayService.getAll();
+	        for(Holidays d : holidayEntity) {
+	        	holidays.add(d.getHoliday_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+	        }
+	        
+	        LocalDate date = LocalDate.now(); // get the current date
+	    	int month = date.getMonthValue();
+	    	WeekFields weekFields = WeekFields.of(Locale.getDefault());
+	    	List<List<LocalDate>> weeksInMonth = new ArrayList<>();
+	    	
+	    	// loop over the weeks of the month
+	    	LocalDate firstDayOfMonth = date.withDayOfMonth(1);
+	    	LocalDate lastDayOfMonth = date.withDayOfMonth(date.lengthOfMonth());
+	        int firstWeekNumber = firstDayOfMonth.get(weekFields.weekOfWeekBasedYear());
+	    	int lastWeekNumber = lastDayOfMonth.get(weekFields.weekOfWeekBasedYear());
+	    	int currentWeeknumber = date.get(weekFields.weekOfWeekBasedYear());
+	    	
+	    	String status = "Register";
+	    	
+	    	if(currentWeeknumber==lastWeekNumber) {
+	    		System.out.println(date.getMonthValue());
+	    		LocalDate TempDate = date.plusMonths(1);
+	    		date = LocalDate.of(date.getYear(), TempDate.getMonth(), 1);
+	    		firstDayOfMonth = date.withDayOfMonth(1);
+	    		lastDayOfMonth = date.withDayOfMonth(date.lengthOfMonth());
+	    		firstWeekNumber = firstDayOfMonth.get(weekFields.weekOfWeekBasedYear());
+	    		lastWeekNumber = lastDayOfMonth.get(weekFields.weekOfWeekBasedYear());
+	    		currentWeeknumber = date.get(weekFields.weekOfWeekBasedYear());
+	    		// add days from previous month to first week
+	        	List<LocalDate> daysOfFirstWeek = new ArrayList<>();
+	        	LocalDate prevMonthLastDay = firstDayOfMonth.minusDays(1);
+	        	int prevMonthDaysToAdd = firstDayOfMonth.getDayOfWeek().getValue() % 7;
+	        	for (int i = prevMonthDaysToAdd - 1; i >= 0; i--) {
+	        	    daysOfFirstWeek.add(prevMonthLastDay.minusDays(i));
+	        	}
 
-        	// add days of current month to first week
-        	for (int i = 1; i <= 7 - prevMonthDaysToAdd; i++) {
-        	    daysOfFirstWeek.add(firstDayOfMonth.plusDays(i - 1));
-        	}
-        	weeksInMonth.add(daysOfFirstWeek);
-        	
-        	// loop over the remaining weeks of the month
-        	for (int weekNumber = firstWeekNumber + 1; weekNumber <= lastWeekNumber; weekNumber++) {
-        	    LocalDate mondayOfWeek = firstDayOfMonth.with(weekFields.weekOfWeekBasedYear(), weekNumber).with(weekFields.dayOfWeek(), 1);
-        	    LocalDate sundayOfWeek = firstDayOfMonth.with(weekFields.weekOfWeekBasedYear(), weekNumber).with(weekFields.dayOfWeek(), 7);
-        	    if (sundayOfWeek.getMonthValue() > month) {
-        	        sundayOfWeek = lastDayOfMonth;
-        	    }
-        	    int weekSize = 0;
-        	    List<LocalDate> daysOfWeek = new ArrayList<>();
-        	    for (LocalDate d = mondayOfWeek; !d.isAfter(sundayOfWeek); d = d.plusDays(1)) {
-        	        if(weekSize<7) {
-        	        	daysOfWeek.add(d);
-            	        weekSize++;
-        	        }
-        	    }
-        	    weeksInMonth.add(daysOfWeek);
-        	}
-        	
-        	// add days from next month to the last week
-        	List<LocalDate> daysOfLastWeek = weeksInMonth.get(weeksInMonth.size() - 1);
-        	LocalDate nextMonthFirstDay = lastDayOfMonth.plusDays(1);
-        	int nextMonthDaysToAdd = 7 - daysOfLastWeek.size();
-        	for (int i = 1; i <= nextMonthDaysToAdd; i++) {
-        	    daysOfLastWeek.add(nextMonthFirstDay.plusDays(i - 1));
-        	}
-        	status = "Register";
-    	}else {
-	    	// add days from previous month to first week
-	    	List<LocalDate> daysOfFirstWeek = new ArrayList<>();
-	    	LocalDate prevMonthLastDay = firstDayOfMonth.minusDays(1);
-	    	int prevMonthDaysToAdd = firstDayOfMonth.getDayOfWeek().getValue() % 7;
-	    	for (int i = prevMonthDaysToAdd - 1; i >= 0; i--) {
-	    	    daysOfFirstWeek.add(prevMonthLastDay.minusDays(i));
-	    	}
-	
-	    	// add days of current month to first week
-	    	for (int i = 1; i <= 7 - prevMonthDaysToAdd; i++) {
-	    	    daysOfFirstWeek.add(firstDayOfMonth.plusDays(i - 1));
-	    	}
-	    	weeksInMonth.add(daysOfFirstWeek);
-	
-	    	// loop over the remaining weeks of the month
-	    	for (int weekNumber = firstWeekNumber + 1; weekNumber <= lastWeekNumber; weekNumber++) {
-	    	    LocalDate mondayOfWeek = firstDayOfMonth.with(weekFields.weekOfWeekBasedYear(), weekNumber).with(weekFields.dayOfWeek(), 1);
-	    	    LocalDate sundayOfWeek = firstDayOfMonth.with(weekFields.weekOfWeekBasedYear(), weekNumber).with(weekFields.dayOfWeek(), 7);
-	    	    if (sundayOfWeek.getMonthValue() > month) {
-	    	        sundayOfWeek = lastDayOfMonth;
-	    	    }
-	    	    List<LocalDate> daysOfWeek = new ArrayList<>();
-	    	    for (LocalDate d = mondayOfWeek; !d.isAfter(sundayOfWeek); d = d.plusDays(1)) {
-	    	        daysOfWeek.add(d);
-	    	    }
-	    	    weeksInMonth.add(daysOfWeek);
+	        	// add days of current month to first week
+	        	for (int i = 1; i <= 7 - prevMonthDaysToAdd; i++) {
+	        	    daysOfFirstWeek.add(firstDayOfMonth.plusDays(i - 1));
+	        	}
+	        	weeksInMonth.add(daysOfFirstWeek);
+	        	
+	        	// loop over the remaining weeks of the month
+	        	for (int weekNumber = firstWeekNumber + 1; weekNumber <= lastWeekNumber; weekNumber++) {
+	        	    LocalDate mondayOfWeek = firstDayOfMonth.with(weekFields.weekOfWeekBasedYear(), weekNumber).with(weekFields.dayOfWeek(), 1);
+	        	    LocalDate sundayOfWeek = firstDayOfMonth.with(weekFields.weekOfWeekBasedYear(), weekNumber).with(weekFields.dayOfWeek(), 7);
+	        	    if (sundayOfWeek.getMonthValue() > month) {
+	        	        sundayOfWeek = lastDayOfMonth;
+	        	    }
+	        	    int weekSize = 0;
+	        	    List<LocalDate> daysOfWeek = new ArrayList<>();
+	        	    for (LocalDate d = mondayOfWeek; !d.isAfter(sundayOfWeek); d = d.plusDays(1)) {
+	        	        if(weekSize<7) {
+	        	        	daysOfWeek.add(d);
+	            	        weekSize++;
+	        	        }
+	        	    }
+	        	    weeksInMonth.add(daysOfWeek);
+	        	}
+	        	
+	        	// add days from next month to the last week
+	        	List<LocalDate> daysOfLastWeek = weeksInMonth.get(weeksInMonth.size() - 1);
+	        	LocalDate nextMonthFirstDay = lastDayOfMonth.plusDays(1);
+	        	int nextMonthDaysToAdd = 7 - daysOfLastWeek.size();
+	        	for (int i = 1; i <= nextMonthDaysToAdd; i++) {
+	        	    daysOfLastWeek.add(nextMonthFirstDay.plusDays(i - 1));
+	        	}
+	        	status = "Register";
+	    	}else {
+		    	// add days from previous month to first week
+		    	List<LocalDate> daysOfFirstWeek = new ArrayList<>();
+		    	LocalDate prevMonthLastDay = firstDayOfMonth.minusDays(1);
+		    	int prevMonthDaysToAdd = firstDayOfMonth.getDayOfWeek().getValue() % 7;
+		    	for (int i = prevMonthDaysToAdd - 1; i >= 0; i--) {
+		    	    daysOfFirstWeek.add(prevMonthLastDay.minusDays(i));
+		    	}
+		
+		    	// add days of current month to first week
+		    	for (int i = 1; i <= 7 - prevMonthDaysToAdd; i++) {
+		    	    daysOfFirstWeek.add(firstDayOfMonth.plusDays(i - 1));
+		    	}
+		    	weeksInMonth.add(daysOfFirstWeek);
+		
+		    	// loop over the remaining weeks of the month
+		    	for (int weekNumber = firstWeekNumber + 1; weekNumber <= lastWeekNumber; weekNumber++) {
+		    	    LocalDate mondayOfWeek = firstDayOfMonth.with(weekFields.weekOfWeekBasedYear(), weekNumber).with(weekFields.dayOfWeek(), 1);
+		    	    LocalDate sundayOfWeek = firstDayOfMonth.with(weekFields.weekOfWeekBasedYear(), weekNumber).with(weekFields.dayOfWeek(), 7);
+		    	    if (sundayOfWeek.getMonthValue() > month) {
+		    	        sundayOfWeek = lastDayOfMonth;
+		    	    }
+		    	    List<LocalDate> daysOfWeek = new ArrayList<>();
+		    	    for (LocalDate d = mondayOfWeek; !d.isAfter(sundayOfWeek); d = d.plusDays(1)) {
+		    	        daysOfWeek.add(d);
+		    	    }
+		    	    weeksInMonth.add(daysOfWeek);
+		    	}
+		    	
+		    	// add days from next month to the last week
+		    	List<LocalDate> daysOfLastWeek = weeksInMonth.get(weeksInMonth.size() - 1);
+		    	LocalDate nextMonthFirstDay = lastDayOfMonth.plusDays(1);
+		    	int nextMonthDaysToAdd = 7 - daysOfLastWeek.size();
+		    	for (int i = 1; i <= nextMonthDaysToAdd; i++) {
+		    	    daysOfLastWeek.add(nextMonthFirstDay.plusDays(i - 1));
+		    	}
+		    	status = "Register";
 	    	}
 	    	
-	    	// add days from next month to the last week
-	    	List<LocalDate> daysOfLastWeek = weeksInMonth.get(weeksInMonth.size() - 1);
-	    	LocalDate nextMonthFirstDay = lastDayOfMonth.plusDays(1);
-	    	int nextMonthDaysToAdd = 7 - daysOfLastWeek.size();
-	    	for (int i = 1; i <= nextMonthDaysToAdd; i++) {
-	    	    daysOfLastWeek.add(nextMonthFirstDay.plusDays(i - 1));
+	    	List<Registered_list> currentMonthRegisteredList = registeredService.getByStaffID(authentication.getName());
+	    	List<LocalDate> checkedDates = new ArrayList<>();
+	    	
+	    	if(!currentMonthRegisteredList.isEmpty()) {
+	        	for(Registered_list registered : currentMonthRegisteredList) {
+	        		if(registered.getDine()==true && registered.getDineDate().getMonthValue() == month) {
+	        			checkedDates.add(registered.getDineDate());
+	        		}
+	        	}
+	        	if(!checkedDates.isEmpty()) {
+	        		status = "Update";
+	        	}
 	    	}
-	    	status = "Register";
-    	}
-    	
-    	List<Registered_list> currentMonthRegisteredList = registeredService.getByStaffID(authentication.getName());
-    	List<LocalDate> checkedDates = new ArrayList<>();
-    	
-    	if(!currentMonthRegisteredList.isEmpty()) {
-        	for(Registered_list registered : currentMonthRegisteredList) {
-        		if(registered.getDine()==true && registered.getDineDate().getMonthValue() == month) {
-        			checkedDates.add(registered.getDineDate());
-        		}
-        	}
-        	if(!checkedDates.isEmpty()) {
-        		status = "Update";
-        	}
-    	}
-    	
-    	List<LocalDate> disabledDates = new ArrayList<>();
-    	List<LocalDate> tempDate = new ArrayList<>();
-    	
-    	for(List<LocalDate> week : weeksInMonth) {
-    		for(LocalDate day : week) {
-    			tempDate.add(day);
-    			if(week.contains(LocalDate.now()) && day.getDayOfWeek()==DayOfWeek.SATURDAY) {
-    				disabledDates.addAll(tempDate);
-    			}
-    		}
-    	}
-    	
-    	List<AvoidMeat> avoidMeats = avoidMeatService.findAll();
-    	String staffAvoidMeats = staffService.getStaffById(authentication.getName()).getAvoidMeatIds();
-    	List<AvoidMeat> checkedMeats = new ArrayList<>();
-    	if(staffAvoidMeats!=null) {
-    		List<String> Meats = Arrays.asList(staffAvoidMeats.split(","));
-        	if(!staffAvoidMeats.equals("")) {
-        		for(String id:Meats) {
-            		int tempId = Integer.parseInt(id);
-            		checkedMeats.add(avoidMeatService.findById(tempId));
-            	}
-        		
-        	}
-    	}
-    	
-    	model.addAttribute("checkedMeats", checkedMeats);
-    	model.addAttribute("avoidmeats", avoidMeats);
-    	model.addAttribute("status", status);
-    	model.addAttribute("checkedDates", checkedDates);
-    	model.addAttribute("holidays", holidays);
-		model.addAttribute("headers", headers);
-		model.addAttribute("currentMonth", date.getMonth());
-		model.addAttribute("currentYear", date.getYear());
-		model.addAttribute("month", weeksInMonth);
-		model.addAttribute("disabledDates", disabledDates);
-		return "lunch-register";
+	    	
+	    	List<LocalDate> disabledDates = new ArrayList<>();
+	    	List<LocalDate> tempDate = new ArrayList<>();
+	    	
+	    	for(List<LocalDate> week : weeksInMonth) {
+	    		for(LocalDate day : week) {
+	    			tempDate.add(day);
+	    			if(week.contains(LocalDate.now()) && day.getDayOfWeek()==DayOfWeek.SATURDAY) {
+	    				disabledDates.addAll(tempDate);
+	    			}
+	    		}
+	    	}
+	    	
+	    	List<AvoidMeat> avoidMeats = avoidMeatService.findAll();
+	    	String staffAvoidMeats = staffService.getStaffById(authentication.getName()).getAvoidMeatIds();
+	    	List<AvoidMeat> checkedMeats = new ArrayList<>();
+	    	if(staffAvoidMeats!=null) {
+	    		List<String> Meats = Arrays.asList(staffAvoidMeats.split(","));
+	        	if(!staffAvoidMeats.equals("")) {
+	        		for(String id:Meats) {
+	            		int tempId = Integer.parseInt(id);
+	            		checkedMeats.add(avoidMeatService.findById(tempId));
+	            	}
+	        		
+	        	}
+	    	}
+	    	
+	    	model.addAttribute("checkedMeats", checkedMeats);
+	    	model.addAttribute("avoidmeats", avoidMeats);
+	    	model.addAttribute("status", status);
+	    	model.addAttribute("checkedDates", checkedDates);
+	    	model.addAttribute("holidays", holidays);
+			model.addAttribute("headers", headers);
+			model.addAttribute("currentMonth", date.getMonth());
+			model.addAttribute("currentYear", date.getYear());
+			model.addAttribute("month", weeksInMonth);
+			model.addAttribute("disabledDates", disabledDates);
+			return "lunch-register";
+			
+		}return "redirect:/showMyLoginPage";
+		
 	}
 	
 	@PostMapping("/saveRegister")

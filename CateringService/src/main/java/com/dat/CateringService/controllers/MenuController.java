@@ -27,8 +27,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.dat.CateringService.daos.AvoidMeatRepository;
 import com.dat.CateringService.daos.PriceRepository;
 import com.dat.CateringService.entity.AvoidMeat;
+import com.dat.CateringService.entity.Headcount;
 import com.dat.CateringService.entity.Price;
 import com.dat.CateringService.service.AvoidMeatService;
+import com.dat.CateringService.service.HeadcountService;
 import com.dat.CateringService.service.MenuPdfService;
 import com.dat.CateringService.service.PriceService;
 import com.dat.CateringService.service.StaffService;
@@ -40,6 +42,9 @@ public class MenuController {
 
 	@Autowired
 	private MenuPdfService menuPdfService;
+	
+	@Autowired
+	private HeadcountService headcountService;
 
 	private AvoidMeatService avoidMeatService;
 	private PriceService priceService;
@@ -177,6 +182,13 @@ public class MenuController {
 			thePrice.setCreated_by(staffService.getStaffById(authentication.getName()).getName());
 			priceService.save(thePrice);
 			System.out.println("Added new price!");
+			
+			
+			 Price activePrice = priceService.findActivePrice();
+			 Headcount headcount = new Headcount();
+			    headcount.setAmount(thePrice.getTotal_price());
+			    headcount.setPrice_ID(activePrice.getPrice_ID());
+			    
 		 } 
 		return "redirect:/menu";
 	}

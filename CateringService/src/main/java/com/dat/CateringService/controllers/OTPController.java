@@ -113,9 +113,4 @@ public class OTPController {
         return "redirect:/";
     }
     
-//    @GetMapping("/reset-password")
-//    public String resetPassword(@RequestParam("email") String email, Model model) {
-//        model.addAttribute("email", email);
-//        return "reset-password";
-//    }
 }

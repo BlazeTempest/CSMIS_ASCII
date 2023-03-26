@@ -19,12 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.dat.CateringService.DTO.ReportDTO;
 import com.dat.CateringService.entity.DailyDoorLog;
+import com.dat.CateringService.entity.Headcount;
 import com.dat.CateringService.entity.Registered_list;
 import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.importHelper.DoorlogImporter;
 import com.dat.CateringService.service.DoorlogService;
+import com.dat.CateringService.service.HeadcountService;
 import com.dat.CateringService.service.RegisteredListService;
 import com.dat.CateringService.service.StaffService;
 
@@ -40,10 +41,22 @@ public class ReportController {
 	@Autowired
 	private RegisteredListService registeredService;
 	
+	@Autowired
+	private HeadcountService headcountService;
+	
 	@GetMapping("/registered-list")
 	public String plannedList(Model model, RedirectAttributes redirect) {
 		List<Registered_list> registeredStaffs = registeredService.getRegisteredStaffByStartDateAndEndDate(LocalDate.now(), LocalDate.now());
 		System.out.println("Total registered list >>>>>>>>>>>"+registeredStaffs);
+		
+			int totalCount = registeredStaffs.size(); // get the total count of registered staff
+
+		    // Update the headcount table with the total registered count
+		    Headcount headcount = new Headcount();
+		    headcount.setRegisteredCount(totalCount);
+		    System.out.println("RegisteredCount"+totalCount);
+		    headcountService.saveHeadcount(headcount);
+		    
 		
 		model.addAttribute("teams", staffService.getTeamNames());
 		model.addAttribute("divs", staffService.getDivNames());
@@ -110,6 +123,15 @@ public class ReportController {
 	public String plannedEatList(Model model) {
 		List<Registered_list> eatList = registeredService.getRegisteredStaffByStatusAndDineAndDate(true, true, LocalDate.now(), LocalDate.now());
 		
+		
+			int actualCount = eatList.size();
+		    Headcount headcount = new Headcount();
+		    headcount.setActualCount(actualCount);
+//		    headcount.setInvoiceDate(LocalDate.now());
+//		    headcount.setPriceID(1); 
+		    headcountService.saveHeadcount(headcount);
+		
+		    
 		model.addAttribute("start", LocalDate.now().minusDays(5));
 		model.addAttribute("end", LocalDate.now());
 		model.addAttribute("teams", staffService.getTeamNames());
@@ -376,22 +398,5 @@ public class ReportController {
 			return "redirect:/404";
 		}
 	}
-	
-	public List<ReportDTO> getUnregisteredEatList(){
-		List<Registered_list> registered = registeredService.getRegisteredStaffByDate(LocalDate.now());
-		List<String> doorlogIds = doorlogService.getStaffIDByDineDate(LocalDate.now());
-		List<ReportDTO> staffs = new ArrayList<>();
-		List<String> toRemove = new ArrayList<>();
-		for(Registered_list register : registered) {
-			if(doorlogIds.contains(register.getStaffID())) {
-				toRemove.add(register.getStaffID());
-			}
-		}
-		doorlogIds.removeAll(toRemove);
-		for(String id : doorlogIds) {
-			Staff staff = staffService.getStaffById(id);
-			staffs.add(new ReportDTO(staff.getStaffID(), LocalDate.now(), staff.getDoorLogNo(), staff.getName(), staff.getDivision(), staff.getDept(), staff.getTeam()));
-		}
-		return staffs;
-	}
+
 }
