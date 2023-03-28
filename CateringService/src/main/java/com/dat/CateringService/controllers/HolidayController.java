@@ -2,6 +2,10 @@ package com.dat.CateringService.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,17 +18,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dat.CateringService.entity.Holidays;
+import com.dat.CateringService.entity.Registered_list;
 import com.dat.CateringService.importHelper.HolidayExcelImport;
 import com.dat.CateringService.service.HolidayService;
+import com.dat.CateringService.service.RegisteredListService;
 
 @Controller
 public class HolidayController {
 	
 	private HolidayService holidayService;
+	private RegisteredListService registeredService;
 	
-	public HolidayController(HolidayService holidayService) {
+	public HolidayController(HolidayService holidayService, RegisteredListService registeredService) {
 		super();
 		this.holidayService = holidayService;
+		this.registeredService = registeredService;
 	}
 
 	@GetMapping("/holiday")
@@ -37,7 +45,23 @@ public class HolidayController {
 			return "holiday";
 			
 		} return "redirect:/showMyLoginPage";
-		
+	}
+	
+	@PostMapping("/addHoliday")
+	public String addHoliday(@RequestParam("holiday")String holiday, @RequestParam("description")String description) throws ParseException {
+		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(holiday);
+		Holidays newHoliday = new Holidays(date, description);
+		holidayService.addHolidays(newHoliday);
+		List<Registered_list> registered = registeredService.getRegisteredStaffByDate(LocalDate.parse(holiday));
+		if(!registered.isEmpty()) {
+			for(Registered_list temp : registered) {
+				System.out.println(temp.getName());
+				temp.setDine(false);
+				registeredService.addRegisteredDate(temp);
+			}
+			
+		}
+		return "redirect:/holiday";
 	}
 	
 	@PostMapping("/importHoliday")

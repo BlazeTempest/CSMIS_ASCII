@@ -27,6 +27,8 @@ public class DoorlogImporter {
         Workbook workbook = WorkbookFactory.create(inputStream);
         Sheet sheet = workbook.getSheetAt(0); // assuming only one sheet in the workbook
         Iterator<Row> iterator = sheet.iterator();
+        int doorId = 0;
+        System.out.println("Start: " + doorId);
         while (iterator.hasNext()) {
             Row row = iterator.next();
             if (row.getRowNum() == 0) { // skip the header row
@@ -44,22 +46,27 @@ public class DoorlogImporter {
                 	case 1:
                 		break;
                     case 2:
-                    	System.out.println(cell.getStringCellValue());
                     	int doorlog = Integer.parseInt(cell.getStringCellValue());
                     	object.setDoorLogNo(doorlog);
                         break;
                     case 3:
-                    	System.out.println(cell.getStringCellValue());
                     	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/dd/yyyy H:mm:ss");
                     	LocalDate date = LocalDate.parse(cell.getStringCellValue(), formatter);
-                    	System.out.println(date);
                     	object.setDineDate(date);
                     	break;
                     default:
                         break;
                 }
             }
-            objects.add(object);
+            
+            if(doorId==0) objects.add(object); 
+            if(doorId==0) doorId = object.getDoorLogNo();
+            System.out.println("Previous Id: " + doorId);
+            if(object.getDoorLogNo()!=doorId) {
+            	objects.add(object);
+            }
+            doorId = object.getDoorLogNo();
+            System.out.println("Next Id: " + doorId);
         }
         workbook.close();
         return objects;

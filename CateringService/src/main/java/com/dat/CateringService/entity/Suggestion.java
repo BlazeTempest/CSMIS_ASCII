@@ -1,5 +1,6 @@
 package com.dat.CateringService.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -20,7 +21,7 @@ public class Suggestion {
 	private String description;
 	
 	@Column(name="registered_date")
-	private Date created_date;
+	private LocalDateTime created_date;
 	
 	@Column(name="registered_by")
 	private String created_by;
@@ -40,7 +41,7 @@ public class Suggestion {
 		this.description = description;
 	}
 
-	public Suggestion(int sug_ID, String description, Date created_date, String created_by) {
+	public Suggestion(int sug_ID, String description, LocalDateTime created_date, String created_by) {
 		super();
 		this.sug_ID = sug_ID;
 		this.description = description;
@@ -64,11 +65,11 @@ public class Suggestion {
 		this.description = description;
 	}
 
-	public Date getCreated_date() {
+	public LocalDateTime getCreated_date() {
 		return created_date;
 	}
 
-	public void setCreated_date(Date created_date) {
+	public void setCreated_date(LocalDateTime created_date) {
 		this.created_date = created_date;
 	}
 

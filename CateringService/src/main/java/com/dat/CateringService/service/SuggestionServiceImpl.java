@@ -23,4 +23,9 @@ public class SuggestionServiceImpl implements SuggestionService {
 	public List<Suggestion> getAllSuggestions() {
 		return repository.findAll();
 	}
+
+	@Override
+	public void addSuggestion(Suggestion suggestion) {
+		repository.save(suggestion);
+	}
 }

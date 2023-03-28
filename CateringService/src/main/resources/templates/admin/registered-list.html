@@ -186,7 +186,6 @@
 	        		<form class="row" method="post" enctype="multipart/form-data" th:action="@{/importDoorlog}">
                     	<div class="card-body my-2 text-center offset-1 col-7">
                 	        <input class="form-control form-control-lg bg-white fs-6" name="file" accept=".xls,.xlsx,.csv" id="formFileLg" type="file" required/>
-                        	
                         </div>
                         <div class="card-body my-2 text-center col-4">
                             <button type="submit" class="btn btn-outline-dark text-center"><i class="fa fa-plus"></i>&nbsp; Upload</button>
@@ -194,50 +193,58 @@
                         <div th:if="${success!=null}" class="alert alert-success" th:text=${success}></div>
                         <div th:if="${error!=null}" class="alert alert-danger" th:text=${error}></div>
                     </form>
+                    <div class="alert alert-info text-center">In case of doorlog system failure, you can input the following data to create invoice</div>
+                    <form th:action="@{/addHeadcount}" method="post" class="row">
+                    	<input type="date" name="invoiceDate" class="ms-3 col-4">
+                    	<input type="number" name="actual" class="ms-3 col-4 float-end" placeholder="Actual Completed lunch count">
+                    	<button type="submit" class="ms-3 col-3 btn btn-outline-dark float-end"><i class="fa fa-plus"></i>&nbsp; Add headcount</button>
+                    </form>
+                    <div th:if=${successHeadcount} th:text=${successHeadcount} class="alert alert-success"></div>
 	        </div>
                 <div class="row bg-secondary rounded align-items-center justify-content-center mx-0">
                     <div class="bg-secondary rounded h-100 p-4">
-                        <h2 class="mb-4 text-center text-secondary">Planned List</h2>
+                    <div class="row">
+                        <h2 class="mb-4 text-end col-lg-8" style="text-decoration: underline;">Lunch Registered List</h2>
+                        <a th:href="@{/registered-list}" class="mt-2 offset-3 col-lg-1 text-end text-dark" style="text-decoration: underline;"><span>Refresh</span></a>
+                    </div>
                         <div class="container-fluid">
-                            <form th:action="@{/searchRegistered}" method="get" class="ms-5 row g-3">
-	                            <div class="col-md-3">
-	                            	<input class="form-control bg-white border-info" th:value=${searchName} name="name" type="search" placeholder="Search By Name">
-	                            </div>
-	                            <div class="col-md-3">
-	                            	<input class="form-control bg-white border-info" th:value=${id} name="id" type="search" placeholder="Search By Id">
+                            <form th:action="@{/searchRegistered}" method="get" class="row g-3">
+                            	<div class="col-md-2">
+	                            	<input class="form-control bg-white border-info" th:value=${id} name="id" type="search" placeholder="By Id">
 		                        </div>
-		                        <div class="col-md-3">
-                            	<input class="form-control bg-white border-info" th:value=${team} list="teamList" name="team" type="search" placeholder="Search By Team">
+	                            <div class="col-md-2">
+	                            	<input class="form-control bg-white border-info" th:value=${searchName} name="name" type="search" placeholder="By Name">
+	                            </div>
+	                            
+		                        <div class="col-md-2">
+                            	<input class="form-control bg-white border-info" th:value=${team} list="teamList" name="team" type="search" placeholder="By Team">
 		                        	<datalist id="teamList">
 									  <option th:each=team:${teams} th:text=${team}>
 									</datalist>
 		                        </div>
-		                        <div class="col-md-3">
-	                            	<input class="form-control bg-white border-info" th:value=${start} name="start" type="date">
+		                        <div class="col-md-2">
+	                            	<input class="form-control bg-white border-info" th:value=${start} name="start" type="text" placeholder="From date" onfocus="(this.type='date')" onblur="(this.type='text')">
 	                            </div>
-	                            <div class="col-md-3">
-	                            	<input class="form-control bg-white border-info" th:value=${end} name="end" type="date">
+	                            <div class="col-md-2">
+	                            	<input class="form-control bg-white border-info" th:value=${end} name="end" type="text" placeholder="To date" onfocus="(this.type='date')" onblur="(this.type='text')">
 		                        </div>
-		                        <div class="col-md-3">
+		                        <div class="col-md-2">
 			                        <button type="submit" class="btn btn-outline-dark me-2"><i class="fa fa-search"></i>&nbsp;
 			                          Search</button>
 		                         </div>
-	                          
 	                       <!-- Filter By division -->
-	                       <div class="col-md-3">
-		                       <button class="btn btn-outline-dark dropdown-toggle me-2" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
+	                       <div class="row mt-3">
+		                       <button class="btn btn-outline-dark dropdown-toggle float-end offset-6 col-3" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
 		                              class="bi bi-funnel"></i>&nbsp; Filter by Division</button>
-	                        	<ul class="dropdown-menu border-0 text-center"   aria-labelledby="filterDropdown">
+	                        	<ul class="dropdown-menu border-0 text-center" style="width: 200px;" aria-labelledby="filterDropdown">
 	                            	<li th:each=name:${divs}>
 										<a th:href="@{/searchRegistered(division=${name}, start=${start}, end=${end}, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item"></a>
 									</li>
 		                        </ul>
-	                        </div>
 	                        <!-- filter by department -->
-	                        <div class="col-md-3">
-		                        <button class="btn btn-outline-dark dropdown-toggle" style="width:200px;" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
+		                        <button class="btn btn-outline-dark dropdown-toggle ms-2 col-3" style="width:200px;" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
 		                              class="bi bi-funnel"></i>Filter by Department</button>
-	                        	<ul class="dropdown-menu border-0 text-center" aria-labelledby="filterDropdown">
+	                        	<ul class="dropdown-menu border-0 text-center" style="width: auto;" aria-labelledby="filterDropdown">
 	                            	<li th:each=name:${depts}>
 										<a th:href="@{/searchRegistered(dept=${name}, start=${start}, end=${end}, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item"></a>
 									</li>
@@ -246,11 +253,12 @@
                         </form>
                         </div>
 						
-						<hr class="mt-5">
-                    	<h5 th:text="'Found ' + ${totalNum!=null ? totalNum : 0} + ' Employees'" class="text-end"></h5><hr style="background-color: rgb(79, 30, 192); height: 2px;">
+						<hr class="mt-5" style="background-color: rgb(79, 30, 192); height: 2px;">
+                    	<h5 th:text="'Found ' + ${totalNum!=null ? totalNum : 0} + ' Records'" class="text-end"></h5>
+                    	<hr style="background-color: rgb(79, 30, 192); height: 2px;">
 						
                         <div class="table-responsive">
-                            <table class="table rounded text-dark table-hover mt-4">
+                            <table th:if="${not #lists.isEmpty(registeredStaffs)}" class="table rounded text-dark table-hover mt-4">
                                 <thead class="text-white">
                                     <tr>
                                         <th scope="col">Staff ID</th>

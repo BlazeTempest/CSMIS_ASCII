@@ -183,13 +183,19 @@ i.fa-solid {
 						<a href="#" class="nav-link dropdown-toggle"
 							data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Report</a>
 						<div class="dropdown-menu bg-transparent border-0">
-							<a href="registered-list.html" class="dropdown-item">Monthly
-								Registered List</a> <a href="register-eat-list.html"
-								class="dropdown-item">Registered & Eat List</a> <a
-								href="register-not-eat-list.html" class="dropdown-item">Registered
-								& Not Eat List</a> <a href="not-registereed-eat-list.html"
-								class="dropdown-item">Not Registered & Eat List</a>
-						</div>
+		                <a th:href="@{registered-list}" class="dropdown-item"
+		                  >Registered List</a
+		                >
+		                <a th:href="@{register-eat-list}" class="dropdown-item"
+		                  >Registered & Eat List</a
+		                >
+		                <a th:href="@{register-not-eat-list}" class="dropdown-item"
+		                  >Registered & Not Eat List</a
+		                >
+		                <a th:href="@{not-registereed-eat-list}" class="dropdown-item"
+		                  >Unregistered & Eat List</a
+		                >
+		              </div>
 					</div>
 					<a th:href="@{registration}" class="nav-item nav-link active"><i class="fas fa-pen me-2"></i>Lunch Register</a> 
 					<a th:href="@{/menu}" class="nav-item nav-link"><i class="fas fa-hamburger me-2"></i>Menu</a>
@@ -270,7 +276,7 @@ i.fa-solid {
 						<div class="alert alert-success" role="alert" th:text="${message}" th:if="${message}"></div>
 						<form th:action="@{/saveRegister}"
 							method="POST">
-							<h3 th:text="${currentMonth} + ' ' + ${currentYear}"></h3>
+							<h3 th:text="${currentMonth} + ' - ' + ${currentYear}"></h3>
 							<table>
 								<thead>
 									<tr>
@@ -281,7 +287,6 @@ i.fa-solid {
 									<tr th:each="week:${month}">
 										<td th:each="day:${week}">
 											<label>
-											
 												<input th:if="${day!=null && not #lists.isEmpty(checkedDates)}" type="checkbox"
 													th:checked="${day.getDayOfWeek().getValue() < 6 && day.getMonth==currentMonth && not #lists.contains(holidays, day) && #lists.contains(checkedDates, day)}" 
 													th:disabled="${day.getDayOfWeek().getValue() >= 6 || day.getMonth!=currentMonth || #lists.contains(holidays, day) || #lists.contains(disabledDates, day)}"
@@ -291,6 +296,7 @@ i.fa-solid {
 													th:checked="${day.getDayOfWeek().getValue() < 6 && day.getMonth==currentMonth && not #lists.contains(holidays, day) && not #lists.contains(disabledDates, day)}" 
 													th:disabled="${day.getDayOfWeek().getValue() >= 6 || day.getMonth!=currentMonth || #lists.contains(holidays, day) || #lists.contains(disabledDates, day)}"
 													id="dates" name="dates" th:value="${day}"/>
+												
 													
 												<span th:text="${#temporals.format(day, 'dd')}" id="date" class="" th:classappend="${#lists.contains(holidays, day) || day.getDayOfWeek().getValue() >= 6} ? holiday : normal"></span>
 											</label>
@@ -299,10 +305,14 @@ i.fa-solid {
 									</tr>
 								</tbody>
 							</table>
-							<label th:each="avoidmeat:${avoidmeats}">
-								<input type="checkbox" th:checked="${#lists.contains(checkedMeats, avoidmeat)}" th:value="${avoidmeat.avoidmeat_ID}" th:text="${avoidmeat.type}" id="avoid" name="avoidMeats">
-							</label>
-							
+							<hr>
+							<h5>Select your avoid meats</h5>
+							<div class="row mt-3 ms-4">
+								<label th:each="avoidmeat:${avoidmeats}" class="col-md-2">
+									<input type="checkbox" th:checked="${#lists.contains(checkedMeats, avoidmeat)}" th:value="${avoidmeat.avoidmeat_ID}" th:text="${avoidmeat.type}" id="avoid" name="avoidMeats">
+								</label>
+							</div>
+							<hr>
 							<input type="hidden" th:value="${disabledDates}" name="disabledDates">
 							<input type="hidden" th:value="${status}" name="status">
 							<input type="submit" th:value="${status}" class="btn btn-outline-dark float-end mt-3">

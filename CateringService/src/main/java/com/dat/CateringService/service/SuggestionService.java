@@ -8,4 +8,5 @@ import com.dat.CateringService.entity.Suggestion;
 public interface SuggestionService {
 	public List<Suggestion> getAllSuggestions();
 	public List<Suggestion> getByStartAndEndDate(LocalDate start, LocalDate end);
+	public void addSuggestion(Suggestion suggestion);
 }

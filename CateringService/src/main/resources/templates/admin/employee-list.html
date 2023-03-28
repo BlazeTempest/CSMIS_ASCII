@@ -238,17 +238,17 @@
                 <div class="bg-secondary rounded h-100 p-4">
                     <div class="row">
                     	<h2 class="mb-4 text-end col-lg-7">Employee List</h2>
-                    	<a th:href="@{/employee-list}" class="mt-2 col-lg-5 text-end text-dark" style="text-decoration: underline;"><span>Refresh</span></a>
+                    	<a th:href="@{/employee-list}" class="mt-2 offset-4 col-lg-1 text-end text-dark" style="text-decoration: underline;"><span>Refresh</span></a>
                     </div>
                     <div class="container-fluid">
                     	<!-- search function -->
-                        <form th:action="@{/search}" method="get" class="ms-5 row g-3"> 
+                        <form th:action="@{/search}" method="get" class="row g-3 ms-5"> 
+                        	<div class="col-md-3">
+                            	<input class="form-control bg-white border-info" th:value=${id} name="id" type="search" placeholder="Search By Id">
+	                        </div>
                             <div class="col-md-3">
                             	<input class="form-control bg-white border-info" th:value=${searchName} name="name" type="search" placeholder="Search By Name">
                             </div>
-                            <div class="col-md-3">
-                            	<input class="form-control bg-white border-info" th:value=${id} name="id" type="search" placeholder="Search By Id">
-	                        </div>
 	                        <div class="col-md-3">
                             	<input class="form-control bg-white border-info" th:value=${team} list="teamList" name="team" type="search" placeholder="Search By Team">
 	                        	<datalist id="teamList">
@@ -261,48 +261,42 @@
 	                         </div>
 	                          
 	                       <!-- Filter By division -->
-	                       <div class="col-md-3">
-		                       <button class="btn btn-outline-dark dropdown-toggle me-2" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
-		                              class="bi bi-funnel"></i>&nbsp; Filter by Division</button>
+	                       <div class="row mt-3">
+		                       <button class="btn btn-outline-dark dropdown-toggle me-2 float-end col-3" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
+		                              class="bi bi-funnel"></i>&nbsp; Division</button>
 	                        	<ul class="dropdown-menu border-0 text-center"   aria-labelledby="filterDropdown">
 	                            	<li th:each=name:${divs}>
-										<a th:href="@{/search(division=${name}, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item">DIV001</a>
+										<a th:href="@{/search(division=${name}, dept= , name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item">DIV001</a>
 									</li>
 		                        </ul>
-	                        </div>
 	                        <!-- filter by department -->
-	                        <div class="col-md-3">
-		                        <button class="btn btn-outline-dark dropdown-toggle" style="width:200px;" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
-		                              class="bi bi-funnel"></i>Filter by Department</button>
+		                        <button class="btn btn-outline-dark dropdown-toggle col-3" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
+		                              class="bi bi-funnel"></i> Department</button>
 	                        	<ul class="dropdown-menu border-0 text-center" aria-labelledby="filterDropdown">
 	                            	<li th:each=name:${depts}>
-										<a th:href="@{/search(dept=${name}, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item"></a>
+										<a th:href="@{/search(dept=${name}, division=, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item"></a>
 									</li>
 		                        </ul>
-	                        </div>
 	                        <!-- filter by team -->
-	                        <div class="col-md-3">
-		                        <button class="btn btn-outline-dark dropdown-toggle me-2" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
-		                              class="bi bi-funnel"></i>&nbsp; Filter by Status</button>
+		                        <button class="btn btn-outline-dark dropdown-toggle ms-2 me-2 col-3" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
+		                              class="bi bi-funnel"></i>&nbsp; Status</button>
 	                        	<ul class="dropdown-menu border-0 text-center" style="height:auto;" aria-labelledby="filterDropdown">                     	
 	                            	<li>
-										<a th:href="@{/search(dept=${name}, name=${searchName}, id=${id}, team=${team}, enabled=1)}" class="dropdown-item">Active</a>
+										<a th:href="@{/search(enabled=1,dept= , division=, name=${searchName}, id=${id}, team=${team})}" class="dropdown-item">Active</a>
 									</li>
 									<li>
-										<a th:href="@{/search(dept=${name}, name=${searchName}, id=${id}, team=${team}, enabled=0)}" class="dropdown-item">Inactive</a>
+										<a th:href="@{/search(enabled=0,dept= , division=, name=${searchName}, id=${id}, team=${team})}" class="dropdown-item">Inactive</a>
 									</li>
 		                        </ul>
-							</div>
 							<!-- Filter by role -->
-							<div class="col-md-3">
-		                        <button class="btn btn-outline-dark dropdown-toggle me-2" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
-		                              class="bi bi-funnel"></i>&nbsp; Filter by Role</button>
+		                        <button class="btn btn-outline-dark dropdown-toggle me-2 col-2" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
+		                              class="bi bi-funnel"></i>&nbsp; Role</button>
 	                        	<ul class="dropdown-menu border-0 text-center" style="height:auto;" aria-labelledby="filterDropdown">
 	                            	<li>
-										<a th:href="@{/search(role=admin)}" class="dropdown-item">Administrator</a>
+										<a th:href="@{/search(role=admin, enabled= ,dept= , division=, name=${searchName}, id=${id}, team=${team})}" class="dropdown-item">Administrator</a>
 									</li>
 									<li>
-										<a th:href="@{/search(role=operator)}" class="dropdown-item">Operator</a>
+										<a th:href="@{/search(role=operator, enabled= ,dept= , division=, name=${searchName}, id=${id}, team=${team})}" class="dropdown-item">Operator</a>
 									</li>
 		                        </ul>
 	                        </div>                        
@@ -332,12 +326,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- UpdateForm Modal -->
-                    
-                    
-                    
-                    <!-- UpdateForm Modal End-->
                     
                     <div th:if="${staffs.size!=0}" class="table-responsive" id="staff-table">
                         <table class="table text-white table-hover">
@@ -362,8 +350,8 @@
                                 	<td th:text=${staff.dept}/>
                                 	<td th:text=${staff.team}/>
                                 	<td th:text=${staff.role}/>
-                                	<td><button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#myModal"><i
-                                          class="bi bi-eye"></i></button></td>
+                                	<td><a class="btn btn-sm btn-outline-success" th:href="@{/detailCalendar(id=${staff.staffID})}"><i
+                                          class="bi bi-eye"></i></a></td>
                                     <td><a class="btn btn-sm btn-outline-dark" th:href="@{/editStaffForm(id=${staff.staffID})}"><i
                                           class="bi bi-pen"></i></a></td>
                                 </tr>

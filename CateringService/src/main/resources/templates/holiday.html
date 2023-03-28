@@ -197,6 +197,19 @@ i.fa-solid {
 										</button>
 									</div>
 								</form>
+								<form method="post" th:action="@{/addHoliday}" class="row">
+									<div class="card-body my-2 text-center offset-1 col-7">
+										<input class="form-control form-control-lg bg-white fs-6" name="holiday"
+											 type="date" required/>
+										<input class="form-control form-control-lg bg-white fs-6" name="description"
+											 type="text" required/>
+									</div>
+									<div class="card-body my-2 text-center col-4">
+										<button class="btn btn-outline-dark text-center">
+											<i class="fa fa-plus"></i>&nbsp; Add
+										</button>
+									</div>
+								</form>
 							</div>
 							<div class="card mt-3">
 				<h5 class="card-header">Holiday in This Year :</h5>

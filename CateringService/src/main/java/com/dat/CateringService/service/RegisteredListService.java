@@ -29,4 +29,6 @@ public interface RegisteredListService {
 	public List<Registered_list> getRegisteredStaffByStatusAndDineAndDate(Boolean status, Boolean dine, LocalDate start, LocalDate end);
 	public List<Registered_list> getRegisteredStaffByStatusAndNameAndID(Boolean status, String name, String id, String team);
 	public List<Registered_list> getRegisteredStaffByAll(Boolean status, LocalDate start, LocalDate end, String name, String id, String team);
+	public int getDeptCount(String dept, Boolean dine);
+	public int getTeamCount(String team, Boolean dine);
 }
