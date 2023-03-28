@@ -147,9 +147,9 @@
                                 <div id="forgetEmailHelp" class="form-text text-dark">We'll send you instructions on how to reset your password.</div>
                             </div>
                             <button type="submit" class="btn btn-sm btn-primary" id="sendOtpBtn">Send OTP</button>
-                            </form>
+                        </form>
                             
-                            <form th:action="@{/resetPassword}" method="POST">
+                        <form th:action="@{/resetPassword}" method="POST">
                             <div class="mb-3">
                                 <label for="otp" class="form-label text-dark mt-3">Enter OTP</label>
                                 <input name="otp" type="text" class="form-control text-dark bg-white" id="otp" aria-describedby="otpHelp">

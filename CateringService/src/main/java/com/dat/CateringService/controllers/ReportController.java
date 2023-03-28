@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +25,7 @@ import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.importHelper.DoorlogImporter;
 import com.dat.CateringService.service.DoorlogService;
 import com.dat.CateringService.service.HeadcountService;
+import com.dat.CateringService.service.PriceService;
 import com.dat.CateringService.service.RegisteredListService;
 import com.dat.CateringService.service.StaffService;
 
@@ -44,19 +44,40 @@ public class ReportController {
 	@Autowired
 	private HeadcountService headcountService;
 	
+	@Autowired
+	private PriceService priceService;
+	
+	@PostMapping("/addHeadcount")
+	public String addHeadcountManually(@RequestParam("invoiceDate")String invoiceDate, @RequestParam("actual")int actualCount, RedirectAttributes attr) {
+		Headcount temp = new Headcount();
+		temp.setActualCount(actualCount);
+		temp.setInvoice_date(LocalDate.parse(invoiceDate));
+		temp.setRegisteredCount(registeredService.getRegisteredStaffByDate(LocalDate.now()).size());
+		temp.setDifference(registeredService.getRegisteredStaffByDate(LocalDate.now()).size() - actualCount);
+		headcountService.saveHeadcount(temp);
+		attr.addFlashAttribute("successHeadcount", "Imported headcount for " + invoiceDate + " successfully");
+		return "redirect:/registered-list";
+	}
+	
 	@GetMapping("/registered-list")
 	public String plannedList(Model model, RedirectAttributes redirect) {
-		List<Registered_list> registeredStaffs = registeredService.getRegisteredStaffByStartDateAndEndDate(LocalDate.now(), LocalDate.now());
-		System.out.println("Total registered list >>>>>>>>>>>"+registeredStaffs);
+		List<Registered_list> registeredStaffs = registeredService.getRegisteredStaffByDate(LocalDate.now());
 		
-			int totalCount = registeredStaffs.size(); // get the total count of registered staff
-
-		    // Update the headcount table with the total registered count
+		Headcount temp = headcountService.getHeadcountByDate(LocalDate.now());
+		// Update the headcount table with the total registered count
+		if(temp==null) {
 		    Headcount headcount = new Headcount();
-		    headcount.setRegisteredCount(totalCount);
-		    System.out.println("RegisteredCount"+totalCount);
-		    headcountService.saveHeadcount(headcount);
-		    
+			headcount.setRegisteredCount(registeredStaffs.size());
+			headcount.setActualCount(doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+			headcount.setInvoice_date(LocalDate.now());
+			headcount.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+			headcountService.saveHeadcount(headcount);
+		}else {
+			temp.setRegisteredCount(registeredStaffs.size());
+			temp.setActualCount(doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+			temp.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+			headcountService.saveHeadcount(temp);
+		}
 		
 		model.addAttribute("teams", staffService.getTeamNames());
 		model.addAttribute("divs", staffService.getDivNames());
@@ -122,15 +143,6 @@ public class ReportController {
 	@GetMapping("/register-eat-list")
 	public String plannedEatList(Model model) {
 		List<Registered_list> eatList = registeredService.getRegisteredStaffByStatusAndDineAndDate(true, true, LocalDate.now(), LocalDate.now());
-		
-		
-			int actualCount = eatList.size();
-		    Headcount headcount = new Headcount();
-		    headcount.setActualCount(actualCount);
-//		    headcount.setInvoiceDate(LocalDate.now());
-//		    headcount.setPriceID(1); 
-		    headcountService.saveHeadcount(headcount);
-		
 		    
 		model.addAttribute("start", LocalDate.now().minusDays(5));
 		model.addAttribute("end", LocalDate.now());
@@ -311,7 +323,6 @@ public class ReportController {
 			doorlogs.removeAll(toRemove);
 		}
 		
-		
 		model.addAttribute("team", team);
 		model.addAttribute("searchName", name);
 		model.addAttribute("id", id);
@@ -398,5 +409,4 @@ public class ReportController {
 			return "redirect:/404";
 		}
 	}
-
 }

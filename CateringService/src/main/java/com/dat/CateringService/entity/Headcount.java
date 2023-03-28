@@ -1,5 +1,6 @@
 package com.dat.CateringService.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -17,7 +18,7 @@ public class Headcount {
 	private int headcount_id;
 	
 	@Column(name="invoice_date")
-	private Date invoice_date;
+	private LocalDate invoice_date;
 	
 	@Column(name="registered_count")
 	private int registeredCount;
@@ -28,22 +29,22 @@ public class Headcount {
 	@Column(name="amount")
 	private int amount;
 	
-	@Column(name="price_ID")
-	private int price_ID;
+	@Column(name="difference")
+	private int difference;
 
 	public Headcount() {
 		super();
 	}
 
-	public Headcount(int headcount_id, Date invoice_date, int registeredCount, int actualCount, int amount,
-			int price_ID) {
+	public Headcount(int headcount_id, LocalDate invoice_date, int registeredCount, int actualCount, int amount,
+			int difference) {
 		super();
 		this.headcount_id = headcount_id;
 		this.invoice_date = invoice_date;
 		this.registeredCount = registeredCount;
 		this.actualCount = actualCount;
 		this.amount = amount;
-		this.price_ID = price_ID;
+		this.difference = difference;
 	}
 
 	public int getHeadcount_id() {
@@ -54,11 +55,11 @@ public class Headcount {
 		this.headcount_id = headcount_id;
 	}
 
-	public Date getInvoice_date() {
+	public LocalDate getInvoice_date() {
 		return invoice_date;
 	}
 
-	public void setInvoice_date(Date invoice_date) {
+	public void setInvoice_date(LocalDate invoice_date) {
 		this.invoice_date = invoice_date;
 	}
 
@@ -86,11 +87,11 @@ public class Headcount {
 		this.amount = amount;
 	}
 
-	public int getPrice_ID() {
-		return price_ID;
+	public int getDifference() {
+		return difference;
 	}
 
-	public void setPrice_ID(int price_ID) {
-		this.price_ID = price_ID;
+	public void setDifference(int difference) {
+		this.difference = difference;
 	}
 }

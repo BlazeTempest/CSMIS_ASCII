@@ -126,6 +126,15 @@ public class RegisteredListServiceImpl implements RegisteredListService {
 	public List<Registered_list> getRegisteredStaffByDateAfter(LocalDate date) {
 		return repository.findByDateAfter(date);
 	}
+
+	@Override
+	public int getDeptCount(String dept, Boolean dine) {
+		return repository.getDeptCount(dept, dine , LocalDate.now());
+	}
 	
+	@Override
+	public int getTeamCount(String team, Boolean dine) {
+		return repository.getTeamCount(team, dine , LocalDate.now());
+	}
 	
 }
