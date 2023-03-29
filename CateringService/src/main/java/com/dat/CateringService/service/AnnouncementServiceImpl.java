@@ -33,18 +33,19 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 		if (result.isPresent()) {
 			theAnnouncement = result.get();
 		} else {
-
 			throw new RuntimeException("Did not find Announcement id - " + theId);
 		}
-
 		return theAnnouncement;
 	}
 	
 
 	@Override
 	public void save(Announcement theAnnouncement) {
-		
 		announcementRepository.save(theAnnouncement);
+	}
+	@Override
+	public void delete(Announcement announcement) {
+		announcementRepository.delete(announcement);
 	}
 
 }

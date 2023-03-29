@@ -1,28 +1,27 @@
 package com.dat.CateringService.controllers;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.thymeleaf.spring5.context.webmvc.SpringWebMvcThymeleafRequestContext;
 
 import com.dat.CateringService.entity.Announcement;
 import com.dat.CateringService.service.AnnouncementService;
+import com.dat.CateringService.service.StaffService;
 
 @Controller
 public class AnnouncementController {
 
 	private AnnouncementService announcementService;
-
-	public AnnouncementController(AnnouncementService theAnnouncementService) {
+	private StaffService staffService;
+	public AnnouncementController(AnnouncementService theAnnouncementService, StaffService theStaffService) {
 		announcementService = theAnnouncementService;
+		staffService = theStaffService;
 	}
 
 	@PostMapping("/announcement")
@@ -30,21 +29,12 @@ public class AnnouncementController {
 		
 		String role = authentication.getAuthorities().toArray()[0].toString();
 		if (role.equals("admin")) {
+			theAnnouncement.setCreated_date(LocalDateTime.now());
+			theAnnouncement.setCreated_by(staffService.getStaffById(authentication.getName()).getName());
+			theAnnouncement.setDeleted_date(LocalDate.now().plusDays(7));
 			announcementService.save(theAnnouncement);
-
-			theAnnouncement.setDescription(description);
-			model.addAttribute("announcement", theAnnouncement);
 			return "redirect:/dashboard";
 		}
 		return "404";
-
 	}
-
-	@GetMapping("/employee/dashboard")
-	public String employeeDashboard(Model model) {
-		List<Announcement> announcements = announcementService.getAllAnnouncements();
-		model.addAttribute("announcements", announcements);
-		return "/employee/employeeDashboard";
-	}
-
 }

@@ -12,5 +12,5 @@ public interface AnnouncementService {
 	
 	public void save(Announcement theAnnouncement);
 	
-
+	public void delete(Announcement announcement);
 }

@@ -1,17 +1,13 @@
 package com.dat.CateringService.config;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -30,14 +26,8 @@ public class DataSecurityConfig extends WebSecurityConfigurerAdapter {
 			.dataSource(dataSource)
 			.usersByUsernameQuery("SELECT staffID,password,enabled FROM staff WHERE staffID=?")
 			.authoritiesByUsernameQuery("SELECT staffID,role FROM staff WHERE staffID=?")
-			.passwordEncoder(passwordEncoder);
-			
+			.passwordEncoder(passwordEncoder);		
 	}
-	
-//	@Override
-//	public void configure(WebSecurity web) throws Exception {
-//	    web.ignoring().antMatchers("/resources/**");
-//	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -59,16 +49,5 @@ public class DataSecurityConfig extends WebSecurityConfigurerAdapter {
 			.permitAll()
 			.and()
 			.exceptionHandling().accessDeniedPage("/access-denied");
-//			.and()
-//	        .csrf().disable()
-//	        .httpBasic().disable()
-//	        .formLogin().disable()
-//	        .logout().disable()
-//	        .headers().frameOptions().disable()
-//	        .and()
-//	        .exceptionHandling().authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_NOT_FOUND));
 	}
-	
-	
-
 }

@@ -228,7 +228,7 @@
                                   placeholder="Something you want to announce..." rows="4" th:field="*{description}" ></textarea>
                     </div>
                     <button type="submit" class="offset-3 btn btn-sm m-4 btn-outline-dark col-md-1" style="width:100px" >Announce</button>
-                </form> 
+                </form>
         </div>
         <div class="row bg-secondary mt-3 ms-2 me-2 rounded">
                 <form th:action="@{/addSuggestion}" method="POST" class="row">
@@ -400,9 +400,6 @@
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-info btn-lg-square back-to-top"><i class="bi bi-arrow-up "></i></a>
-
-
-
     </div>
 
     <!-- JavaScript Libraries -->
@@ -421,6 +418,21 @@
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
     <script src="js/test.js"></script>
+    <script>
+    // Get the textarea element
+    const textarea = document.getElementById('announcement');
+
+    // Store the original value of the textarea
+    const originalValue = textarea.value;
+
+    // Listen for the form submit event
+    document.querySelector('form').addEventListener('submit', (event) => {
+      // If the textarea value is empty, set it to the original value
+      if (textarea.value.trim() === '') {
+        textarea.value = originalValue;
+      }
+    });
+  </script>
 </body>
 
 </html>
