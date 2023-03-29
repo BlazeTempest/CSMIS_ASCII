@@ -1,7 +1,6 @@
 package com.dat.CateringService.entity;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,10 +29,18 @@ public class PaymentVoucher {
 	@Column(name = "to_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate end_date;
-	
+
 	@Column(name="payment_method")
 	private String payment_method;
 
+	@Column(name="total_price")
+	private int totalPrice;
+
+	@Column(name="amount")
+	private int totalCost;
+
+	@Column(name="no_of_pax")
+	private int no_of_pax;
 	/*
 	 * @Column(name="headcount_ID") private int headcount_ID;
 	 */
@@ -53,17 +60,22 @@ public class PaymentVoucher {
 	@Column(name = "created_by")
 	private String created_by;
 
+	@Column(name="status")
+	private String status;
+
 	public PaymentVoucher() {
 		super();
 	}
 
-	public PaymentVoucher(String voucher_ID, String restaurant_name, String payment_method, LocalDate payment_date, LocalDate start_date,
+	public PaymentVoucher(String voucher_ID, String restaurant_name,int totalPrice,int totalCost, String payment_method, LocalDate payment_date, LocalDate start_date,
 			LocalDate end_date, String cashier, String received_by, String approved_by, LocalDate created_date,
 			String created_by) {
 		super();
 		this.voucher_ID = voucher_ID;
 	    this.restaurant_name = restaurant_name;
 	    this.payment_method=payment_method;
+	    this.totalPrice=totalPrice;
+	    this.totalCost=totalCost;
 		this.payment_date = payment_date;
 		this.start_date = start_date;
 		this.end_date = end_date;
@@ -75,12 +87,30 @@ public class PaymentVoucher {
 		this.created_by = created_by;
 	}
 
+
+	public int getTotalCost() {
+		return totalCost;
+	}
+
+	public void setTotalCost(int totalCost) {
+		this.totalCost = totalCost;
+	}
+
 	public String getVoucher_ID() {
 		return voucher_ID;
 	}
 
 	public void setVoucher_ID(String voucher_ID) {
 		this.voucher_ID = voucher_ID;
+	}
+
+
+	public int getNo_of_pax() {
+		return no_of_pax;
+	}
+
+	public void setNo_of_pax(int no_of_pax) {
+		this.no_of_pax = no_of_pax;
 	}
 
 	public String getRestaurant_name() {
@@ -91,6 +121,14 @@ public class PaymentVoucher {
 		this.restaurant_name = restaurant_name;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public LocalDate getPayment_date() {
 		return payment_date;
 	}
@@ -98,8 +136,14 @@ public class PaymentVoucher {
 	public void setPayment_date(LocalDate payment_date) {
 		this.payment_date = payment_date;
 	}
-	
-	
+
+	public int getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(int totalPrice) {
+		this.totalPrice = totalPrice;
+	}
 
 	public String getPayment_method() {
 		return payment_method;

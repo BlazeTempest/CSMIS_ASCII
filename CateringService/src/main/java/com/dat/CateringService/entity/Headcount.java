@@ -18,7 +18,7 @@ public class Headcount {
 	private int headcount_id;
 	
 	@Column(name="invoice_date")
-	private LocalDate invoice_date;
+	private LocalDate invoiceDate;
 	
 	@Column(name="registered_count")
 	private int registeredCount;
@@ -40,7 +40,7 @@ public class Headcount {
 			int difference) {
 		super();
 		this.headcount_id = headcount_id;
-		this.invoice_date = invoice_date;
+		this.invoiceDate = invoice_date;
 		this.registeredCount = registeredCount;
 		this.actualCount = actualCount;
 		this.amount = amount;
@@ -55,12 +55,12 @@ public class Headcount {
 		this.headcount_id = headcount_id;
 	}
 
-	public LocalDate getInvoice_date() {
-		return invoice_date;
+	public LocalDate getInvoiceDate() {
+		return invoiceDate;
 	}
 
-	public void setInvoice_date(LocalDate invoice_date) {
-		this.invoice_date = invoice_date;
+	public void setInvoiceDate(LocalDate invoice_date) {
+		this.invoiceDate = invoice_date;
 	}
 
 	public int getRegisteredCount() {

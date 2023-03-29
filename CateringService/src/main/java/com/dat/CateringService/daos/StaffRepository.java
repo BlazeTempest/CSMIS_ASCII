@@ -17,6 +17,9 @@ public interface StaffRepository extends JpaRepository<Staff, String> {
     public List<Staff> findByEnabledContains(int status);
     public List<Staff> findByRoleContainsAllIgnoreCase(String role);
     
+    @Query(value="SELECT * FROM staff WHERE team= 'admin' ", nativeQuery=true)
+    public List<Staff> getAdminTeam();
+    
     @Query(value="SELECT * FROM staff WHERE door_log_no = :doorlog", nativeQuery = true)
     public Staff findByDoorlog(@Param("doorlog")int doorlog);
     

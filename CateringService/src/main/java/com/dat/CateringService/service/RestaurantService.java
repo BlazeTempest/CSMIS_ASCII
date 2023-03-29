@@ -14,6 +14,9 @@ public interface RestaurantService {
 
 	public boolean isDuplicate(Restaurant theRestaurant);
 	
-	String findActiveRestaurantName();
-
+	public String findActiveRestaurantName();
+	
+	public List<Restaurant> getRestaurantName();
+	
+	public String findRestaurantReceiverName();
 }

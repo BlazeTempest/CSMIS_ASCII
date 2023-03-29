@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8" />
+<title>CSMIS</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<meta content="" name="keywords" />
+<meta content="" name="description" />
+
+<!-- Print -->
+<script src="https://code.jquery.com/jquery-3.6.4.slim.js"
+	integrity="sha256-dWvV84T6BhzO4vG6gWhsWVKVoa4lVmLnpBOZh/CAHU4="
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js%22%3E"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+	crossorigin="anonymous"></script>
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
+
+<!-- Datable -->
+
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css">
+<script defer src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script defer
+	src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script defer
+	src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
+
+
+<!-- Favicon -->
+<link href="img/favicon.ico" rel="icon" />
+
+<!-- Google Web Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" />
+<link
+	href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap"
+	rel="stylesheet" />
+
+<!-- Icon Font Stylesheet -->
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+	rel="stylesheet" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+	rel="stylesheet" />
+
+<!-- Libraries Stylesheet -->
+<link href="lib/owlcarousel/assets/owl.carousel.min.css"
+	rel="stylesheet" />
+<link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css"
+	rel="stylesheet" />
+
+<!-- Customized Bootstrap Stylesheet -->
+<link href="css/bootstrap.min.css" rel="stylesheet" />
+
+<!-- Template Stylesheet -->
+<link href="css/style.css" rel="stylesheet" />
+
+<!-- font awesome -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+<style>
+#dataTableEx tr th {
+	color: black;
+	font-size: 1.2em;
+}
+
+#dataTableEx tr td {
+	color: black;
+}
+
+#invoiceTable tr td {
+	height: 50px;
+	text-align: center;
+	font-weight: bold;
+	color: black;
+}
+
+#invoiceTable tr th {
+	text-align: center;
+	font-weight: bold;
+	color: black;
+	background-color: #6c7ae0;
+}
+
+#invoiceTable thead {
+	border-radius: 10px;
+}
+
+#invoiceTable tr:nth-child(even) {
+	background-color: #fff;
+}
+
+i.fa-solid {
+	font-size: 25\px;
+	cursor: pointer;
+	user-select: none;
+	color: white;
+}
+
+.fa-solid:hover {
+	color: rgb(250, 16, 75);
+}
+/* Add fade-in and fade-out animations to the modal */
+/* Add zoom animation to the modal */
+.modal.zoom {
+	transform: scale(0);
+	transition: transform 0.8s ease-in-out;
+}
+
+.modal.zoom.show {
+	transform: scale(1);
+}
+
+/* Add sliding animation to the modal */
+.modal.slide {
+	transition: transform 0.8s ease-in-out;
+	transform: translateX(100%);
+}
+
+.modal.slide.show {
+	transform: translateX(0);
+}
+
+@media print {
+	#NOprint {
+		display: none;
+	}
+	* {
+		-webkit-print-color-adjust: exact;
+	}
+	/* 	.watermark::after {
+		content: "DAT";
+		opacity: 0.3;
+		font-size: 4em;
+		color: #6c7ae0;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-40%, -50%) rotate(-50deg);
+		z-index: 9999;
+	}*/
+}
+</style>
+
+<script>
+
+$(document).ready(function() {
+	$("#dataTableEx").DataTable();
+});
+
+//validate payment date
+$(function() {
+	var dtToday = new Date();
+
+	var month = dtToday.getMonth() + 1;
+	var day = dtToday.getDate();
+	var year = dtToday.getFullYear();
+	if (month < 10)
+		month = '0' + month.toString();
+	if (day < 10)
+		day = '0' + day.toString();
+	var maxDate = year + '-' + month + '-' + day;
+	$('#paymentDate').attr('min', maxDate);
+});
+</script>
+
+</head>
+
+<body>
+	<div class="container-fluid position-relative d-flex p-0">
+		<!-- Spinner Start -->
+		<div id="spinner"
+			class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+			<div class="spinner-border text-primary"
+				style="width: 3rem; height: 3rem" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+		</div>
+		<!-- Spinner End -->
+
+		<!-- Sidebar Start -->
+		<div class="sidebar pe-4 pb-3" id="NOprint">
+			<nav class="navbar bg-secondary navbar-dark">
+				<div class="sidebar-head">
+					<div>
+						<img class="sidebar-logo mt-0" src="img/dat logo.png"
+							alt="DAT Logo" />
+					</div>
+					<div>
+						<a href="index.html" class="navbar-brand mb-3">
+							<h3 class="text-primary">CSMIS</h3>
+						</a>
+					</div>
+				</div>
+
+				<div class="navbar-nav w-100">
+					<a href="index.html" class="nav-item nav-link"><i
+						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
+						th:href="@{/employee-list}" class="nav-item nav-link"><i
+						class="fas fa-users me-2"></i>Employee List</a>
+					<div class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle"
+							data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Report</a>
+						<div class="dropdown-menu bg-transparent border-0">
+							<a href="registered-list.html" class="dropdown-item">Monthly
+								Registered List</a> <a href="register-eat-list.html"
+								class="dropdown-item">Registered & Eat List</a> <a
+								href="register-not-eat-list.html" class="dropdown-item">Registered
+								& Not Eat List</a> <a href="not-registereed-eat-list.html"
+								class="dropdown-item">Not Registered & Eat List</a>
+						</div>
+					</div>
+					<a href="lunch-register.html" class="nav-item nav-link"><i
+						class="fas fa-pen me-2"></i>Lunch Register</a> <a href="menu.html"
+						class="nav-item nav-link"><i class="fas fa-hamburger me-2"></i>Menu</a>
+					<a href="restaurant.html" class="nav-item nav-link"><i
+						class="fas fa-home me-2"></i>Restaurant</a>
+					<div class="nav-item dropdown">
+						<a href="" class="nav-link dropdown-toggle active"
+							data-bs-toggle="dropdown"><i class="fas fa-file me-2"></i>Invoice</a>
+						<div class="dropdown-menu bg-transparent border-0">
+							<a th:href="@{/weekly-invoice}" class="dropdown-item active">Weekly
+								Invoice</a> <a th:href="@{/monthly-invoice}" class="dropdown-item ">Monthly
+								Invoice</a>
+						</div>
+					</div>
+					<div class="nav-item">
+						<a th:href="@{/suggestion}" class="nav-link"><i
+							class="far fa-file-alt me-2"></i>Suggestions</a>
+					</div>
+					<div class="nav-item">
+						<a th:href="@{/holiday}" class="nav-link"><i
+							class="fa fa-mug-hot me-2"></i>Holidays</a>
+					</div>
+				</div>
+			</nav>
+		</div>
+		<!-- Sidebar End -->
+
+		<!-- Content Start -->
+		<div class="content">
+			<!-- Navbar Start -->
+			<nav id="NOprint"
+				class="navbar navbar-expand bg-secondary-nav navbar-dark sticky-top px-4 py-0">
+				<a href="#" class="sidebar-toggler flex-shrink-0"> <i
+					class="fa fa-bars"></i>
+				</a>
+				<div class="navbar-nav align-items-center ms-auto">
+					<div class="nav-item dropdown">
+
+						<i onclick="myFunction(this)"
+							title="This is a mail notification on/off for lunch!"
+							class="fa-solid fa-bell"></i> <span
+							class="text-center text-white ms-2">Email </span>
+					</div>
+					<div class="nav-item">
+
+						<div class="nav-item dropdown">
+							<a href="#" class="nav-link dropdown-toggle"
+								data-bs-toggle="dropdown"> <img
+								class="rounded-circle me-lg-2" src="img/admin-logo.png" alt=""
+								style="width: 40px; height: 40px" /> <span
+								class="d-none d-lg-inline-flex">Admin</span>
+							</a>
+							<div
+								class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
+								<a href="profile.html" class="dropdown-item">Profile</a> <a
+									th:href="@{/showMyLoginPage}" class="dropdown-item">Log Out</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</nav>
+			<!-- Navbar End -->
+
+			<!-- Sale & Revenue Start -->
+			<!-- Weekly Invoice start -->
+			<div class="container-fluid " id="NOprint">
+				<div class="row my-3 bg-secondary ms-3 me-3 rounded">
+					<div class=" mb-4 d-flex justify-content-end">
+						<button type="button" onclick="myDailyInvoiceFunction()"
+							id="dailyInvoiceBtn" class="btn btn-outline-dark mt-4 me-3">
+							<i class="fa fa-plus"></i>&nbsp; View Daily Invoice
+						</button>
+						<button class="btn btn-outline-dark  mt-4 me-3"
+							data-bs-toggle="modal" data-bs-target="#createInvoice">
+							<i class="fa fa-plus"></i>&nbsp; Create Weekly Invoice
+						</button>
+					</div>
+				</div>
+				
+				<!-- Error messages start-->
+				<div class="row bg-secondary ms-3 me-3 mb-3 rounded">
+					<div class="col-md-4">
+						<div th:if="${cashierErrorMessage!=null}" class="card-body my-3">
+							<div class="alert alert-danger" th:text="${cashierErrorMessage}"></div>
+						</div>
+						<div th:if="${cashierUnique!=null}" class="card-body my-3">
+							<div class="alert alert-danger" th:text="${cashierUnique}"></div>
+						</div>
+						<div class="offset-6 col-md-12">
+							<div th:if="${approverErrorMessage!=null}" class="card-body my-3">
+								<div class="alert alert-danger"
+									th:text="${approverErrorMessage}"></div>
+							</div>
+							<div th:if="${approverUnique!=null}" class="card-body my-3">
+								<div class="alert alert-danger" th:text="${approverUnique}"></div>
+							</div>
+							<div th:if="${endDateError!=null}" class="card-body my-3 me-0">
+								<div class="alert alert-danger" th:text="${endDateError}"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Error messages end -->
+			</div>
+
+			<!-- Create invoice start -->
+			<div class="modal fade " id="createInvoice" tabindex="-1"
+				aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content bg-secondary">
+						<div class="modal-header">
+							<h3 class="modal-title text-primary ms-3" id="exampleModalLabel">Create
+								Weekly Invoice</h3>
+
+						</div>
+						<div class="modal-body bg-secondary ">
+							<form th:action="@{/saveWeeklyInvoice}"
+								th:object="${weeklyInvoice}" method="POST">
+								<input type="hidden" th:field="*{voucher_ID}"
+									th:value="${generateId}">
+
+								<div class="row mb-3">
+									<label for="inputPassword3"
+										class="col-sm-4 col-form-label text-dark"> Name</label>
+									<div class="col-sm-8 ">
+										<input type="text" th:value="${restaurantName}" readonly
+											class="form-control bg-white text-primary" id="inputEmail3">
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label for="inputPassword3"
+										class="col-sm-4 col-form-label text-dark">Payment Date</label>
+									<div class="col-sm-8">
+										<input type="date" th:field="*{payment_date}" required
+											id="paymentDate" class="form-control bg-white text-primary"
+											value="">
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label for="inputPassword3"
+										class="col-sm-4 col-form-label text-dark">Invoice
+										for(Start Date)</label>
+									<div class="col-sm-8">
+										<input type="date" th:field="*{start_date}" required
+											class="form-control bg-white text-primary"
+											id="inputPassword3">
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label for="inputPassword3"
+										class="col-sm-4 col-form-label text-dark">Invoice
+										for(End Date)</label>
+									<div class="col-sm-8">
+										<input type="date" th:field="*{end_date}" required
+											class="form-control bg-white text-primary"
+											id="inputPassword3">
+									</div>
+								</div>
+								<!-- <div class="row mb-3">
+									<label for="inputPassword3"
+										class="col-sm-4 col-form-label text-dark">Received by</label>
+									<div class="col-sm-8">
+										<input type="text" readonly th:value="${received}"
+											class="form-control bg-white text-primary"
+											id="inputPassword3" placeholder="Receiver name">
+									</div>
+								</div>
+ -->
+								<div class="modal-footer">
+									<button type="button" class="btn btn-outline-danger"
+										data-bs-dismiss="modal" name="action" value="close">Close</button>
+									<button type="submit" class="btn btn-outline-dark" id="saveBtn">Save</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Create invoice end -->
+
+			<div class="container-fluid mb-3 " id="dailyInvoice"
+				style="display: none;">
+				<div class="bg-secondary ms-3 me-3 rounded p-5">
+					<table class="table table-striped" id="dataTableEx">
+						<thead>
+							<tr>
+								<th>Sr</th>
+								<th>Invoice Date</th>
+								<th>Registered Count</th>
+								<th>Actual Count</th>
+								<th>Difference</th>
+								<th>Total Price</th>
+								<th>Amount</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="temp,i: ${dailyInvoiceList}">
+								<td th:text="${i.count}"></td>
+								<td th:text="${temp.invoiceDate}"></td>
+								<td th:text="${temp.registeredCount}"></td>
+								<td th:text="${temp.actualCount}"></td>
+								<td th:text="${temp.difference}"></td>
+								<td th:text="${temp.totalPrice}"></td>
+								<td th:text="${temp.totalAmount}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="container-fluid" id="weeklyInvoice">
+				<form th:action="@{/confirm}" method="POST">
+					<div class="bg-secondary ms-3 me-3 rounded">
+						<div class="row py-3 text-center">
+							<div>
+								<img class="sidebar-logo mt-3 mb-3" src="img/dat logo.png"
+									alt="DAT Logo" style="width: 150px; height: 100px;" />
+							</div>
+							<!-- <h2 class="text-center text-decoration-underline">Payment
+								Voucher</h2> -->
+								<h3>DIR-ACE TECHNOLOGY COMPANY LIMITED</h3>
+								<span>Building 17,3rd Floor, Myanmar Info-Tech, Hlaing Compus, Yangon, Myanmar</span>
+
+							<div th:if="${incvoiceError!=null}" class="card-body my-3 me-0">
+								<div class="alert alert-danger" th:text="${incvoiceError}"></div>
+							</div>
+							<div th:if="${invoiceStartDateError!=null}"
+								class="card-body my-3 me-0">
+								<div class="alert alert-danger" role="alert"
+									th:text="${invoiceStartDateError}"></div>
+							</div>
+							<div th:if="${invoiceSuccessMessage!=null}"
+								class="card-body my-3 me-0">
+								<div class="alert alert-success" role="alert"
+									th:text="${invoiceSuccessMessage}"></div>
+							</div>
+						</div>
+						
+						<div class="row ms-4 me-4 py-2">
+							<table class="ms-3 text-dark">
+								<tbody>
+									<tr>
+										<td>Voucher No :</td>
+										<td><input name="voucherID" th:value="${voucherID}"
+											readonly style="outline-style: none; border: none;"
+											class="bg-secondary"></td>
+
+										<td class="w-25">Payment Date :</td>
+										<td><input name="paymentDate" type="date"
+											th:value="${paymentDate}" readonly
+											style="outline-style: none; border: none;"
+											class="bg-secondary"></td>
+									</tr>
+									<tr>
+										<td class="w-25">Catering Service Name:</td>
+										<td><select
+											class="form-select bg-secondary text-dark mt-2"
+											name="selectedRestaurantName">
+												<option th:each="temp:${restaurantNameList}" th:text="${temp.restaurant_name}"
+													class="text-dark active"></option>
+										</select></td>
+										<td>Invoice for :</td>
+										<td><input name="invoiceStart" type="date" readonly
+											th:if="${invoiceStart!=null}" th:value="${invoiceStart}"
+											style="outline-style: none; border: none;"
+											class="bg-secondary"> <input name="invoiceEnd"
+											type="date" th:if="${invoiceEnd!=null}" readonly
+											th:value="${invoiceEnd}"
+											style="outline-style: none; border: none;"
+											class="bg-secondary"></td>
+									</tr>
+									<tr>
+										<td>Payment Method :</td>
+										<td><select
+											class="form-select bg-secondary text-dark w-50 "
+											name="paymentMethod">
+												<option value="Cash">Cash</option>
+												<option value="Bank">Bank</option>
+										</select></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="row bg-secondary ms-3 me-3 mt-3 rounded">
+							<table class="table shadow-sm  watermark" id="invoiceTable">
+								<thead>
+									<tr>
+										<th>Sr.</th>
+										<th>Particulars Description</th>
+										<th>Registered Heat Count</th>
+										<th>Actual Head Count</th>
+										<th>Difference</th>
+										<th>Price</th>
+										<th>Amount</th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="tempWeeklyInvoice,i : ${dto}"
+										th:style="${i}? 'font-weight: bold;'">
+										<td th:text="${i.count}">
+										<td th:text="${tempWeeklyInvoice.invoiceDate}">
+										<td th:text="${tempWeeklyInvoice.registeredCount}">
+										<td th:text="${tempWeeklyInvoice.actualCount}">
+										<td th:text="${tempWeeklyInvoice.difference}">
+										<td th:text="${tempWeeklyInvoice.totalPrice}">
+										<td th:text="${tempWeeklyInvoice.totalAmount}">
+									</tr>
+									<tr class="fw-bold">
+										<td></td>
+										<td></td>
+										<td th:text="${totalRegisterCount}"></td>
+										<td th:text="${totalActualCount}"></td>
+										<td th:text="${totalDifferenceCount}"></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td colspan="6">TOTAL AMOUNT</td>
+										<td><input name="totalCost" th:value="${totalCost}"
+											readonly class="w-75 text-center bg-secondary fw-bold mt-1"
+											style="outline-style: none; border: none;"></td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="row ms-2  me-2 py-5">
+								<div class="col-sm-4 text-start text-dark">
+									<span class="ms-3">Signature</span><br> <br> <br>
+									<span class="text-decoration-underline ms-3">Cashier</span><br>
+									<select class="form-select bg-secondary text-dark mt-2"
+										name="selectedCashier">
+										<option th:each="temp:${adminTeam}" th:text="${temp.name}"
+											class="text-dark active"></option>
+									</select> <br> <span class="ms-3">--/--/----</span>
+								</div>
+								<div class="col-sm-4 text-center text-dark">
+									<span>Signature</span><br> <br> <br> <span
+										class="text-decoration-underline">Received by</span><br>
+									<br> <input name="received" th:value="${received}"
+										class="w-100 bg-secondary text-center" readonly
+										style="outline-style: none; border: none;"><br> <br>
+									<span>--/--/----</span>
+								</div>
+								<div class="col-sm-4 text-end text-dark">
+									<span class="me-4">Signature</span><br> <br> <br>
+									<span class="text-decoration-underline me-3">Approved by</span><br>
+
+									<select
+										class="form-select bg-secondary text-dark text-end mt-2"
+										name="selectedApprover">
+										<option th:each="temp:${adminTeam}" th:text="${temp.name}"
+											class="text-dark active"></option>
+									</select> <br> <span class="text-center me-5">--/--/----</span>
+								</div>
+							</div>
+						</div>
+						<input type="hidden" name="numberOfPax" th:value="${numberOfPax}">
+						<div id="NOprint">
+							<button type="button" id="printBtn" disabled
+								class="btn btn-outline-dark mb-5 ms-5">Print</button>
+
+							<button type="submit" id="confirmBtn"
+								class="btn btn-outline-dark mb-5 ms-2">Confirm</button>
+						</div>
+
+					</div>
+				</form>
+			</div>
+
+			<!-- Weekly Invoice end -->
+
+			<!-- Footer Start -->
+			<div class="container-fluid pt-4 px-4 " id="NOprint">
+
+				<div class="bg-secondary rounded-top p-4 ">
+					<div class="row ">
+						<div class="col-12 col-sm-6 text-center text-sm-start ">
+							&copy; <a href="#" style="color: rgb(8, 50, 238);">Catering
+								Service Management System</a>, All Right Reserved.
+						</div>
+						<div class="col-12 col-sm-6 text-center text-sm-end">
+							<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal ". Thank you for your support. ***/-->
+							Designed By <a href="" style="color: rgb(8, 50, 238);">TEAM
+								ASCII</a>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Footer End -->
+		</div>
+		<!-- Content End -->
+
+
+		<!-- Back to Top -->
+		<a href="#" class="btn btn-lg btn-info btn-lg-square back-to-top"
+			id="NOprint"><i class="bi bi-arrow-up"></i></a>
+	</div>
+	<!-- JavaScript Libraries -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="lib/chart/chart.min.js"></script>
+	<script src="lib/easing/easing.min.js"></script>
+	<script src="lib/waypoints/waypoints.min.js"></script>
+	<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+	<script src="lib/tempusdominus/js/moment.min.js"></script>
+	<script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+	<script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+	<!-- Template Javascript -->
+	<script src="js/main.js"></script>
+</body>
+
+</html>

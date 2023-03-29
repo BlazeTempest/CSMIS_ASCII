@@ -7,18 +7,15 @@ import com.dat.CateringService.entity.Staff;
 public interface StaffService {
 	//add and update
 	public void addStaff(Staff staff);
+	public void addAllStaff(List<Staff> staffs);
 	
 	//select staffs
 	public List<Staff> getAllStaffs();
 	public List<Staff> getActiveStaffs(int status);
 	public Staff getStaffById(String id);
-	
-
 	public List<Staff> getStaffByEmail(String email);
 	public List<String> findActiveEmailNoti(boolean email_noti);
 	public Staff getByDoorlog(int doorlog);
-
-
 	
 	//search
 	public List<Staff> searchBy(String name, String id, String team);
@@ -37,6 +34,6 @@ public interface StaffService {
 	
 	//delete
 	public void deleteById(String id);
-
-	public void addAllStaff(List<Staff> staffs);
+	
+	public List<Staff> getAdminTeam();
 }

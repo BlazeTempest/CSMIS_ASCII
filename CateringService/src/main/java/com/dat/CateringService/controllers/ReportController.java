@@ -51,7 +51,7 @@ public class ReportController {
 	public String addHeadcountManually(@RequestParam("invoiceDate")String invoiceDate, @RequestParam("actual")int actualCount, RedirectAttributes attr) {
 		Headcount temp = new Headcount();
 		temp.setActualCount(actualCount);
-		temp.setInvoice_date(LocalDate.parse(invoiceDate));
+		temp.setInvoiceDate(LocalDate.parse(invoiceDate));
 		temp.setRegisteredCount(registeredService.getRegisteredStaffByDate(LocalDate.now()).size());
 		temp.setDifference(registeredService.getRegisteredStaffByDate(LocalDate.now()).size() - actualCount);
 		headcountService.saveHeadcount(temp);
@@ -69,7 +69,7 @@ public class ReportController {
 		    Headcount headcount = new Headcount();
 			headcount.setRegisteredCount(registeredStaffs.size());
 			headcount.setActualCount(doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
-			headcount.setInvoice_date(LocalDate.now());
+			headcount.setInvoiceDate(LocalDate.now());
 			headcount.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
 			headcountService.saveHeadcount(headcount);
 		}else {

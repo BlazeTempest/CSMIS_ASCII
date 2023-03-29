@@ -60,4 +60,15 @@ public class RestaurantServiceImpl implements RestaurantService {
 		return restaurant !=null ? restaurant.getRestaurant_name(): "";
 	}
 
+	@Override
+	public List<Restaurant> getRestaurantName() {
+		return restaurantRepository.getRestaurantName();
+	}
+
+	@Override
+	public String findRestaurantReceiverName() {
+		Restaurant restaurant=restaurantRepository.findFirstByStatus("active");
+        return restaurant !=null ? restaurant.getReceived_by(): "";
+	}
+
 }

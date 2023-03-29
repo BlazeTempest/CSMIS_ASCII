@@ -87,9 +87,12 @@
             <a th:href="@{/employee-list}" class="nav-item nav-link"
               ><i class="fas fa-users me-2"></i>Employee List</a
             >
-            <div class="nav-item dropdown">
+            <a th:href="@{registered-list}" class="nav-item nav-link"
+              ><i class="fa fa-laptop me-2"></i>Report</a
+            >
+            <!-- <div class="nav-item dropdown">
               <a
-                href="#"
+                th:href="@{registered-list}"
                 class="nav-link dropdown-toggle"
                 data-bs-toggle="dropdown"
                 ><i class="fa fa-laptop me-2"></i>Report</a
@@ -108,7 +111,7 @@
                   >Unregistered & Eat List</a
                 >
               </div>
-            </div>
+            </div> -->
             <a th:href="@{registration}" class="nav-item nav-link"
               ><i class="fas fa-pen me-2"></i>Lunch Register</a
             >

@@ -2,96 +2,119 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8" />
-    <title>DarkPan - Bootstrap 5 Admin Template</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta content="" name="keywords" />
-    <meta content="" name="description" />
+<meta charset="utf-8" />
+<title>DarkPan - Bootstrap 5 Admin Template</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<meta content="" name="keywords" />
+<meta content="" name="description" />
 
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon" />
+<!-- Favicon -->
+<link href="img/favicon.ico" rel="icon" />
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet" />
+<!-- Google Web Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap"
+	rel="stylesheet" />
 
-    <!-- Icon Font Stylesheet -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+<!-- Icon Font Stylesheet -->
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+	rel="stylesheet" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+	rel="stylesheet" />
 
-    <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+<!-- Libraries Stylesheet -->
+<link href="lib/owlcarousel/assets/owl.carousel.min.css"
+	rel="stylesheet" />
+<link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css"
+	rel="stylesheet" />
 
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" />
+<!-- Customized Bootstrap Stylesheet -->
+<link href="css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- font awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+<!-- font awesome -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
-    <style>
-        table tr th {
-            color: rgb(79, 30, 192);
-        }
-        
-        i.fa-solid {
-            font-size: 25\px;
-            cursor: pointer;
-            user-select: none;
-            color: white;
-        }
-        
-        .fa-solid:hover {
-            color: rgb(250, 16, 75);
-        }
-    </style>
-    <script>
-        function myFunction(x) {
-            x.classList.toggle("fa-bell-slash");
-        }
-    </script>
+<style>
+table tr th {
+	color: rgb(79, 30, 192);
+}
 
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet" />
-    <style>
-        table tr th {
-            color: rgb(79, 30, 192);
-        }
-    </style>
+i.fa-solid {
+	font-size: 25\px;
+	cursor: pointer;
+	user-select: none;
+	color: white;
+}
+
+.fa-solid:hover {
+	color: rgb(250, 16, 75);
+}
+
+/* start style for report btn */
+.btn-group {
+	padding-right: 20px;
+	padding-left: 30px;
+}
+.btn-group .btn {
+  border-radius: 10px;
+}
+/* end style for report btn */
+</style>
+<script>
+	function myFunction(x) {
+		x.classList.toggle("fa-bell-slash");
+	}
+</script>
+
+<!-- Template Stylesheet -->
+<link href="css/style.css" rel="stylesheet" />
+<style>
+table tr th {
+	color: rgb(79, 30, 192);
+}
+</style>
 </head>
 
 <body>
-    <div class="container-fluid position-relative d-flex p-0">
-        <!-- Spinner Start -->
-        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        <!-- Spinner End -->
+	<div class="container-fluid position-relative d-flex p-0">
+		<!-- Spinner Start -->
+		<div id="spinner"
+			class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+			<div class="spinner-border text-primary"
+				style="width: 3rem; height: 3rem" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+		</div>
+		<!-- Spinner End -->
 
-        <!-- Sidebar Start -->
-        <div class="sidebar pe-4 pb-3">
-            <nav class="navbar bg-secondary navbar-dark">
-                <div class="sidebar-head">
-                    <div>
-                        <img class="sidebar-logo mt-0" src="img/dat logo.png" alt="DAT Logo" />
-                    </div>
-                    <div>
-                        <a href="index.html" class="navbar-brand mb-3">
-                            <h3 class="text-primary">CSMIS</h3>
-                        </a>
-                    </div>
-                </div>
+		<!-- Sidebar Start -->
+		<div class="sidebar pe-4 pb-3">
+			<nav class="navbar bg-secondary navbar-dark">
+				<div class="sidebar-head">
+					<div>
+						<img class="sidebar-logo mt-0" src="img/dat logo.png"
+							alt="DAT Logo" />
+					</div>
+					<div>
+						<a href="index.html" class="navbar-brand mb-3">
+							<h3 class="text-primary">CSMIS</h3>
+						</a>
+					</div>
+				</div>
 
-                <div class="navbar-nav w-100">
-                    <a th:href="@{dashboard}" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
-            >
-            <a th:href="@{/employee-list}" class="nav-item nav-link"
-              ><i class="fas fa-users me-2"></i>Employee List</a
-            >
-            <div class="nav-item dropdown">
+				<div class="navbar-nav w-100">
+					<a th:href="@{dashboard}" class="nav-item nav-link"><i
+						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
+						th:href="@{/employee-list}" class="nav-item nav-link"><i
+						class="fas fa-users me-2"></i>Employee List</a> <a
+						th:href="@{registered-list}" class="nav-item nav-link active"><i
+						class="fa fa-laptop me-2"></i>Report</a>
+					<!-- <div class="nav-item dropdown">
               <a
                 href="#"
                 class="nav-link dropdown-toggle active"
@@ -112,212 +135,273 @@
                   >Unregistered & Eat List</a
                 >
               </div>
-            </div>
-            <a th:href="@{registration}" class="nav-item nav-link"
-              ><i class="fas fa-pen me-2"></i>Lunch Register</a
-            >
-            <a th:href="@{menu}" class="nav-item nav-link"
-              ><i class="fas fa-hamburger me-2"></i>Menu</a
-            >
-            <a th:href="@{restaurant}" class="nav-item nav-link"
-              ><i class="fas fa-home me-2"></i>Restaurant</a
-            >
-            <div class="nav-item dropdown">
-              <a
-                href="#"
-                class="nav-link dropdown-toggle"
-                data-bs-toggle="dropdown"
-                ><i class="fas fa-file me-2"></i>Invoice</a
-              >
-              <div class="dropdown-menu bg-transparent border-0">
-                <a th:href="@{/weekly-invoice}" class="dropdown-item"
-                  >Weekly Invoice</a
-                >
-                <a th:href="@{/monthly_invoice}" class="dropdown-item"
-                  >Monthly Invoice</a
-                >
-              </div>
-            </div>
-            <div class="nav-item">
-              <a th:href="@{suggestion}" class="nav-link"><i class="far fa-file-alt me-2"></i>Suggestions</a>
-                </div>
-                <div class="nav-item">
-                    <a th:href="@{holiday}" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
-                </div>
-        </div>
-            </nav>
-        </div>
-        <!-- Sidebar End -->
+            </div> -->
+					<a th:href="@{registration}" class="nav-item nav-link"><i
+						class="fas fa-pen me-2"></i>Lunch Register</a> <a th:href="@{menu}"
+						class="nav-item nav-link"><i class="fas fa-hamburger me-2"></i>Menu</a>
+					<a th:href="@{restaurant}" class="nav-item nav-link"><i
+						class="fas fa-home me-2"></i>Restaurant</a>
+					<div class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle"
+							data-bs-toggle="dropdown"><i class="fas fa-file me-2"></i>Invoice</a>
+						<div class="dropdown-menu bg-transparent border-0">
+							<a th:href="@{/weekly-invoice}" class="dropdown-item">Weekly
+								Invoice</a> <a th:href="@{/monthly_invoice}" class="dropdown-item">Monthly
+								Invoice</a>
+						</div>
+					</div>
+					<div class="nav-item">
+						<a th:href="@{suggestion}" class="nav-link"><i
+							class="far fa-file-alt me-2"></i>Suggestions</a>
+					</div>
+					<div class="nav-item">
+						<a th:href="@{holiday}" class="nav-link"><i
+							class="fa fa-mug-hot me-2"></i>Holidays</a>
+					</div>
+				</div>
+			</nav>
+		</div>
+		<!-- Sidebar End -->
 
-        <!-- Content Start -->
-        <div class="content">
-            <!-- Navbar Start -->
-            <nav class="navbar navbar-expand bg-secondary-nav navbar-dark sticky-top px-4 py-0">
-                <a href="#" class="sidebar-toggler flex-shrink-0">
-                    <i class="fa fa-bars"></i>
-                </a>
-                <div class="navbar-nav align-items-center ms-auto">
-                    <div class="nav-item dropdown">
+		<!-- Content Start -->
+		<div class="content">
+			<!-- Navbar Start -->
+			<nav
+				class="navbar navbar-expand bg-secondary-nav navbar-dark sticky-top px-4 py-0">
+				<a href="#" class="sidebar-toggler flex-shrink-0"> <i
+					class="fa fa-bars"></i>
+				</a>
+				<div class="navbar-nav align-items-center ms-auto">
+					<div class="nav-item dropdown">
 
-                        <i onclick="myFunction(this)" title="This is a mail notification on/off for lunch!" class="fa-solid fa-bell"></i>
-                        <span class="text-center text-white ms-2">Email</span>
-                    </div>
-                    <div class="nav-item">
+						<i onclick="myFunction(this)"
+							title="This is a mail notification on/off for lunch!"
+							class="fa-solid fa-bell"></i> <span
+							class="text-center text-white ms-2">Email</span>
+					</div>
+					<div class="nav-item">
 
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                                <img class="rounded-circle me-lg-2" src="img/admin-logo.png" alt="" style="width: 40px; height: 40px" />
-                                <span class="d-none d-lg-inline-flex" th:text="${name}"></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
-                                <a href="profile.html" class="dropdown-item">Profile</a>
-                                <a href="signin.html" class="dropdown-item">Log Out</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-            <!-- Navbar End -->
+						<div class="nav-item dropdown">
+							<a href="#" class="nav-link dropdown-toggle"
+								data-bs-toggle="dropdown"> <img
+								class="rounded-circle me-lg-2" src="img/admin-logo.png" alt=""
+								style="width: 40px; height: 40px" /> <span
+								class="d-none d-lg-inline-flex" th:text="${name}"></span>
+							</a>
+							<div
+								class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
+								<a href="profile.html" class="dropdown-item">Profile</a> <a
+									href="signin.html" class="dropdown-item">Log Out</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</nav>
+			<!-- Navbar End -->
 
-            <!-- Sale & Revenue Start -->
-            <div class="container-fluid pt-4 px-4">
-            <div class="bg-secondary rounded mb-3 p-4">
-	        	<h2 class="mb-4 text-center">Import Doorlog Data</h2>
-	        		<form class="row" method="post" enctype="multipart/form-data" th:action="@{/importDoorlog}">
-                    	<div class="card-body my-2 text-center offset-1 col-7">
-                	        <input class="form-control form-control-lg bg-white fs-6" name="file" accept=".xls,.xlsx,.csv" id="formFileLg" type="file" required/>
-                        </div>
-                        <div class="card-body my-2 text-center col-4">
-                            <button type="submit" class="btn btn-outline-dark text-center"><i class="fa fa-plus"></i>&nbsp; Upload</button>
-                        </div>
-                        <div th:if="${success!=null}" class="alert alert-success" th:text=${success}></div>
-                        <div th:if="${error!=null}" class="alert alert-danger" th:text=${error}></div>
-                    </form>
-                    <div class="alert alert-info text-center">In case of doorlog system failure, you can input the following data to create invoice</div>
-                    <form th:action="@{/addHeadcount}" method="post" class="row">
-                    	<input type="date" name="invoiceDate" class="ms-3 col-4">
-                    	<input type="number" name="actual" class="ms-3 col-4 float-end" placeholder="Actual Completed lunch count">
-                    	<button type="submit" class="ms-3 col-3 btn btn-outline-dark float-end"><i class="fa fa-plus"></i>&nbsp; Add headcount</button>
-                    </form>
-                    <div th:if=${successHeadcount} th:text=${successHeadcount} class="alert alert-success"></div>
-	        </div>
-                <div class="row bg-secondary rounded align-items-center justify-content-center mx-0">
-                    <div class="bg-secondary rounded h-100 p-4">
-                    <div class="row">
-                        <h2 class="mb-4 text-end col-lg-8" style="text-decoration: underline;">Lunch Registered List</h2>
-                        <a th:href="@{/registered-list}" class="mt-2 offset-3 col-lg-1 text-end text-dark" style="text-decoration: underline;"><span>Refresh</span></a>
-                    </div>
-                        <div class="container-fluid">
-                            <form th:action="@{/searchRegistered}" method="get" class="row g-3">
-                            	<div class="col-md-2">
-	                            	<input class="form-control bg-white border-info" th:value=${id} name="id" type="search" placeholder="By Id">
-		                        </div>
-	                            <div class="col-md-2">
-	                            	<input class="form-control bg-white border-info" th:value=${searchName} name="name" type="search" placeholder="By Name">
-	                            </div>
-	                            
-		                        <div class="col-md-2">
-                            	<input class="form-control bg-white border-info" th:value=${team} list="teamList" name="team" type="search" placeholder="By Team">
-		                        	<datalist id="teamList">
-									  <option th:each=team:${teams} th:text=${team}>
+			<!-- Sale & Revenue Start -->
+			<div class="container-fluid pt-4 px-4">
+				<div class="btn-group d-flex justify-content-between" role="group"
+					aria-label="Button group with options">
+					<div role="group">
+						<a th:href="@{registered-list}" class="btn btn-primary active">Registered
+							List</a>
+					</div>
+					<div class="" role="group">
+						<a th:href="@{register-eat-list}" class="btn btn-primary">Registered
+							& Eat List</a>
+					</div>
+					<div class="" role="group">
+						<a th:href="@{register-not-eat-list}" class="btn btn-primary">Registered
+							& Not Eat List</a>
+					</div>
+					<div class="" role="group">
+						<a th:href="@{not-registereed-eat-list}" class="btn btn-primary">Unregistered
+							& Eat List</a>
+					</div>
+				</div>
+				<div class="mt-3"></div>
+				<div class="bg-secondary rounded mb-3 p-4">
+					<h2 class="mb-4 text-center">Import Doorlog Data</h2>
+					<form class="row" method="post" enctype="multipart/form-data"
+						th:action="@{/importDoorlog}">
+						<div class="card-body my-2 text-center offset-1 col-7">
+							<input class="form-control form-control-lg bg-white fs-6"
+								name="file" accept=".xls,.xlsx,.csv" id="formFileLg" type="file"
+								required />
+						</div>
+						<div class="card-body my-2 text-center col-4">
+							<button type="submit" class="btn btn-outline-dark text-center">
+								<i class="fa fa-plus"></i>&nbsp; Upload
+							</button>
+						</div>
+						<div th:if="${success!=null}" class="alert alert-success"
+							th:text=${success}></div>
+						<div th:if="${error!=null}" class="alert alert-danger"
+							th:text=${error}></div>
+					</form>
+					<div class="alert alert-info text-center">In case of doorlog
+						system failure, you can input the following data to create invoice</div>
+					<form th:action="@{/addHeadcount}" method="post" class="row">
+						<input type="date" name="invoiceDate" class="ms-3 col-4">
+						<input type="number" name="actual" class="ms-3 col-4 float-end"
+							placeholder="Actual Completed lunch count">
+						<button type="submit"
+							class="ms-3 col-3 btn btn-outline-dark float-end">
+							<i class="fa fa-plus"></i>&nbsp; Add headcount
+						</button>
+					</form>
+					<div th:if=${successHeadcount} th:text=${successHeadcount}
+						class="alert alert-success"></div>
+				</div>
+				<div
+					class="row bg-secondary rounded align-items-center justify-content-center mx-0">
+					<div class="bg-secondary rounded h-100 p-4">
+						<div class="row">
+							<h2 class="mb-4 text-end col-lg-8"
+								style="text-decoration: underline;">Lunch Registered List</h2>
+							<a th:href="@{/registered-list}"
+								class="mt-2 offset-3 col-lg-1 text-end text-dark"
+								style="text-decoration: underline;"><span>Refresh</span></a>
+						</div>
+						<div class="container-fluid">
+							<form th:action="@{/searchRegistered}" method="get"
+								class="row g-3">
+								<div class="col-md-2">
+									<input class="form-control bg-white border-info" th:value=${id} name="id"
+										type="search" placeholder="By Id">
+								</div>
+								<div class="col-md-2">
+									<input class="form-control bg-white border-info" th:value=${searchName}
+										name="name" type="search" placeholder="By Name">
+								</div>
+
+								<div class="col-md-2">
+									<input class="form-control bg-white border-info" th:value=${team}
+										list="teamList" name="team" type="search"
+										placeholder="By Team">
+									<datalist id="teamList">
+										<option th:each=team:${teams} th:text=${team}>
 									</datalist>
-		                        </div>
-		                        <div class="col-md-2">
-	                            	<input class="form-control bg-white border-info" th:value=${start} name="start" type="text" placeholder="From date" onfocus="(this.type='date')" onblur="(this.type='text')">
-	                            </div>
-	                            <div class="col-md-2">
-	                            	<input class="form-control bg-white border-info" th:value=${end} name="end" type="text" placeholder="To date" onfocus="(this.type='date')" onblur="(this.type='text')">
-		                        </div>
-		                        <div class="col-md-2">
-			                        <button type="submit" class="btn btn-outline-dark me-2"><i class="fa fa-search"></i>&nbsp;
-			                          Search</button>
-		                         </div>
-	                       <!-- Filter By division -->
-	                       <div class="row mt-3">
-		                       <button class="btn btn-outline-dark dropdown-toggle float-end offset-6 col-3" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
-		                              class="bi bi-funnel"></i>&nbsp; Filter by Division</button>
-	                        	<ul class="dropdown-menu border-0 text-center" style="width: 200px;" aria-labelledby="filterDropdown">
-	                            	<li th:each=name:${divs}>
-										<a th:href="@{/searchRegistered(division=${name}, start=${start}, end=${end}, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item"></a>
-									</li>
-		                        </ul>
-	                        <!-- filter by department -->
-		                        <button class="btn btn-outline-dark dropdown-toggle ms-2 col-3" style="width:200px;" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i
-		                              class="bi bi-funnel"></i>Filter by Department</button>
-	                        	<ul class="dropdown-menu border-0 text-center" style="width: auto;" aria-labelledby="filterDropdown">
-	                            	<li th:each=name:${depts}>
-										<a th:href="@{/searchRegistered(dept=${name}, start=${start}, end=${end}, name=${searchName}, id=${id}, team=${team})}" th:text=${name} class="dropdown-item"></a>
-									</li>
-		                        </ul>
-	                        </div>               
-                        </form>
-                        </div>
-						
-						<hr class="mt-5" style="background-color: rgb(79, 30, 192); height: 2px;">
-                    	<h5 th:text="'Found ' + ${totalNum!=null ? totalNum : 0} + ' Records'" class="text-end"></h5>
-                    	<hr style="background-color: rgb(79, 30, 192); height: 2px;">
-						
-                        <div class="table-responsive">
-                            <table th:if="${not #lists.isEmpty(registeredStaffs)}" class="table rounded text-dark table-hover mt-4">
-                                <thead class="text-white">
-                                    <tr>
-                                        <th scope="col">Staff ID</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Division</th>
-                                        <th scope="col">Department</th>
-                                        <th scope="col">Planned Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="staff:${registeredStaffs}">
-                                        <td th:text=${staff.staffID}></td>
-                                        <td th:text=${staff.name}></td>
-                                        <td th:text=${staff.division}></td>
-                                        <td th:text=${staff.dept}></td>
-                                        <td th:text=${staff.dineDate}></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Content End -->
+								</div>
+								<div class="col-md-2">
+									<input class="form-control bg-white border-info" th:value=${start}
+										name="start" type="text" placeholder="From date"
+										onfocus="(this.type='date')" onblur="(this.type='text')">
+								</div>
+								<div class="col-md-2">
+									<input class="form-control bg-white border-info" style="width: 150px;"
+										th:value=${end} name="end" type="text" placeholder="To date"
+										onfocus="(this.type='date')" onblur="(this.type='text')">
+								</div>
+								<div class="col-md-2">
+									<button type="submit" class="btn btn-outline-dark me-2">
+										<i class="fa fa-search"></i>&nbsp; Search
+									</button>
+								</div>
+								<!-- Filter By division -->
+								<div class="row mt-3">
+									<button
+										class="btn btn-outline-dark dropdown-toggle float-end offset-6 col-3"
+										type="button" id="filterDropdown" data-bs-toggle="dropdown"
+										aria-expanded="false">
+										<i class="bi bi-funnel"></i>&nbsp; Division
+									</button>
+									<ul class="dropdown-menu border-0 text-center"
+										style="width: 200px;" aria-labelledby="filterDropdown">
+										<li th:each=name:${divs}><a
+											th:href="@{/searchRegistered(division=${name}, start=${start}, end=${end}, name=${searchName}, id=${id}, team=${team})}"
+											th:text=${name} class="dropdown-item"></a></li>
+									</ul>
+									<!-- filter by department -->
+									<button class="btn btn-outline-dark dropdown-toggle ms-2 col-3"
+										style="width: 200px;" type="button" id="filterDropdown"
+										data-bs-toggle="dropdown" aria-expanded="false">
+										<i class="bi bi-funnel"></i> Department
+									</button>
+									<ul class="dropdown-menu border-0 text-center"
+										style="width: auto;" aria-labelledby="filterDropdown">
+										<li th:each=name:${depts}><a
+											th:href="@{/searchRegistered(dept=${name}, start=${start}, end=${end}, name=${searchName}, id=${id}, team=${team})}"
+											th:text=${name} class="dropdown-item"></a></li>
+									</ul>
+								</div>
+							</form>
+						</div>
 
-            <!-- Footer Start -->
-            <div class="container-fluid pt-4 px-4 ">
-                <div class="bg-secondary rounded-top p-4 ">
-                    <div class="row ">
-                        <div class="col-12 col-sm-6 text-center text-sm-start ">
-                            &copy; <a href="#" style="color:  rgb(8, 50, 238);">Catering Service Management System</a>, All Right Reserved.
-                        </div>
-                        <div class="col-12 col-sm-6 text-center text-sm-end">
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal ". Thank you for your support. ***/-->
-                            Designed By <a href="" style="color:  rgb(8, 50, 238);">TEAM ASCII</a>
+						<hr class="mt-5"
+							style="background-color: rgb(79, 30, 192); height: 2px;">
+						<h5
+							th:text="'Found ' + ${totalNum!=null ? totalNum : 0} + ' Records'"
+							class="text-end"></h5>
+						<hr style="background-color: rgb(79, 30, 192); height: 2px;">
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Footer End -->
-        </div>
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-info btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-    </div>
+						<div class="table-responsive">
+							<table th:if="${not #lists.isEmpty(registeredStaffs)}"
+								class="table rounded text-dark table-hover mt-4">
+								<thead class="text-white">
+									<tr>
+										<th scope="col">Staff ID</th>
+										<th scope="col">Name</th>
+										<th scope="col">Division</th>
+										<th scope="col">Department</th>
+										<th scope="col">Planned Date</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="staff:${registeredStaffs}">
+										<td th:text=${staff.staffID}></td>
+										<td th:text=${staff.name}></td>
+										<td th:text=${staff.division}></td>
+										<td th:text=${staff.dept}></td>
+										<td th:text=${staff.dineDate}></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Content End -->
 
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/chart/chart.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+			<!-- Footer Start -->
+			<div class="container-fluid pt-4 px-4 ">
+				<div class="bg-secondary rounded-top p-4 ">
+					<div class="row ">
+						<div class="col-12 col-sm-6 text-center text-sm-start ">
+							&copy; <a href="#" style="color: rgb(8, 50, 238);">Catering
+								Service Management System</a>, All Right Reserved.
+						</div>
+						<div class="col-12 col-sm-6 text-center text-sm-end">
+							<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal ". Thank you for your support. ***/-->
+							Designed By <a href="" style="color: rgb(8, 50, 238);">TEAM
+								ASCII</a>
 
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Footer End -->
+		</div>
+		<!-- Back to Top -->
+		<a href="#" class="btn btn-lg btn-info btn-lg-square back-to-top"><i
+			class="bi bi-arrow-up"></i></a>
+	</div>
+
+	<!-- JavaScript Libraries -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="lib/chart/chart.min.js"></script>
+	<script src="lib/easing/easing.min.js"></script>
+	<script src="lib/waypoints/waypoints.min.js"></script>
+	<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+	<script src="lib/tempusdominus/js/moment.min.js"></script>
+	<script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+	<script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+	<!-- Template Javascript -->
+	<script src="js/main.js"></script>
 </body>
 
 </html>

@@ -15,22 +15,22 @@ public class PaidVoucher {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int paid_ID;
-	
+
 	@Column(name="voucher_ID")
 	private String voucher_ID;
-	
+
 	@Column(name="report_date")
 	private Date report_date;
-	
+
 	@Column(name="voucher_status")
 	private String status;
-	
+
 	@Column(name="payment_method")
 	private String paymentMethod;
-	
+
 	@Column(name="created_date")
 	private Date created_date;
-	
+
 	@Column(name="created_by")
 	private String created_by;
 

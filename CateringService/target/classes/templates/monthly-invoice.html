@@ -1,251 +1,273 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8" />
-    <title>DarkPan - Bootstrap 5 Admin Template</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta content="" name="keywords" />
-    <meta content="" name="description" />
+<meta charset="utf-8" />
+<title>CSMIS</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<meta content="" name="keywords" />
+<meta content="" name="description" />
 
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon" />
+<!-- Favicon -->
+<link href="img/favicon.ico" rel="icon" />
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet" />
+<!-- Google Web Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap"
+	rel="stylesheet" />
 
-    <!-- Icon Font Stylesheet -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+<!-- Icon Font Stylesheet -->
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+	rel="stylesheet" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+	rel="stylesheet" />
 
-    <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+<!-- Libraries Stylesheet -->
+<link href="lib/owlcarousel/assets/owl.carousel.min.css"
+	rel="stylesheet" />
+<link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css"
+	rel="stylesheet" />
 
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" />
+<!-- Customized Bootstrap Stylesheet -->
+<link href="css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet" />
+<!-- Template Stylesheet -->
+<link href="css/style.css" rel="stylesheet" />
 
-    <!-- font awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+<!-- font awesome -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
-    <style>
-        table tr th {
-            color: rgb(79, 30, 192);
-        }
-        
-        i.fa-solid {
-            font-size: 25\px;
-            cursor: pointer;
-            user-select: none;
-            color: white;
-        }
-        
-        .fa-solid:hover {
-            color: rgb(250, 16, 75);
-        }
-    </style>
-    <script>
+<style>
+#monthlyInvoiceTable tr th {
+	text-align: center;
+	font-weight: bold;
+	color: #19191a;
+	background-color: #6c7ae0;
+}
+
+#monthlyInvoiceTable thead {
+	border-radius: 10px;
+}
+
+#monthlyInvoiceTable tr:nth-child(even) {
+	background-color: #fff;
+}
+
+#monthlyInvoiceTable tr:nth-child(odd) {
+	background-color: #e1e5eb;
+}
+
+i.fa-solid {
+	font-size: 25\px;
+	cursor: pointer;
+	user-select: none;
+	color: white;
+}
+
+.fa-solid:hover {
+	color: rgb(250, 16, 75);
+}
+</style>
+<script>
         function myFunction(x) {
             x.classList.toggle("fa-bell-slash");
         }
     </script>
 
-    <style>
-        table tr th {
-            color: rgb(79, 30, 192);
-        }
-    </style>
+<style>
+table tr th {
+	color: rgb(79, 30, 192);
+}
+</style>
 </head>
 
 <body>
-    <div class="container-fluid position-relative d-flex p-0">
-        <!-- Spinner Start -->
-        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        <!-- Spinner End -->
+	<div class="container-fluid position-relative d-flex p-0">
+		<!-- Spinner Start -->
+		<div id="spinner"
+			class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+			<div class="spinner-border text-primary"
+				style="width: 3rem; height: 3rem" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+		</div>
+		<!-- Spinner End -->
 
-        <!-- Sidebar Start -->
-        <div class="sidebar pe-4 pb-3">
-            <nav class="navbar bg-secondary navbar-dark">
-                <div class="sidebar-head">
-                    <div>
-                        <img class="sidebar-logo mt-0" src="img/dat logo.png" alt="DAT Logo" />
-                    </div>
-                    <div>
-                        <a href="index.html" class="navbar-brand mb-3">
-                            <h3 class="text-primary">CSMIS</h3>
-                        </a>
-                    </div>
-                </div>
+		<!-- Sidebar Start -->
+		<div class="sidebar pe-4 pb-3">
+			<nav class="navbar bg-secondary navbar-dark">
+				<div class="sidebar-head">
+					<div>
+						<img class="sidebar-logo mt-0" src="img/dat logo.png"
+							alt="DAT Logo" />
+					</div>
+					<div>
+						<a href="index.html" class="navbar-brand mb-3">
+							<h3 class="text-primary">CSMIS</h3>
+						</a>
+					</div>
+				</div>
 
-                <div class="navbar-nav w-100">
-                    <a href="/" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
-            >
-            <a th:href="@{/employee-list}" class="nav-item nav-link"
-              ><i class="fas fa-users me-2"></i>Employee List</a
-            >
-            <div class="nav-item dropdown">
-              <a
-                href="#"
-                class="nav-link dropdown-toggle"
-                data-bs-toggle="dropdown"
-                ><i class="fa fa-laptop me-2"></i>Report</a
-              >
-              <div class="dropdown-menu bg-transparent border-0">
-                <a href="registered-list.html" class="dropdown-item"
-                  >Monthly Registered List</a
-                >
-                <a href="register-eat-list.html" class="dropdown-item"
-                  >Registered & Eat List</a
-                >
-                <a href="register-not-eat-list.html" class="dropdown-item"
-                  >Registered & Not Eat List</a
-                >
-                <a href="not-registereed-eat-list.html" class="dropdown-item"
-                  >Not Registered & Eat List</a
-                >
-              </div>
-            </div>
-            <a th:href="@{registration}" class="nav-item nav-link"
-              ><i class="fas fa-pen me-2"></i>Lunch Register</a
-            >
-            <a th:href="@{menu}" class="nav-item nav-link"
-              ><i class="fas fa-hamburger me-2"></i>Menu</a
-            >
-            <a th:href="@{restaurant}" class="nav-item nav-link"
-              ><i class="fas fa-home me-2"></i>Restaurant</a
-            >
-            <div class="nav-item dropdown">
-              <a
-                href="#"
-                class="nav-link dropdown-toggle active"
-                data-bs-toggle="dropdown"
-                ><i class="fas fa-file me-2"></i>Invoice</a
-              >
-              <div class="dropdown-menu bg-transparent border-0">
-                <a th:href="@{/weekly-invoice}" class="dropdown-item"
-                  >Weekly Invoice</a
-                >
-                <a th:href="@{/monthly_invoice}" class="dropdown-item active"
-                  >Monthly Invoice</a
-                >
-              </div>
-            </div>
-            <div class="nav-item">
-              <a th:href="@{/suggestion}" class="nav-link"
-                ><i class="far fa-file-alt me-2"></i>Suggestions</a
-              >
-            </div>
-            <div class="nav-item">
-              <a th:href="@{/holiday}" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
-                </div>
-        </div>
-        </nav>
-    </div>
-    <!-- Sidebar End -->
+				<div class="navbar-nav w-100">
+					<a href="/" class="nav-item nav-link"><i
+						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
+						th:href="@{/employee-list}" class="nav-item nav-link"><i
+						class="fas fa-users me-2"></i>Employee List</a>
+					<div class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle"
+							data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Report</a>
+						<div class="dropdown-menu bg-transparent border-0">
+							<a href="registered-list.html" class="dropdown-item">Monthly
+								Registered List</a> <a href="register-eat-list.html"
+								class="dropdown-item">Registered & Eat List</a> <a
+								href="register-not-eat-list.html" class="dropdown-item">Registered
+								& Not Eat List</a> <a href="not-registereed-eat-list.html"
+								class="dropdown-item">Not Registered & Eat List</a>
+						</div>
+					</div>
+					<a href="lunch-register.html" class="nav-item nav-link"><i
+						class="fas fa-pen me-2"></i>Lunch Register</a> <a href="menu.html"
+						class="nav-item nav-link"><i class="fas fa-hamburger me-2"></i>Menu</a>
+					<a href="restaurant.html" class="nav-item nav-link"><i
+						class="fas fa-home me-2"></i>Restaurant</a>
+					<div class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle active"
+							data-bs-toggle="dropdown"><i class="fas fa-file me-2"></i>Invoice</a>
+						<div class="dropdown-menu bg-transparent border-0">
+							<a th:href="@{/weekly-invoice}" class="dropdown-item">Weekly
+								Invoice</a> <a th:href="@{/monthly_invoice}"
+								class="dropdown-item active">Monthly Invoice</a>
+						</div>
+					</div>
+					<div class="nav-item">
+						<a th:href="@{/suggestion}" class="nav-link"><i
+							class="far fa-file-alt me-2"></i>Suggestions</a>
+					</div>
+					<div class="nav-item">
+						<a th:href="@{/holiday}" class="nav-link"><i
+							class="fa fa-mug-hot me-2"></i>Holidays</a>
+					</div>
+				</div>
+			</nav>
+		</div>
+		<!-- Sidebar End -->
 
-    <!-- Content Start -->
-    <div class="content">
-        <!-- Navbar Start -->
-        <nav class="navbar navbar-expand bg-secondary-nav navbar-dark sticky-top px-4 py-0">
-            <a href="#" class="sidebar-toggler flex-shrink-0">
-                <i class="fa fa-bars"></i>
-            </a>
-            <div class="navbar-nav align-items-center ms-auto">
-                <div class="nav-item dropdown">
+		<!-- Content Start -->
+		<div class="content">
+			<!-- Navbar Start -->
+			<nav
+				class="navbar navbar-expand bg-secondary-nav navbar-dark sticky-top px-4 py-0">
+				<a href="#" class="sidebar-toggler flex-shrink-0"> <i
+					class="fa fa-bars"></i>
+				</a>
+				<div class="navbar-nav align-items-center ms-auto">
+					<div class="nav-item dropdown">
 
-                    <i onclick="myFunction(this)" title="This is a mail notification on/off for lunch!" class="fa-solid fa-bell"></i>
-                    <span class="text-center text-white ms-2">Email </span>
-                </div>
-                <div class="nav-item">
+						<i onclick="myFunction(this)"
+							title="This is a mail notification on/off for lunch!"
+							class="fa-solid fa-bell"></i> <span
+							class="text-center text-white ms-2">Email </span>
+					</div>
+					<div class="nav-item">
 
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="img/admin-logo.png" alt="" style="width: 40px; height: 40px" />
-                            <span class="d-none d-lg-inline-flex">Admin</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
-                            <a th:href="@{/userProfile}" class="dropdown-item">Profile</a>
-                            <a href="signin.html" class="dropdown-item">Log Out</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        <!-- Navbar End -->
+						<div class="nav-item dropdown">
+							<a href="#" class="nav-link dropdown-toggle"
+								data-bs-toggle="dropdown"> <img
+								class="rounded-circle me-lg-2" src="img/admin-logo.png" alt=""
+								style="width: 40px; height: 40px" /> <span
+								class="d-none d-lg-inline-flex">Admin</span>
+							</a>
+							<div
+								class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
+								<a href="profile.html" class="dropdown-item">Profile</a> <a
+									href="signin.html" class="dropdown-item">Log Out</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</nav>
+			<!-- Navbar End -->
 
-        <!-- Sale & Revenue Start -->
-        <!-- Weekly Invoice start -->
-        <div class="container-fluid ">
-            <div class="row my-3 bg-secondary ms-3 me-3 rounded">
-                <div class="mb-4">
-                    <button class="btn btn-outline-dark float-end me-3 mt-4" data-bs-toggle="modal" data-bs-target="#createInvoice"><i class="fa fa-plus"></i>&nbsp; Create Monthly
-                            Invoice</button>
-                </div>
-            </div>
-        </div>
+			<!-- Sale & Revenue Start -->
+			<!-- Weekly Invoice start -->
+			<!-- <div class="container-fluid ">
+				<div class="row my-3 bg-secondary ms-3 me-3 rounded">
+					<div class="mb-4">
+						<button class="btn btn-outline-dark float-end me-3 mt-4"
+							data-bs-toggle="modal" data-bs-target="#createInvoice">
+							<i class="fa fa-plus"></i>&nbsp; Create Monthly Invoice
+						</button>
+					</div>
+				</div>
+			</div>
+ -->
+			<!-- Create invoice start -->
+			<!-- Modal start -->
+			<div class="modal fade" id="createInvoice" tabindex="-1"
+				aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content bg-secondary">
+						<div class="modal-header">
+							<h3 class="modal-title text-primary ms-2" id="exampleModalLabel">Create
+								monthly Invoice</h3>
 
-        <!-- Create invoice start -->
-        <!-- Modal start -->
-        <div class="modal fade" id="createInvoice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content bg-secondary">
-                    <div class="modal-header">
-                        <h3 class="modal-title text-primary ms-2" id="exampleModalLabel">Create monthly Invoice
-                        </h3>
+						</div>
+						<div class="modal-body bg-secondary">
+							<form>
+								<div class="row mb-3">
+									<label for="inputPassword3"
+										class="col-sm-4 col-form-label text-dark"> Start Date
+									</label>
+									<div class="col-sm-8 ">
+										<input type="date" class="form-control bg-white"
+											id="inputEmail3" placeholder="Restaurant Name">
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label for="inputPassword3"
+										class="col-sm-4 col-form-label text-dark"> End Date </label>
+									<div class="col-sm-8">
+										<input type="date" class="form-control bg-white" value=""
+											id="inputPassword3">
+									</div>
+								</div>
+								<div class="row mb-3">
+									<label for="inputPassword3"
+										class="col-sm-4 col-form-label text-dark"> Report Date
+									</label>
+									<div class="col-sm-8">
+										<input type="date" class="form-control bg-white" value=""
+											id="inputPassword3">
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-outline-danger"
+										data-bs-dismiss="modal">Close</button>
+									<button type="submit" class="btn btn-outline-dark">Save</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Create invoice end -->
 
-                    </div>
-                    <div class="modal-body bg-secondary">
-                        <form>
-                            <div class="row mb-3">
-                                <label for="inputPassword3" class="col-sm-4 col-form-label text-dark"> Start
-                                        Date </label>
-                                <div class="col-sm-8 ">
-                                    <input type="date" class="form-control bg-white" id="inputEmail3" placeholder="Restaurant Name">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="inputPassword3" class="col-sm-4 col-form-label text-dark"> End Date
-                                         </label>
-                                <div class="col-sm-8">
-                                    <input type="date" class="form-control bg-white" value="" id="inputPassword3">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="inputPassword3" class="col-sm-4 col-form-label text-dark"> Report Date
-                                         </label>
-                                <div class="col-sm-8">
-                                    <input type="date" class="form-control bg-white" value="" id="inputPassword3">
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-outline-dark">Save</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Create invoice end -->
-
-        <div class="container-fluid">
-            <div class="bg-secondary ms-3 me-3 rounded">
-                <div class="row py-3 text-center">
-                    <div>
-                        <img class="sidebar-logo mt-3 mb-3" src="img/dat logo.png" alt="DAT Logo" style="width: 150px; height: 100px;" />
-                    </div>
-                    <h3 class="text-center text-decoration-underline">Paid Voucher List</h3>
-                </div>
-                <div class="row ms-4  me-4 py-2">
+			<div class="container-fluid mt-4">
+				<div class="bg-secondary ms-3 me-3 rounded">
+					<div class="row py-3 text-center">
+						<div>
+							<img class="sidebar-logo mt-3 mb-3" src="img/dat logo.png"
+								alt="DAT Logo" style="width: 150px; height: 100px;" />
+						</div>
+						<h2 class="text-center text-decoration-underline">Paid
+							Voucher List</h2>
+					</div>
+					<!--  <div class="row ms-4  me-4 py-2">
                     <div class="col-lg-6 ">
                         <div class="row">
                             <div class="col-md-6 text-dark">
@@ -271,146 +293,95 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row bg-secondary ms-3 me-3 mt-3 rounded">
-                    <table class="table table-hover text-dark">
-                        <thead>
-                            <tr>
-                                <th>Sr.No</th>
-                                <th>Description</th>
-                                <th>Cashier</th>
-                                <th>Received By</th>
-                                <th>Approved By</th>
-                                <th>No. of Pax</th>
-                                <th>Price</th>
-                                <th>Amount</th>
-                                <th>Payment Date</th>
-                                <th>Status</th>
-                                <th>Payment Method</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>CS001-20230206 : 30012023 ~03022023 </td>
-                                <td>May Thet Naing</td>
-                                <td>Zin Hnin Aung</td>
-                                <td>Kay Thi Aung</td>
-                                <td>933</td>
-                                <td>1300</td>
-                                <td>121900</td>
-                                <td>02/03/2023</td>
-                                <td>Paid</td>
-                                <td>Cash</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>CS001-20230206 : 30012023 ~03022023 </td>
-                                <td>May Thet Naing</td>
-                                <td>Zin Hnin Aung</td>
-                                <td>Kay Thi Aung</td>
-                                <td>933</td>
-                                <td>1300</td>
-                                <td>121900</td>
-                                <td>02/03/2023</td>
-                                <td>Paid</td>
-                                <td>Cash</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>CS001-20230206 : 30012023 ~03022023 </td>
-                                <td>May Thet Naing</td>
-                                <td>Zin Hnin Aung</td>
-                                <td>Kay Thi Aung</td>
-                                <td>933</td>
-                                <td>1300</td>
-                                <td>121900</td>
-                                <td>02/03/2023</td>
-                                <td>Paid</td>
-                                <td>Cash</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>CS001-20230206 : 30012023 ~03022023 </td>
-                                <td>May Thet Naing</td>
-                                <td>Zin Hnin Aung</td>
-                                <td>Kay Thi Aung</td>
-                                <td>933</td>
-                                <td>1300</td>
-                                <td>121900</td>
-                                <td>02/03/2023</td>
-                                <td>Paid</td>
-                                <td>Cash</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>CS001-20230206 : 30012023 ~03022023 </td>
-                                <td>May Thet Naing</td>
-                                <td>Zin Hnin Aung</td>
-                                <td>Kay Thi Aung</td>
-                                <td>933</td>
-                                <td>1300</td>
-                                <td>121900</td>
-                                <td>02/03/2023</td>
-                                <td>Paid</td>
-                                <td>Cash</td>
-                            </tr>
-                            <tr>
-                                <td colspan="7">Total Cost For Lunch Catering Service</td>
-                                <td>5541900</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                </div> -->
+					<div class="row bg-secondary ms-3 me-4 mt-3">
+							<table class="table text-dark shadow-md" id="monthlyInvoiceTable">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Description</th>
+										<th>Restaurant Name</th>
+										<th>Cashier</th>
+										<th>Received By</th>
+										<th>Approved By</th>
+										<th>No. of Pax</th>
+										<th>Price</th>
+										<th>Amount</th>
+										<th>Payment Date</th>
+										<th>Payment Method</th>
+										<th>Status</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="temp, i : ${paymentVoucher}" class="text-center">
+										<td th:text="${i.count}"></td>
+										<td
+											th:text="${temp.voucher_ID + ' / ' + temp.start_date + ' ~' + temp.end_date}"></td>
+										<td th:text="${temp.restaurant_name}"></td>
+										<td th:text="${temp.cashier}"></td>
+										<td th:text="${temp.received_by}"></td>
+										<td th:text="${temp.approved_by}"></td>
+										<td th:text="${temp.no_of_pax}"></td>
+										<td th:text="${temp.totalPrice}"></td>
+										<td th:text="${temp.totalCost}"></td>
+										<td th:text="${temp.payment_date}" ></td>
+										<td th:text="${temp.payment_method}" ></td>
+										<td th:text="${temp.status}">
+									</tr>
+								</tbody>
+							</table>
+						</div>
 
-                        </tbody>
-                    </table>
-                    <div class="mb-4">
-                        <button class="btn btn-outline-dark float-end mt-4 me-3"><i class="fa fa-download"></i>&nbsp; Download Monthly Invoice</button>
-                    </div>
-                </div>
-            </div>
+						<!-- 	<div class="mb-4">
+							<button class="btn btn-outline-dark float-end mt-4 me-3">
+								<i class="fa fa-download"></i>&nbsp; Download Monthly Invoice
+							</button>
+						</div> -->
+					</div>
+			</div>
+			<!-- Weekly Invoice end -->
 
-        </div>
-        <!-- Weekly Invoice end -->
+			<!-- Footer Start -->
+			<div class="container-fluid pt-4 px-4 ">
+				<div class="bg-secondary rounded-top p-4 ">
+					<div class="row ">
+						<div class="col-12 col-sm-6 text-center text-sm-start ">
+							&copy; <a href="#" style="color: rgb(8, 50, 238);">Catering
+								Service Management System</a>, All Right Reserved.
+						</div>
+						<div class="col-12 col-sm-6 text-center text-sm-end">
+							<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal ". Thank you for your support. ***/-->
+							Designed By <a href="" style="color: rgb(8, 50, 238);">TEAM
+								ASCII</a>
 
-        <!-- Footer Start -->
-        <div class="container-fluid pt-4 px-4 ">
-            <div class="bg-secondary rounded-top p-4 ">
-                <div class="row ">
-                    <div class="col-12 col-sm-6 text-center text-sm-start ">
-                        &copy; <a href="#" style="color: rgb(8, 50, 238);">Catering Service Management System</a>, All Right Reserved.
-                    </div>
-                    <div class="col-12 col-sm-6 text-center text-sm-end">
-                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal ". Thank you for your support. ***/-->
-                        Designed By <a href="" style="color: rgb(8, 50, 238);">TEAM ASCII</a>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Footer End -->
-    </div>
-    <!-- Content End -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Footer End -->
+		</div>
+		<!-- Content End -->
 
 
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-info btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-    </div>
+		<!-- Back to Top -->
+		<a href="#" class="btn btn-lg btn-info btn-lg-square back-to-top"><i
+			class="bi bi-arrow-up"></i></a>
+	</div>
 
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/chart/chart.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+	<!-- JavaScript Libraries -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="lib/chart/chart.min.js"></script>
+	<script src="lib/easing/easing.min.js"></script>
+	<script src="lib/waypoints/waypoints.min.js"></script>
+	<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+	<script src="lib/tempusdominus/js/moment.min.js"></script>
+	<script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+	<script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+	<!-- Template Javascript -->
+	<script src="js/main.js"></script>
 </body>
 
 </html>

@@ -13,9 +13,6 @@ public class StaffServiceImpl implements StaffService {
 	@Autowired
 	private StaffRepository repository;
 
-	
-
-
 	@Override
 	public void addStaff(Staff staff) {
 		repository.save(staff);
@@ -88,7 +85,6 @@ public class StaffServiceImpl implements StaffService {
 
 	@Override
 	public List<String> getEmails() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -98,14 +94,18 @@ public class StaffServiceImpl implements StaffService {
 	}
 	
 	@Override
-    public List<String> findActiveEmailNoti(boolean email_noti)
-    {
+    public List<String> findActiveEmailNoti(boolean email_noti) {
         return repository.findActiveEmailNoti(email_noti);
     }
 	
 	@Override
 	public Staff getByDoorlog(int doorlog) {
 		return repository.findByDoorlog(doorlog);
+	}
+
+	@Override
+	public List<Staff> getAdminTeam() {
+		return repository.getAdminTeam();
 	}
 
 
