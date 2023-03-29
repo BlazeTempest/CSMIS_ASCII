@@ -31,28 +31,186 @@
     <link th:href="@{/css/style.css}" rel="stylesheet" />
     <!-- font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<style>
+table tr th {
+	color: rgb(79, 30, 192);
+}
 
-    <style>
-        table tr th {
-            color: rgb(79, 30, 192);
+i.fa-solid {
+	font-size: 25\px;
+	cursor: pointer;
+	user-select: none;
+	color: white;
+}
+
+.fa-solid:hover {
+	color: rgb(250, 16, 75);
+}
+
+/* Style for the toggle switch */
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 32px;
+	height: 18px;
+	margin: 10px;
+	border-radius: 9px;
+	background-color: #ccc;
+}
+
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 1px;
+	left: 1px;
+	right: 1px;
+	bottom: 1px;
+	border-radius: 9px;
+	background-color: #fff;
+	transition: .4s;
+}
+
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 12px;
+	width: 12px;
+	left: 2px;
+	bottom: 2px;
+	background-color: #ccc;
+	border-radius: 50%;
+	transition: .4s;
+}
+
+input:checked+.slider {
+	background-color: #2196F3;
+}
+
+input:focus+.slider {
+	box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+	transform: translateX(12px);
+	background-color: #fff;
+}
+/* end Style for the toggle switch */
+
+body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      /* Button used to open the contact form - fixed at the bottom of the page */
+
+      .open-button {
+        border: none;
+        cursor: pointer;
+        opacity: 1;
+        position: fixed;
+        bottom: 23px;
+        right: 50px;
+      }
+
+      .open-button:hover {
+        color: darkblue;
+      }
+      /* The popup form - hidden by default */
+
+      .form-popup {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        right: 15px;
+        border: 3px solid #f1f1f1;
+        background-color: white;
+        z-index: 9;
+      }
+      /* Add animation to the form-popup */
+
+      .form-popup {
+        animation: fadeIn 0.5s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(50px);
         }
-        
-        i.fa-solid {
-            font-size: 25\px;
-            cursor: pointer;
-            user-select: none;
-            color: white;
+        100% {
+          opacity: 1;
+          transform: translateY(0);
         }
-        
-        .fa-solid:hover {
-            color: rgb(250, 16, 75);
+      }
+      /* Add animation to hide the form-popup */
+
+      .form-popup.hide {
+        animation: fadeOut 0.5s ease-in-out;
+      }
+
+      @keyframes fadeOut {
+        0% {
+          opacity: 1;
+          transform: translateY(0);
         }
-    </style>
-    <script>
-        function myFunction(x) {
-            x.classList.toggle("fa-bell-slash");
+        100% {
+          opacity: 0;
+          transform: translateY(50px);
         }
-    </script>
+      }
+      /* Add styles to the form container */
+
+      .form-container {
+        max-width: 400px;
+        padding: 10px;
+        background-color: white;
+        margin-bottom: 10px;
+      }
+      /* Full-width input fields */
+
+      .form-container input[type="text"] {
+        width: 100%;
+        height: 30px;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        border: none;
+        background: #f1f1f1;
+      }
+      /* When the inputs get focus, do something */
+
+      .form-container input[type="text"]:focus {
+        outline: none;
+      }
+      /* Set a style for the submit/login button */
+
+      .form-container .btn {
+        color: black;
+        border: none;
+        cursor: pointer;
+        margin-bottom: 10px;
+        opacity: 0.8;
+      }
+      /* Add a red background color to the cancel button */
+
+      .form-container .btn:hover,
+      .open-button:hover {
+        opacity: 1;
+      }
+</style>
+<script>
+	function myFunction(x) {
+		x.classList.toggle("fa-bell-slash");
+	}
+</script>
 </head>
 
 <body>
@@ -90,28 +248,7 @@
             <a th:href="@{registered-list}" class="nav-item nav-link"
               ><i class="fa fa-laptop me-2"></i>Report</a
             >
-            <!-- <div class="nav-item dropdown">
-              <a
-                th:href="@{registered-list}"
-                class="nav-link dropdown-toggle"
-                data-bs-toggle="dropdown"
-                ><i class="fa fa-laptop me-2"></i>Report</a
-              >
-              <div class="dropdown-menu bg-transparent border-0">
-                <a th:href="@{registered-list}" class="dropdown-item"
-                  >Registered List</a
-                >
-                <a th:href="@{register-eat-list}" class="dropdown-item"
-                  >Registered & Eat List</a
-                >
-                <a th:href="@{register-not-eat-list}" class="dropdown-item"
-                  >Registered & Not Eat List</a
-                >
-                <a th:href="@{not-registereed-eat-list}" class="dropdown-item"
-                  >Unregistered & Eat List</a
-                >
-              </div>
-            </div> -->
+            
             <a th:href="@{registration}" class="nav-item nav-link"
               ><i class="fas fa-pen me-2"></i>Lunch Register</a
             >
@@ -226,22 +363,13 @@
         <div class="row bg-secondary mt-5 ms-2 me-2 rounded">
                 <form th:object="${announcement}" th:action="@{/announcement}" method="POST" class="row">
                 	<input type="hidden" th:field="*{announce_ID}">
-                    <div class="form-outline m-4 col-md-8">
+                    <div class="form-outline ms-5 mt-5 col-md-8">
                         <textarea class="form-control bg-white" style="height: 50px;" id="announcement"
                                   placeholder="Something you want to announce..." rows="4" th:field="*{description}" ></textarea>
                     </div>
-                    <button type="submit" class="offset-3 btn btn-sm m-4 btn-outline-dark col-md-1" style="width:100px" >Announce</button>
+                    <button type="submit" class="offset-3 mt-5 ms-5 btn btn-sm btn-outline-dark col-md-1" style="width:100px; height: 50px;" >Announce</button>
                 </form>
-        </div>
-        <div class="row bg-secondary mt-3 ms-2 me-2 rounded">
-                <form th:action="@{/addSuggestion}" method="POST" class="row">
-                    <div class="form-outline m-4 col-md-8">
-                        <textarea class="form-control bg-white" style="height: 50px;" id="suggestion" name="suggestion"
-                                  placeholder="Give suggestion for this restaurant..." rows="4"></textarea>
-                    </div>
-                    <button type="submit" class="offset-3 btn btn-sm m-4 btn-outline-dark col-md-1" style="width:100px" >Suggest</button>
-                </form>
-                <div class="alert alert-success" th:if=${Smessage} th:text=${Smessage}></div>
+                <a th:href="@{/}" class="mt-3 ms-5 mb-3" style="text-decoration: underline; color: blue;">View Announcements</a>
         </div>
     </div>
         <!-- Department List-->
@@ -328,61 +456,6 @@
         </div>
         <!-- Recent Sales End -->
 
-        <!-- Menu List start -->
-        <!-- 
-        <div class="container-fluid pt-4 px-4">
-				<div class="row">
-					<div class="col-lg-6">
-						<div class="card bg-secondary">
-							<div class="card-header">
-								<h3 class="py-2">Current Week Menu</h3>
-							</div>
-							<div class="card-body">
-								<div th:if="${pdf}">
-									<embed th:attr="src='data:application/pdf;base64,' + ${pdf}"
-										type="application/pdf" width="100%" height="700" />
-								</div>
-								<div class="card-footer" style="color:black;text-align: center; font-size: 13px;">
-		                            <span th:text="'DAT price : ' + ${datPrice}"></span>
-		                            <span th:text="'Staff price : ' + ${staffPrice}"></span> 
-		                            <span th:text="'Total price : ' + ${totalPrice}"></span>
-		                        </div>
-								<div th:unless="${pdf}">
-									<h6>This is Current Week Menu</h6>
-									<span>Please select file</span>
-								</div>
-							</div>
-
-						</div>
-
-					</div>
-					<div class="col-lg-6">
-						<div class="card bg-secondary">
-							<div class="card-header">
-								<h3 class="py-2">Next Week Menu</h3>
-							</div>
-							<div class="card-body">
-								<div th:if="${pdf1}">
-									<embed th:attr="src='data:application/pdf;base64,' + ${pdf1}"
-										type="application/pdf" width="100%" height="700" />
-								</div>
-								<div class="card-footer" style="color:black;text-align: center; font-size: 13px;">
-		                            <span th:text="'DAT price : ' + ${datPrice}"></span>
-		                            <span th:text="'Staff price : ' + ${staffPrice}"></span> 
-		                            <span th:text="'Total price : ' + ${totalPrice}"></span>
-		                        </div>
-									<div th:unless="${pdf}">
-									<h6>This is Next Week Menu</h6>
-									<span>Please select file</span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</div>
-			<!-- Menu Ends -->
-			
         <!-- Footer Start -->
         <div class="container-fluid pt-4 px-4 ">
             <div class="bg-secondary rounded-top p-4 ">
@@ -400,10 +473,52 @@
         <!-- Footer End -->
     </div>
     <!-- Content End -->
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-info btn-lg-square back-to-top"><i class="bi bi-arrow-up "></i></a>
+	<i
+      class="fa-regular fa-comment-dots fs-1 open-button"
+      onclick="openForm()"
+      id="open"
+    ></i>
+    <div class="form-popup bg-secondary" id="myForm">
+      <form th:action="@{/addSuggestion}" method="POST" class="form-container bg-secondary">
+        <h3 style="text-decoration: underline;">Suggestion
+        <i class="fa-solid fa-xmark btn cancel float-end"
+            onclick="closeForm()"
+            type="button"
+          ></i>
+		</h3>
+		<span class="text-center">(Your suggestion will be sent to system admin.)</span>
+	    <input type="text" placeholder="Enter Your suggestion" style="height: 100px;" id="suggestionCount" name="suggestion" maxlength="1000" required />    
+	    <input type="text" id="count" style="background-color: transparent; font-size: small;" disabled>
+        <div class="float-end">
+          <button class="fa-solid fa-paper-plane fs-3 btn" type="submit"></button>
+        </div>
+      </form>
     </div>
+	<script>
+	$(document).ready(function () {
+		console.log("HHHH");
+        var maxLength = 1000;
+        $('#suggestionCount').keyup(function () {
+            var length = $(this).val().length + '/1000';
+            console.log(maxLength);
+            $('#count').val(length);
+        });
+    });
+      function openForm() {
+        document.getElementById("myForm").style.display = "block";
+        document.getElementById("open").style.display = "none";
+      }
+
+      function closeForm() {
+        var form = document.getElementById("myForm");
+        form.classList.add("hide");
+        setTimeout(function () {
+          form.style.display = "none";
+          form.classList.remove("hide");
+          document.getElementById("open").style.display = "block";
+        }, 500); // wait for the animation to finish before hiding the form
+      }
+    </script>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -421,21 +536,6 @@
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
     <script src="js/test.js"></script>
-    <script>
-    // Get the textarea element
-    const textarea = document.getElementById('announcement');
-
-    // Store the original value of the textarea
-    const originalValue = textarea.value;
-
-    // Listen for the form submit event
-    document.querySelector('form').addEventListener('submit', (event) => {
-      // If the textarea value is empty, set it to the original value
-      if (textarea.value.trim() === '') {
-        textarea.value = originalValue;
-      }
-    });
-  </script>
 </body>
 
 </html>
