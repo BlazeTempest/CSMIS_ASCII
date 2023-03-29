@@ -1,5 +1,7 @@
 package com.dat.CateringService.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -20,16 +22,13 @@ public class Announcement {
 	private String description;
 	
 	@Column(name="created_date")
-	private Date created_date;
+	private LocalDateTime created_date;
 	
 	@Column(name="created_by")
 	private String created_by;
 	
-	@Column(name="modify_date")
-	private Date modify_date;
-	
-	@Column(name="modify_by")
-	private Date modify_by;
+	@Column(name="deleted_date")
+	private LocalDate deleted_date;
 
 	public int getAnnounce_ID() {
 		return announce_ID;
@@ -54,19 +53,15 @@ public class Announcement {
 		this.description = description;
 	}
 
-	public Announcement(int announce_ID, String description, Date created_date, String created_by, Date modify_date,
-			Date modify_by) {
+	public Announcement(int announce_ID, String description, LocalDateTime created_date, String created_by, LocalDate deleted_date) {
 		super();
 		this.announce_ID = announce_ID;
 		this.description = description;
 		this.created_date = created_date;
 		this.created_by = created_by;
-		this.modify_date = modify_date;
-		this.modify_by = modify_by;
+		this.deleted_date = deleted_date;
 	}
-
 	
-
 	public String getDescription() {
 		return description;
 	}
@@ -75,11 +70,11 @@ public class Announcement {
 		this.description = description;
 	}
 
-	public Date getCreated_date() {
+	public LocalDateTime getCreated_date() {
 		return created_date;
 	}
 
-	public void setCreated_date(Date created_date) {
+	public void setCreated_date(LocalDateTime created_date) {
 		this.created_date = created_date;
 	}
 
@@ -91,19 +86,11 @@ public class Announcement {
 		this.created_by = created_by;
 	}
 
-	public Date getModify_date() {
-		return modify_date;
+	public LocalDate getDeleted_date() {
+		return deleted_date;
 	}
 
-	public void setModify_date(Date modify_date) {
-		this.modify_date = modify_date;
-	}
-
-	public Date getModify_by() {
-		return modify_by;
-	}
-
-	public void setModify_by(Date modify_by) {
-		this.modify_by = modify_by;
+	public void setDeleted_date(LocalDate modify_date) {
+		this.deleted_date = modify_date;
 	}
 }

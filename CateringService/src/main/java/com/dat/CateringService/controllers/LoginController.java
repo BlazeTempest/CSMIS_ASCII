@@ -63,15 +63,13 @@ public class LoginController {
 		try {
 			String role = authentication.getAuthorities().toArray()[0].toString();
 			if (role.equals("admin")) {
-				List<Announcement> announces = announcementService.getAllAnnouncements();
-
-				Staff staff = staffService.getStaffById(authentication.getName());
-				theModel.addAttribute("name", staff.getName());
-				if (announces.size() == 0) {
-					theModel.addAttribute("announcement", new Announcement());
-				} else {
-					theModel.addAttribute("announcement", announces.get(0));
+				List<Announcement> announcements = announcementService.getAllAnnouncements();
+				for(Announcement temp : announcements) {
+					if(temp.getDeleted_date()==LocalDate.now()) {
+						announcementService.delete(temp);
+					}
 				}
+				theModel.addAttribute("announcement", new Announcement());
 				//dashboard overview counts
 				List<String> teams = staffService.getTeamNames();
 				List<String> depts = staffService.getDeptNames();
@@ -106,40 +104,15 @@ public class LoginController {
 						teamCounts.add(dto);
 					}
 				}
-				
-//				String pdfFileName = "currentweek.pdf";
-//				if (pdfFileName != null) {
-//					try {
-//						String encodedPdf = menuPdfService.getPdfAsByteString(pdfFileName);
-//						theModel.addAttribute("pdf", encodedPdf);
-//
-//					} catch (NoSuchFileException e) {
-//						return "admin/menu";
-//					} catch (IOException e) {
-//						System.err.println("Error reading file: " + e.getMessage());
-//					}
-//				}
-//				
-//				String pdfFileName2 = "nextweek.pdf";
-//				if (pdfFileName2 != null) {
-//					try {
-//						String encodedPdf1 = menuPdfService.getPdfAsByteString(pdfFileName2);
-//						theModel.addAttribute("pdf1", encodedPdf1);
-//					} catch (NoSuchFileException e) {
-//						return "admin/menu";
-//					} catch (IOException e) {
-//						System.err.println("Error reading file: " + e.getMessage());
-//					}
-//				}
-//				Price activePrice = priceService.findActivePrice();
-//				Byte status = activePrice.getStatus();
-//				if (status != null || status.equals((byte)1)) {
-//					
-//					// perform actions when status is equal to myByteObject
-//					theModel.addAttribute("totalPrice", activePrice.getTotal_price());
-//					theModel.addAttribute("datPrice", activePrice.getDATprice());
-//					theModel.addAttribute("staffPrice", activePrice.getStaff_price());
-//				}
+				Price activePrice = priceService.findActivePrice();
+				Byte status = activePrice.getStatus();
+				if (status != null || status.equals((byte)1)) {
+					
+					// perform actions when status is equal to myByteObject
+					theModel.addAttribute("totalPrice", activePrice.getTotal_price());
+					theModel.addAttribute("datPrice", activePrice.getDATprice());
+					theModel.addAttribute("staffPrice", activePrice.getStaff_price());
+				}
 				theModel.addAttribute("admins", admin);
 				theModel.addAttribute("teamCounts", teamCounts);
 				theModel.addAttribute("deptCounts", deptCounts);
@@ -174,7 +147,15 @@ public class LoginController {
 						String encodedPdf1 = menuPdfService.getPdfAsByteString(pdfFileName2);
 						theModel.addAttribute("pdf1", encodedPdf1);
 					}
-				
+					Price activePrice = priceService.findActivePrice();
+					Byte status = activePrice.getStatus();
+					if (status != null || status.equals((byte)1)) {
+						
+						// perform actions when status is equal to myByteObject
+						theModel.addAttribute("totalPrice", activePrice.getTotal_price());
+						theModel.addAttribute("datPrice", activePrice.getDATprice());
+						theModel.addAttribute("staffPrice", activePrice.getStaff_price());
+					}
 				return "employee/employeeDashboard";
 			} else {
 
