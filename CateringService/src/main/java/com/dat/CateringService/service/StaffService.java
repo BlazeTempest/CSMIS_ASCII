@@ -16,6 +16,7 @@ public interface StaffService {
 	public List<Staff> getStaffByEmail(String email);
 	public List<String> findActiveEmailNoti(boolean email_noti);
 	public Staff getByDoorlog(int doorlog);
+	public List<Staff> getByAvoidMeatIds(String id);
 	
 	//search
 	public List<Staff> searchBy(String name, String id, String team);

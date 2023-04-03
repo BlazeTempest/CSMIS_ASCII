@@ -59,43 +59,43 @@
 		  	  		<div class="mb-3 row">
 					    <label for="staffId" class="col-sm-3 col-form-label">Staff ID</label>
 					    <div class="col-sm-9">
-					      <input type="text" id="staffId" readonly class="form-control-plaintext" th:field="${staff.staffID}">
+					      <input type="text" id="staffId" class="form-control bg-white text-dark" th:field="${staff.staffID}">
 					    </div>
 					  </div>
 					  <div class="mb-3 row">
 					    <label for="name" class="col-sm-3 col-form-label">Name</label>
 					    <div class="col-sm-9">
-					      <input type="text" id="name" readonly class="form-control-plaintext" th:field="${staff.name}">
+					      <input type="text" id="name" class="form-control bg-white text-dark" th:field="${staff.name}">
 					    </div>
 					  </div>
 					  <div class="mb-3 row">
 					    <label for="email" class="col-sm-3 col-form-label">Email</label>
 					    <div class="col-sm-9">
-					      <input type="text" id="email" readonly class="form-control-plaintext" th:field="${staff.email}">
+					      <input type="text" id="email" class="form-control bg-white text-dark" th:field="${staff.email}">
 					    </div>
 					  </div>
 					  <div class="mb-3 row">
 					    <label for="div" class="col-sm-3 col-form-label">Division</label>
 					    <div class="col-sm-9">
-					      <input type="text" id="div" readonly class="form-control-plaintext" th:field="${staff.division}">
+					      <input type="text" id="div" class="form-control bg-white text-dark" th:field="${staff.division}">
 					    </div>
 					  </div>
 					  <div class="mb-3 row">
 					    <label for="dep" class="col-sm-3 col-form-label">Department</label>
 					    <div class="col-sm-9">
-					      <input type="text" id="dep" readonly class="form-control-plaintext" th:value="${staff.dept}">
+					      <input type="text" id="dep" class="form-control bg-white text-dark" th:value="${staff.dept}">
 					    </div>
 					  </div>
 					  <div class="mb-3 row">
 					    <label for="team" class="col-sm-3 col-form-label">Team</label>
 					    <div class="col-sm-9">
-					      <input type="text" id="team" readonly class="form-control-plaintext" th:field="${staff.team}">
+					      <input type="text" id="team" class="form-control bg-white text-dark" th:field="${staff.team}">
 					    </div>
 					  </div>
 					  <div class="mb-3 row">
 					    <label for="inputPassword" class="col-sm-3 col-form-label">Role</label>
 					    <div class="form-group col-sm-9">
-			            	<select class="form-select" id="role" th:field="${staff.role}">
+			            	<select class="form-select bg-white text-dark" id="role" th:field="${staff.role}">
 				            	<option th:selected="${staff.role == 'admin'}" th:value="admin">Administrator</option>
 				                <option th:selected="${staff.role == 'operator'}" th:value="operator">Operator</option>
 			               	</select>

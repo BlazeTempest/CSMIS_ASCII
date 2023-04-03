@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8" />
@@ -218,12 +218,14 @@
 													style="text-decoration: underline;">20000</b>
 											</p>
 										</li>
-										<li
-											class="list-group-item d-flex text-center p-3 bg-secondary">
+										<li class="list-group-item d-flex text-center p-3 bg-secondary">
 											<p class="mb-0">
 												Total cost for previous month: <b
 													style="text-decoration: underline;">16000</b>
 											</p>
+										</li>
+										<li class="list-group-item d-flex text-center p-3 bg-secondary">
+											<a th:href="@{/detailCalendar(id=${id})}" style="text-decoration: underline;">Calendar</a>
 										</li>
 									</ul>
 								</div>

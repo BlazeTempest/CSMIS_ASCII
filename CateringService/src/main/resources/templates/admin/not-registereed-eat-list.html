@@ -29,7 +29,10 @@
 
     <!-- font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css" />
+	<script defer src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script defer src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+	<script defer src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
     <style>
         table tr th {
             color: rgb(79, 30, 192);
@@ -45,6 +48,32 @@
         .fa-solid:hover {
             color: rgb(250, 16, 75);
         }
+/* start style for report btn */
+.btn-group {
+	padding-right: 30px;
+	padding-left: 30px;
+}
+
+.btn-group .btn {
+	border-radius: 10px;
+}
+
+.btn-check:checked+.btn-primary, .btn-check:active+.btn-primary,
+	.btn-primary:active, .btn-primary.active, .show>.btn-primary.dropdown-toggle
+	{
+	color: #06324d;
+	background-color: white;
+	border-color: #06324d;
+	box-shadow: 5px 5px #06324d;
+}
+.btn-primary:hover {
+	background-color: #06324d;
+	color: white;
+	transform: scale(1.1);
+	box-shadow: 0 0 20px #06324d;
+}
+
+/* end style for report btn */
     </style>
     <script>
         function myFunction(x) {
@@ -91,28 +120,8 @@
             <a th:href="@{employee-list}" class="nav-item nav-link"
               ><i class="fas fa-users me-2"></i>Employee List</a
             >
-            <div class="nav-item dropdown">
-              <a
-                href="#"
-                class="nav-link dropdown-toggle active"
-                data-bs-toggle="dropdown"
-                ><i class="fa fa-laptop me-2"></i>Report</a
-              >
-              <div class="dropdown-menu bg-transparent border-0">
-                <a th:href="@{registered-list}" class="dropdown-item"
-                  >Registered List</a
-                >
-                <a th:href="@{register-eat-list}" class="dropdown-item"
-                  >Registered & Eat List</a
-                >
-                <a th:href="@{register-not-eat-list}" class="dropdown-item"
-                  >Registered & Not Eat List</a
-                >
-                <a th:href="@{not-registereed-eat-list}" class="dropdown-item active"
-                  >Unregistered & Eat List</a
-                >
-              </div>
-            </div>
+            <a th:href="@{registered-list}" class="nav-item nav-link active"><i
+						class="fa fa-laptop me-2"></i>Report</a>
             <a th:href="@{registration}" class="nav-item nav-link"
               ><i class="fas fa-pen me-2"></i>Lunch Register</a
             >
@@ -175,9 +184,13 @@
                             <span class="d-none d-lg-inline-flex">Admin</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
-                            <a href="profile.html" class="dropdown-item">Profile</a>
-                            <a href="#" class="dropdown-item">Log Out</a>
-                        </div>
+								<a th:href="@{/userProfile}" class="dropdown-item text-center">Profile</a>
+								<form action="#" th:action="@{/logout}" method="POST">
+                                    <input type="submit" value="Logout"
+                                        class="dropdown-item text-center"
+                                        style="color: rgb(0, 0, 0); width: 100%; height: 45px;" />
+                                </form>
+							</div>
                     </div>
                 </div>
             </div>
@@ -186,6 +199,31 @@
 
         <!-- Button Start -->
         <div class="container-fluid pt-4 px-4">
+        	<div class="row">
+					<div class="btn-group d-flex justify-content-between" role="group"
+						aria-label="Button group with options">
+						<div role="group">
+							<a th:href="@{summary}" class="btn btn-primary">Summary
+								Report</a>
+						</div>
+						<div role="group">
+							<a th:href="@{registered-list}" class="btn btn-primary">Registered
+								List</a>
+						</div>
+						<div class="" role="group">
+							<a th:href="@{register-eat-list}" class="btn btn-primary">Registered
+								- Eat List</a>
+						</div>
+						<div class="" role="group">
+							<a th:href="@{register-not-eat-list}" class="btn btn-primary">Registered
+								- Not Eat List</a>
+						</div>
+						<div class="" role="group">
+							<a th:href="@{not-registereed-eat-list}" class="btn btn-primary active">Unregistered
+								- Eat List</a>
+						</div>
+					</div>
+				</div>
             <div class="row bg-secondary rounded align-items-center justify-content-center mx-0">
                 <div class="bg-secondary rounded h-100 p-4">
                     <div class="row">
@@ -242,7 +280,7 @@
                     <h5 th:text="'Found ' + ${totalNum!=null ? totalNum : 0} + ' Record(s)'" class="text-end"></h5>
                     <hr style="background-color: rgb(79, 30, 192); height: 2px;">
                     <div class="table-responsive">
-                        <table class="table rounded text-white table-hover mt-4">
+                        <table class="table rounded text-white table-hover mt-4" id="empList">
                             <thead>
                                 <tr>
                                 	<th scope="col">Staff ID</th>
@@ -314,6 +352,15 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    <script>
+        function myFunction(x) {
+            x.classList.toggle("fa-bell-slash");
+        }
+        $(document).ready( function () {
+            $('#empList').DataTable({searching: false, info: false});
+            
+        } );
+    </script>
 </body>
 
 </html>

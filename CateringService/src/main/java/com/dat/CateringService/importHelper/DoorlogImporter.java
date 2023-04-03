@@ -50,7 +50,7 @@ public class DoorlogImporter {
                     	object.setDoorLogNo(doorlog);
                         break;
                     case 3:
-                    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/dd/yyyy H:mm:ss");
+                    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
                     	LocalDate date = LocalDate.parse(cell.getStringCellValue(), formatter);
                     	object.setDineDate(date);
                     	break;

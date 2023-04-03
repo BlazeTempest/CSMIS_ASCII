@@ -133,9 +133,6 @@ public class WeeklyInvoiceController {
 
 			List<WeeklyInvoiceDTO> dto = new ArrayList<>();
 
-			System.out.println("This is last inserted date >>>>>>>>>>" + lastInsertedDate);
-			System.out.println("This is last start date >>>>>>>>>>" + startDate);
-
 			for (Headcount headcount : headcounts) {
 				WeeklyInvoiceDTO temp = new WeeklyInvoiceDTO();
 

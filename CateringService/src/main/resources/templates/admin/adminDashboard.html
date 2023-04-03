@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
     <meta charset="utf-8" />
@@ -7,10 +7,47 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="" name="keywords" />
     <meta content="" name="description" />
+    <style>
+        table tr th {
+            color: rgb(79, 30, 192);
+        }
+        
+        table tr td {
+            color: black;
+        }
+        
+        i.fa-solid {
+            font-size: 25\px;
+            cursor: pointer;
+            user-select: none;
+            color: white;
+        }
+        
+        .fa-solid:hover {
+            color: rgb(250, 16, 75);
+        }
+        .loader {
+		  border: 5px solid #f3f3f3; /* Light grey */
+		  border-top: 5px solid #3498db; /* Blue */
+		  border-radius: 50%;
+		  width: 50px;
+		  height: 50px;
+		  animation: spin 2s linear infinite;
+		}
+		
+		@keyframes spin {
+		  0% { transform: rotate(0deg); }
+		  100% { transform: rotate(360deg); }
+		}
+		td {
+		  white-space: nowrap;
+		}
+    </style>
 
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon" />
-
+    <link th:href="@{/img/favicon.ico}" rel="icon" />
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+  
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,200 +63,35 @@
 
     <!-- Customized Bootstrap Stylesheet -->
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
     <!-- Template Stylesheet -->
     <link th:href="@{/css/style.css}" rel="stylesheet" />
-    <!-- font awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<style>
-table tr th {
-	color: rgb(79, 30, 192);
-}
-
-i.fa-solid {
-	font-size: 25\px;
-	cursor: pointer;
-	user-select: none;
-	color: white;
-}
-
-.fa-solid:hover {
-	color: rgb(250, 16, 75);
-}
-
-/* Style for the toggle switch */
-.switch {
-	position: relative;
-	display: inline-block;
-	width: 32px;
-	height: 18px;
-	margin: 10px;
-	border-radius: 9px;
-	background-color: #ccc;
-}
-
-.switch input {
-	opacity: 0;
-	width: 0;
-	height: 0;
-}
-
-.slider {
-	position: absolute;
-	cursor: pointer;
-	top: 1px;
-	left: 1px;
-	right: 1px;
-	bottom: 1px;
-	border-radius: 9px;
-	background-color: #fff;
-	transition: .4s;
-}
-
-.slider:before {
-	position: absolute;
-	content: "";
-	height: 12px;
-	width: 12px;
-	left: 2px;
-	bottom: 2px;
-	background-color: #ccc;
-	border-radius: 50%;
-	transition: .4s;
-}
-
-input:checked+.slider {
-	background-color: #2196F3;
-}
-
-input:focus+.slider {
-	box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked+.slider:before {
-	transform: translateX(12px);
-	background-color: #fff;
-}
-/* end Style for the toggle switch */
-
-body {
-        font-family: Arial, Helvetica, sans-serif;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-      /* Button used to open the contact form - fixed at the bottom of the page */
-
-      .open-button {
-        border: none;
-        cursor: pointer;
-        opacity: 1;
-        position: fixed;
-        bottom: 23px;
-        right: 50px;
-      }
-
-      .open-button:hover {
-        color: darkblue;
-      }
-      /* The popup form - hidden by default */
-
-      .form-popup {
-        display: none;
-        position: fixed;
-        bottom: 0;
-        right: 15px;
-        border: 3px solid #f1f1f1;
-        background-color: white;
-        z-index: 9;
-      }
-      /* Add animation to the form-popup */
-
-      .form-popup {
-        animation: fadeIn 0.5s ease-in-out;
-      }
-
-      @keyframes fadeIn {
-        0% {
-          opacity: 0;
-          transform: translateY(50px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      /* Add animation to hide the form-popup */
-
-      .form-popup.hide {
-        animation: fadeOut 0.5s ease-in-out;
-      }
-
-      @keyframes fadeOut {
-        0% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        100% {
-          opacity: 0;
-          transform: translateY(50px);
-        }
-      }
-      /* Add styles to the form container */
-
-      .form-container {
-        max-width: 400px;
-        padding: 10px;
-        background-color: white;
-        margin-bottom: 10px;
-      }
-      /* Full-width input fields */
-
-      .form-container input[type="text"] {
-        width: 100%;
-        height: 30px;
-        padding: 15px;
-        margin: 5px 0 22px 0;
-        border: none;
-        background: #f1f1f1;
-      }
-      /* When the inputs get focus, do something */
-
-      .form-container input[type="text"]:focus {
-        outline: none;
-      }
-      /* Set a style for the submit/login button */
-
-      .form-container .btn {
-        color: black;
-        border: none;
-        cursor: pointer;
-        margin-bottom: 10px;
-        opacity: 0.8;
-      }
-      /* Add a red background color to the cancel button */
-
-      .form-container .btn:hover,
-      .open-button:hover {
-        opacity: 1;
-      }
-</style>
-<script>
-	function myFunction(x) {
-		x.classList.toggle("fa-bell-slash");
-	}
-</script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css" />
+    <script defer src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script defer src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script defer src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.5.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+    <script>
+	    $(document).ready(function () {
+			var maxLength = 1000;
+			$('#announcement').keyup(function () {
+	            var length = $(this).val().length + '/1000';
+	            console.log(maxLength);
+	            $('#announceCount').val(length);
+	        });
+	    });
+    </script>
 </head>
 
 <body>
-
-
     <div class="container-fluid position-relative d-flex p-0">
         <!-- Spinner Start -->
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem" role="status">
+        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
@@ -233,26 +105,27 @@ body {
                         <img class="sidebar-logo mt-0" src="img/dat logo.png" alt="DAT Logo" />
                     </div>
                     <div>
-                        <a href="index.html" class="navbar-brand mb-3">
+                    	<a href="index.html" class="navbar-brand mb-3">
                             <h3 class="text-primary">CSMIS</h3>
                         </a>
                     </div>
                 </div>
 
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
+                    <a href="/" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
+            >
+            <a th:href="@{/importFiles}" class="nav-item nav-link"
+              ><i class="fas fa-upload me-2"></i>Import Data</a
             >
             <a th:href="@{/employee-list}" class="nav-item nav-link"
               ><i class="fas fa-users me-2"></i>Employee List</a
             >
-            <a th:href="@{registered-list}" class="nav-item nav-link"
-              ><i class="fa fa-laptop me-2"></i>Report</a
-            >
-            
-            <a th:href="@{registration}" class="nav-item nav-link"
-              ><i class="fas fa-pen me-2"></i>Lunch Register</a
-            >
-            <a th:href="@{menu}" class="nav-item nav-link"
+            <a th:href="@{registered-list}"  class="nav-item nav-link"
+            ><i class="fa fa-laptop me-2"></i>Report</a>
+            <a th:href="@{registration}"  class="nav-item nav-link"
+            ><i class="fas fa-pen me-2"></i>Lunch Register</a
+          >
+            <a th:href="@{/menu}" class="nav-item nav-link"
               ><i class="fas fa-hamburger me-2"></i>Menu</a
             >
             <a th:href="@{restaurant}" class="nav-item nav-link"
@@ -275,13 +148,16 @@ body {
               </div>
             </div>
             <div class="nav-item">
-              <a th:href="@{suggestion}" class="nav-link"><i class="far fa-file-alt me-2"></i>Suggestions</a>
-                </div>
-                <div class="nav-item">
-                    <a th:href="@{holiday}" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
+              <a th:href="@{/suggestion}" class="nav-link"
+                ><i class="far fa-file-alt me-2"></i>Suggestions</a
+              >
+            </div>
+            <div class="nav-item">
+              <a th:href="@{/holiday}" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
                 </div>
         </div>
         </nav>
+    </div>
     </div>
     <!-- Sidebar End -->
 
@@ -294,8 +170,12 @@ body {
             </a>
             <div class="navbar-nav align-items-center ms-auto">
                 <div class="nav-item dropdown">
+                    <!-- <div id="mail-toggle" class="form-check form-switch">
+                        <label class="form-check-label changes" style="color: whitesmoke;" for="flexSwitchCheckChecked"><i class="bi bi-bell me-lg-2"></i>Email</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+                    </div> -->
                     <i onclick="myFunction(this)" title="This is a mail notification on/off for lunch!" class="fa-solid fa-bell"></i>
-                    <span class="text-center text-white ms-2">Email </span>
+                    <span class="text-center text-white ms-2">Email</span>
                 </div>
                 <div class="nav-item">
                     <div class="nav-item dropdown">
@@ -303,8 +183,7 @@ body {
                             <img class="rounded-circle me-lg-2" src="img/admin-logo.png" alt="" style="width: 40px; height: 40px" />
                             <span class="d-none d-lg-inline-flex" th:text=${name}></span>
                         </a>
-                       <div
-                                class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
+                       <div class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
                                 <a th:href="@{/userProfile}" class="dropdown-item fw-bold text-center">Profile</a>
 
                                 <form action="#" th:action="@{/logout}" method="POST">
@@ -314,7 +193,7 @@ body {
                                         style="color: rgb(0, 0, 0); width: 100%; height: 45px;" />
 
                                 </form>
-                            </div>
+                    	</div>
                     </div>
                 </div>
             </div>
@@ -327,63 +206,81 @@ body {
                 <div class="col-sm-6 col-xl-3 ">
                     <div class="bg-secondary rounded p-4 ">
                         <div class="ms-3 text-center">
-                            <h4 class="mb-2 text-dark" th:text=${totalStaff}></h4>
-                            <h6 class="mb-0 bg-secondary">Total Employees</h6>
+                            <h4 class="mb-2 text-dark" th:text=${registeredCount}></h4>
+                            <h6 class="mb-0 bg-secondary">Registered Employees</h6>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-xl-3 ">
                     <div class="bg-secondary rounded p-4 ">
                         <div class="ms-3 text-center">
-                            <h4 class="mb-2 text-dark" th:text=${totalDept}></h4>
-                            <h6 class="bg-secondary mb-0">Total Departments</h6>
+                            <h4 class="mb-2 text-dark" th:text=${completedCount}></h4>
+                            <h6 class="bg-secondary mb-0">Registered - Eat</h6>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-xl-3 ">
                     <div class="bg-secondary rounded p-4">
                         <div class="ms-3 text-center">
-                            <h4 class="mb-2 text-dark" th:text=${totalTeam}></h4>
-                            <h6 class="bg-secondary mb-0">Total Teams</h6>
+                            <h4 class="mb-2 text-dark" th:text=${skippedCount}></h4>
+                            <h6 class="bg-secondary mb-0">Registered - Not Eat</h6>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-xl-3 ">
                     <div class="bg-secondary rounded p-4 ">
                         <div class="ms-3 text-center">
-                            <h4 class="mb-2 text-dark" th:text=${totalRegistered}></h4>
-                            <h6 class=" bg-secondary mb-0">Total Registered</h6>
+                            <h4 class="mb-2 text-dark" th:text=${unregisteredComplete}></h4>
+                            <h6 class=" bg-secondary mb-0">Unregistered - Eat</h6>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Sale & Revenue End -->
-         <div class="container-fluid">
-        <div class="row bg-secondary mt-5 ms-2 me-2 rounded">
-                <form th:object="${announcement}" th:action="@{/announcement}" method="POST" class="row">
-                	<input type="hidden" th:field="*{announce_ID}">
-                    <div class="form-outline ms-5 mt-5 col-md-8">
-                        <textarea class="form-control bg-white" style="height: 50px;" id="announcement"
-                                  placeholder="Something you want to announce..." rows="4" th:field="*{description}" ></textarea>
+        
+        <input type="hidden" id="countGraph" th:value="${countGraph}">
+
+		<div class="container-fluid pt-4 px-4 ">
+            <div class="row g-4 ">
+                <div class="col-sm-6 col-xl-6">
+                    <div class="bg-secondary rounded p-4">
+                       	<canvas id="lunchChart"></canvas>
                     </div>
-                    <button type="submit" class="offset-3 mt-5 ms-5 btn btn-sm btn-outline-dark col-md-1" style="width:100px; height: 50px;" >Announce</button>
-                </form>
-                <a th:href="@{/}" class="mt-3 ms-5 mb-3" style="text-decoration: underline; color: blue;">View Announcements</a>
+                </div>
+                <div class="col-sm-6 col-xl-6">
+                    <div class="bg-secondary rounded p-4 ">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+		<!-- Sale & Revenue End -->
+        <div class="container-fluid">
+	        <div class="row bg-secondary mt-3 ms-2 me-2 rounded">
+	                <form th:object="${announcement}" th:action="@{/announcement}" method="POST" class="row">
+	                	<input type="hidden" th:field="*{announce_ID}">
+	                    <div class="form-outline ms-5 mt-5 col-md-9">
+	                        <textarea class="form-control bg-white" style="height: 200px;" id="announcement" maxlength="1000"
+	                                  placeholder="Something you want to announce..." rows="4" th:field="*{description}" required></textarea>
+	                    </div>
+	                    <button type="submit" class="mt-5 ms-5 btn btn-sm btn-outline-dark col-md-1" style="width:100px; height: 50px;" >Announce</button>
+	                    <input type="text" value="0/1000" class="ms-5" id="announceCount" style="background-color: transparent; border: none; font-size: small;" disabled>
+	                    <div class="alert alert-success ms-2" th:text="${announceSuccess}" th:if="${announceSuccess}"></div>
+	                </form>
+	                <span data-bs-toggle="modal" data-bs-target="#viewAnnouncements" class="mt-3 ms-5 mb-3" style="text-decoration: underline; color: blue; cursor: pointer;">View Announcements</span>
+	        </div>
+	    </div>
         <!-- Department List-->
         <div class="container-fluid px-4 py-4">
             <div class="bg-secondary text-center rounded p-4">
                 <div class="d-flex align-items-center justify-content-between mb-4">
                     <h4 class="mb-0 bg-secondary">Employee Counts By Departments and Teams</h4>
-                    <a th:href="@{registered-list}" class="text-decoration-underline" style="color:rgb(91, 80, 253)">Show All</a>
                 </div>
-                <div th:if="${#lists.isEmpty(deptCounts) AND #lists.isEmpty(teamCounts)}" class="alert alert-info">Sorry, There is no Employees for today</div>
+                <div th:if="${#lists.isEmpty(deptCounts) AND #lists.isEmpty(teamCounts)}" class="alert alert-info"><a th:href="@{/importDoorFile}" style="text-decoration: underline;">Please import doorlog data first</a></div>
                 <table th:if="${not #lists.isEmpty(deptCounts)}" class="table bg-secondary text-center">
                     <thead class="text-white">
                         <tr>
-                            <th class="text-start">Department</th>
+                            <th style="width: 265px;">Department</th>
                             <th>Registered Consumer Head Count</th>
                             <th>Actual Consumer Head Count</th>
                             <th>Difference</th>
@@ -403,7 +300,7 @@ body {
                 <table th:if="${not #lists.isEmpty(teamCounts)}" class="table bg-secondary text-center">
                     <thead class="text-white">
                         <tr>
-                            <th class="text-start">Team</th>
+                            <th style="width: 265px;">Team</th>
                             <th>Registered Consumer Head Count</th>
                             <th>Actual Consumer Head Count</th>
                             <th>Difference</th>
@@ -423,15 +320,14 @@ body {
         </div>
 
         <!-- Recent Sales Start -->
-        <div th:if=${admins} class="container-fluid pt-4 px-4">
+        <div th:if=${admins} class="container-fluid pt-3 px-4">
             <div class="bg-secondary text-center rounded p-4">
                 <div class="d-flex align-items-center justify-content-between mb-4">
-                    <h4 class="mb-0 bg-secondary">Admin List</h4>
-                    <a href="employee-list.html" class="text-decoration-underline" style="color:rgb(91, 80, 253)">Show All</a>
+                    <h4 class="mb-0 bg-secondary">System Admin List</h4>
                 </div>
                 <div th:if="${#lists.isEmpty(admins)}" class="alert alert-info">Sorry, There is no Admins</div>
                 <div class="table-responsive">
-                    <table class="table text-start align-middle table-hover mb-0">
+                    <table th:if="${not #lists.isEmpty(admins)}" class="table text-start align-middle table-hover mb-0">
                         <thead>
                             <tr class="text-white">
                             	<th scope="col">Staff ID</th>
@@ -458,84 +354,157 @@ body {
 
         <!-- Footer Start -->
         <div class="container-fluid pt-4 px-4 ">
-            <div class="bg-secondary rounded-top p-4 ">
-                <div class="row ">
-                    <div class="col-12 col-sm-6 text-center text-sm-start ">
-                        &copy; <a href="#" style="color: rgb(8, 50, 238);">Catering Service Management System</a>, All Right Reserved.
+				<div class="bg-secondary rounded-top p-4 ">
+					<div class="row ">
+						<div class="col-12 col-sm-6 text-center text-sm-start ">
+							&copy; <a href="#" style="color: rgb(8, 50, 238);">Catering
+								Service Management System</a>, All Right Reserved.
+						</div>
+						<div class="col-12 col-sm-6 text-center text-sm-end">
+							<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal ". Thank you for your support. ***/-->
+							Developed By <a href="" style="color: rgb(8, 50, 238);">TEAM
+								@ASCII</a>
+						</div>
+					</div>
+				</div>
+			</div>
+        <!-- Footer End -->
+    </div>
+    <!-- Content End -->
+    
+    <!-- View All Announcements -->
+    <div class="modal fade" id="viewAnnouncements" aria-labelledby="forgetPasswordModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="width: 1000px;">
+                <div class="modal-content bg-secondary">
+                    <div class="modal-header">
+                        <h4 class="modal-title text-primary" id="forgetPasswordModalLabel">Announcements</h4>
+                        <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="col-12 col-sm-6 text-center text-sm-end">
-                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal ". Thank you for your support. ***/-->
-                        Designed By <a href="" style="color:  rgb(8, 50, 238);">TEAM ASCII</a>
+                    <div class="modal-body bg-secondary">
+                        <div th:if="${not #lists.isEmpty(announcements)}">
+                        	<div class="alert alert-success" th:text="${announceEdit}" th:if="${announceEdit}"></div>
+                        	<div class="alert alert-danger" th:text="${announceDelete}" th:if="${announceDelete}"></div>
+							<ul class="list-group">
+							  <li class="list-group-item border-0" th:each="announcement : ${announcements}">
+							    <div class="d-flex justify-content-between align-items-center">
+							      <b><span th:text="${#temporals.format(announcement.createdDate, 'dd-MM-yyyy HH:mm:ss')}"></span></b>
+							      <button type="button" class="btn btn-link float-end" onclick="toggleInputBox(this)">Edit</button>
+							      <a th:href="@{/deleteAnnounce(id=${announcement.announce_ID})}" onclick="if(confirm('Are you sure you want to delete this announcement?')){document.querySelector('#delete-form').submit();}return false;"><i class="bi bi-trash"></i></a>
+							    </div>
+							    <br>
+							    <form th:action="@{/editAnnouncement}" method="post" class="d-flex justify-content-between align-items-center">
+							    	<input type="hidden" th:value="${announcement.announce_ID}" name="id">
+							    	<textarea rows="4" style="width: 500px;" maxlength="1000" readonly="readonly" name="description" th:id="'description-' + ${announcement.announce_ID}" th:text="${announcement.description}"></textarea>
+							    	<button type="reset" class="btn btn-outline-dark" style="display: none" onclick="hideResetButton(this)">Reset</button>
+							    	<button type="submit" class="btn btn-outline-success" style="display: none" onclick="hideSubmitButton(this)">Save</button>
+							    </form>
+							    <hr>
+							  </li>
+							</ul>
+						</div>
+						<div th:if="${#lists.isEmpty(announcements)}">
+							<p>No announcements found</p>
+						</div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Footer End -->
-    </div>
-    <!-- Content End -->
-	<i
-      class="fa-regular fa-comment-dots fs-1 open-button"
-      onclick="openForm()"
-      id="open"
-    ></i>
-    <div class="form-popup bg-secondary" id="myForm">
-      <form th:action="@{/addSuggestion}" method="POST" class="form-container bg-secondary">
-        <h3 style="text-decoration: underline;">Suggestion
-        <i class="fa-solid fa-xmark btn cancel float-end"
-            onclick="closeForm()"
-            type="button"
-          ></i>
-		</h3>
-		<span class="text-center">(Your suggestion will be sent to system admin.)</span>
-	    <input type="text" placeholder="Enter Your suggestion" style="height: 100px;" id="suggestionCount" name="suggestion" maxlength="1000" required />    
-	    <input type="text" id="count" style="background-color: transparent; font-size: small;" disabled>
-        <div class="float-end">
-          <button class="fa-solid fa-paper-plane fs-3 btn" type="submit"></button>
-        </div>
-      </form>
-    </div>
-	<script>
-	$(document).ready(function () {
-		console.log("HHHH");
-        var maxLength = 1000;
-        $('#suggestionCount').keyup(function () {
-            var length = $(this).val().length + '/1000';
-            console.log(maxLength);
-            $('#count').val(length);
-        });
-    });
-      function openForm() {
-        document.getElementById("myForm").style.display = "block";
-        document.getElementById("open").style.display = "none";
+    <!-- End view all announcements -->
+    <script>
+	    $(document).ready(function() {
+	    	const urlData = new URL(window.location.href);
+		    if(urlData.search!=''){
+		    	$('#viewAnnouncements').modal('show');
+		    }
+	        
+	    });
+      function toggleInputBox(editButton) {
+  		var form = editButton.closest("li").querySelector("form");
+  		var textarea = form.querySelector("textarea");
+  		var resetButton = form.querySelector("button[type='reset']");
+  		var submitButton = form.querySelector("button[type='submit']");
+  		
+  		if (textarea.hasAttribute("readonly")) {
+  			textarea.removeAttribute("readonly");
+  			editButton.innerHTML = "Cancel";
+  			resetButton.style.display = "inline-block";
+  			submitButton.style.display = "inline-block";
+  		} else {
+  			textarea.setAttribute("readonly", "readonly");
+  			editButton.innerHTML = "Edit";
+  			resetButton.style.display = "none";
+  			submitButton.style.display = "none";
+  		}
+  	  }
+      function handleInputChange(textarea) {
+          var form = textarea.parentNode;
+          var resetButton = form.querySelector("button[type='reset']");
+          var submitButton = form.querySelector("button[type='submit']");
+          resetButton.style.display = "inline-block";
+          submitButton.style.display = "inline-block";
+      }
+      
+      function hideSubmitButton(submitButton) {
+    	  var submitButton = form.querySelector("button[type='submit']");
+    	  submitButton.style.display = "none";
       }
 
-      function closeForm() {
-        var form = document.getElementById("myForm");
-        form.classList.add("hide");
-        setTimeout(function () {
-          form.style.display = "none";
-          form.classList.remove("hide");
-          document.getElementById("open").style.display = "block";
-        }, 500); // wait for the animation to finish before hiding the form
+      function hideResetButton(resetButton) {
+    	  var resetButton = form.querySelector("button[type='reset']");
+          resetButton.style.display = "none";
       }
     </script>
 
     <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script> -->
+    <!-- jQuery library from Google CDN -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/chart/chart.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js"></script>
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
     <script src="js/test.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1"></script>
+	
+	<script>
+	var countGraphInput = document.getElementById("countGraph");
+	console.log(countGraphInput.value);
+    // Parse the JSON-encoded array values
+    var typeOfLunch = ['Registered-Eat', 'Registered-Not Eat', 'Unregistered-Eat'];
+    var countGraph = countGraphInput.value.split(',');
+    console.log(typeOfLunch);
+    
+    var data = {
+        labels: typeOfLunch,
+        datasets: [{
+            label: 'Employee count',
+            data: countGraph,
+            backgroundColor: 'black'
+        }]
+    };
+
+    // Get the context of the canvas element
+    var ctx = document.getElementById('lunchChart').getContext('2d');
+
+    // Create the bar chart
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+            responsive: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            barThickness: 20
+        }
+    });
+	</script>
 </body>
 
 </html>

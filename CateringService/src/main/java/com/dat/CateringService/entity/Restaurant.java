@@ -1,7 +1,6 @@
 package com.dat.CateringService.entity;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,9 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-
-
 
 @Entity
 @Table(name="restaurant")
@@ -21,23 +17,18 @@ public class Restaurant {
 	@Column(name="restaurant_id")
 	private int restaurant_ID;
 
-	@NotBlank(message = "is required")
 	@Column(name="restaurant_name")
 	private String restaurant_name;
 
-	@NotBlank(message = "is required")
 	@Column(name="received_by")
 	private String received_by;
 
-	@NotBlank(message = "is required")
 	@Column(name="email")
 	private String email;
 
-	@NotBlank(message = "is required")
 	@Column(name="address")
 	private String address;
 
-	@NotBlank(message = "is required")
 	@Column(name="phone")
 	private String phone;
 
@@ -51,10 +42,10 @@ public class Restaurant {
 	private String created_by;
 
 	@Column(name="modify_date")
-	private Date modify_date;
+	private LocalDate modify_date;
 
 	@Column(name="modify_by")
-	private Date modify_by;
+	private String modify_by;
 
 	public Restaurant() {
 		super();
@@ -63,7 +54,7 @@ public class Restaurant {
 
 
 	public Restaurant(int restaurant_ID, String restaurant_name, String received_by, String email, String address,
-			String phone, String status, LocalDate created_date, String created_by, Date modify_date, Date modify_by) {
+			String phone, String status, LocalDate created_date, String created_by, LocalDate modify_date, String modify_by) {
 		super();
 		this.restaurant_ID = restaurant_ID;
 		this.restaurant_name = restaurant_name;
@@ -152,19 +143,19 @@ public class Restaurant {
 		this.created_by = created_by;
 	}
 
-	public Date getModify_date() {
+	public LocalDate getModify_date() {
 		return modify_date;
 	}
 
-	public void setModify_date(Date modify_date) {
+	public void setModify_date(LocalDate modify_date) {
 		this.modify_date = modify_date;
 	}
 
-	public Date getModify_by() {
+	public String getModify_by() {
 		return modify_by;
 	}
 
-	public void setModify_by(Date modify_by) {
+	public void setModify_by(String modify_by) {
 		this.modify_by = modify_by;
 	}
 

@@ -64,12 +64,10 @@ public class OTPController {
         }
 
         session.setAttribute("staffId", staffId);
-        System.out.println("====>"+staffId);
             
         String otp = otpSender.generateOTP();
         otpSender.sendOTP(email, otp);
         model.addAttribute(staffId);
-        System.out.println("====>"+staffId);
         model.addAttribute("email", email);
         return "redirect:/showMyLoginPage";
     }

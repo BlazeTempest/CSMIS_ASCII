@@ -1,13 +1,13 @@
 package com.dat.CateringService.controllers;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dat.CateringService.entity.Staff;
@@ -34,6 +34,7 @@ public class ProfileController {
 			if (role.equals("admin")) { 
 				Staff staff = staffService.getStaffById(authentication.getName());
 				if (staff != null) {
+					model.addAttribute("month", LocalDate.now().getMonth());
 					model.addAttribute("id", staff.getStaffID());
 					model.addAttribute("name", staff.getName());
 					model.addAttribute("email", staff.getEmail());
@@ -42,13 +43,14 @@ public class ProfileController {
 					model.addAttribute("doorLogNo",staff.getDoorLogNo());
 					model.addAttribute("division", staff.getDivision());
 					model.addAttribute("department", staff.getDept());
-					return "profile";
+					return "admin/profile";
 				} else {
 					return "404";
 				}
 			} else if (role.equals("operator")) {
 				Staff staff = staffService.getStaffById(authentication.getName());
 				if (staff != null) {
+					model.addAttribute("month", LocalDate.now().getMonth());
 					model.addAttribute("id", staff.getStaffID());
 					model.addAttribute("name", staff.getName());
 					model.addAttribute("email", staff.getEmail());

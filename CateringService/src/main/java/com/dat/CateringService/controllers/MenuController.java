@@ -7,6 +7,8 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -27,10 +29,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.dat.CateringService.daos.AvoidMeatRepository;
 import com.dat.CateringService.daos.PriceRepository;
 import com.dat.CateringService.entity.AvoidMeat;
-import com.dat.CateringService.entity.Headcount;
 import com.dat.CateringService.entity.Price;
+import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.service.AvoidMeatService;
-import com.dat.CateringService.service.HeadcountService;
 import com.dat.CateringService.service.MenuPdfService;
 import com.dat.CateringService.service.PriceService;
 import com.dat.CateringService.service.StaffService;
@@ -42,6 +43,12 @@ public class MenuController {
 
 	@Autowired
 	private MenuPdfService menuPdfService;
+	
+	@Autowired
+	private PriceRepository priecPriceRepository;
+
+	@Autowired
+	private AvoidMeatRepository avoidMeatRepository;
 
 	private AvoidMeatService avoidMeatService;
 	private PriceService priceService;
@@ -51,12 +58,43 @@ public class MenuController {
 		priceService = thePriceService;
 	}
 	
-	@Autowired
-	private PriceRepository priecPriceRepository;
+	@GetMapping("/deleteAvoid")
+	public String deleteAvoid(@RequestParam("id")int id, RedirectAttributes attr) {
+		attr.addFlashAttribute("avoidMessage", avoidMeatService.findById(id).getType() + " deleted successfully.");
+		avoidMeatService.deleteAvoidMeat(avoidMeatService.findById(id));
+		
+		for(Staff staff:staffService.getActiveStaffs(1)) {
+			String meats = staff.getAvoidMeatIds();
+			List<String> toRemove = new ArrayList<>();
+			if(meats!=null) {
+				List<String> ids = new ArrayList<>(Arrays.asList(meats.split(",")));
+				for(String temp : ids) {
+					if(temp.equals(String.valueOf(id))) {
+						toRemove.add(temp);
+					}
+				}
+			
+				ids.removeAll(toRemove);
+				String avoidMeatList = "";
+				if (ids != null) {
+					for (String avoidMeat : ids) {
+						if (avoidMeatList.isEmpty() || avoidMeatList.isEmpty()) {
+							avoidMeatList = avoidMeat;
+						} else {
+							avoidMeatList = avoidMeatList + "," + avoidMeat;
+						}
+					}
 
-	@Autowired
-	private AvoidMeatRepository avoidMeatRepository;
-
+				}
+				staff.setAvoidMeatIds(avoidMeatList);
+				staffService.addStaff(staff);
+			}
+		}
+		
+		attr.addAttribute("scroll", "scroll");
+		return "redirect:/menu";
+	}
+	
 	@PostMapping("/change_price")
 	public String changePrice(@RequestParam("priceList") int price_ID, RedirectAttributes redirectAttrsl) {
 
@@ -92,7 +130,6 @@ public class MenuController {
 				theModel.addAttribute("priceList", priceList);
 
 				List<AvoidMeat> avoidmeat = avoidMeatService.findAll();
-				System.out.println(avoidmeat);
 				if (avoidmeat.isEmpty()) {
 					theModel.addAttribute("avoidMessage", "Please add an option");
 				} else {
@@ -100,13 +137,11 @@ public class MenuController {
 				}
 			
 				Price activePrice = priceService.findActivePrice();
-				System.out.println(activePrice);
 				if (activePrice == null) {
-					System.out.println("No price");
 					theModel.addAttribute("priceMessage", "Please set a price");
 				} else {
 					Byte status = activePrice.getStatus();
-					if (status != null || status.equals(1)) {
+					if (status != null || status.equals((byte)1)) {
 						
 						// perform actions when status is equal to myByteObject
 						theModel.addAttribute("totalPrice", activePrice.getTotal_price());
@@ -144,6 +179,26 @@ public class MenuController {
 			theModel.addAttribute("staffPrice", activePrice.getStaff_price());
 			
 			}
+			List<AvoidMeat> avoidMeats = avoidMeatService.findAll();
+			String meatTypes = "";
+			String staffCounts = "";
+			for(AvoidMeat meat : avoidMeats) {
+				List<Staff> staffs = staffService.getByAvoidMeatIds(String.valueOf(meat.getAvoidmeat_ID()));
+				if(staffCounts=="") {
+					staffCounts = String.valueOf(staffs.size());
+				}else {
+					staffCounts = staffCounts + "," + staffs.size();
+				}
+				
+				if(meatTypes=="") {
+					meatTypes = meat.getType();
+				} else {
+					meatTypes = meatTypes + "," + meat.getType();
+				}
+				System.out.println(meat.getType() + "==>" + staffs.size());
+			}
+			theModel.addAttribute("meatTypes", meatTypes);
+			theModel.addAttribute("staffCounts", staffCounts);
 			return "admin/menu";
 			
 		} 
@@ -161,46 +216,35 @@ public class MenuController {
 		}
 		
 		Price existingDATPrice=priecPriceRepository.findUniquePrice(thePrice.getTotal_price(), thePrice.getDATprice());
-		System.out.println(existingDATPrice);
-		System.out.println(thePrice.getDATprice());
-		if(existingDATPrice !=null)
-		{
-			System.out.println(existingDATPrice.getDATprice() + "Price already existed");
+		if(existingDATPrice !=null) {
 			redirect.addFlashAttribute("unique", "Added Price already existed!");
 		}
 		else {
-			
 			int staff_price = thePrice.getTotal_price() - thePrice.getDATprice();
 			thePrice.setStaff_price(staff_price);
 			thePrice.setCreated_date(LocalDateTime.now());
 			thePrice.setStatus((byte) 1);
 			thePrice.setCreated_by(staffService.getStaffById(authentication.getName()).getName());
 			priceService.save(thePrice);
-			System.out.println("Added new price!");
 		 } 
 		return "redirect:/menu";
 	}
 
 	@PostMapping("/saveAvoidMeat")
-	public String saveAvoidMeat(@ModelAttribute("avoidmeat") @Valid AvoidMeat theAvoidMeat,RedirectAttributes redirectAttrsl, BindingResult br,
+	public String saveAvoidMeat(@ModelAttribute("avoidmeat") AvoidMeat theAvoidMeat,RedirectAttributes redirectAttrsl, BindingResult br,
 			Model theModel) {
 
-		if (br.hasErrors()) {
-			System.out.println(br);
-			return "redirect:/menu";
-		}
 		AvoidMeat existingAvoidMeat = avoidMeatRepository.findByType(theAvoidMeat.getType());
-		
-		System.out.println(existingAvoidMeat);
 
 		if (existingAvoidMeat != null) {
 			redirectAttrsl.addFlashAttribute("avoidMeatMessage",theAvoidMeat.getType()+ " already existed!");
 		}else {
 		theAvoidMeat.setCreated_date(LocalDateTime.now());
 		avoidMeatService.save(theAvoidMeat);
+		redirectAttrsl.addFlashAttribute("successMessage", theAvoidMeat.getType() + " added successfully.");
 		}
+		redirectAttrsl.addAttribute("scroll", "scroll");
 		return "redirect:/menu";
-
 	}
 
 	@PostMapping("/import_menu")

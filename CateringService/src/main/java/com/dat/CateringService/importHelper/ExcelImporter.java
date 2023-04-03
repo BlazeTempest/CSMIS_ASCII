@@ -39,17 +39,6 @@ public class ExcelImporter {
 	    	staff.setEmail(row[7]);
 	    	objects.add(staff);
 	    }
-//	    while ((row = csvReader.readNext()) != null) {
-//	        Staff object = new Staff();
-//	        object.setDivision(row[1]);
-//	        object.setStaffID(row[2]);
-//	        object.setName(row[3]);
-//	        object.setDoorLogNo(Integer.parseInt(row[4]));
-//	        object.setDept(row[5]);
-//	        object.setTeam(row[6]);
-//	        object.setEmail(row[7]);
-//	        objects.add(object);
-//	    }
 	    csvReader.close();
 	    return objects;
 	}

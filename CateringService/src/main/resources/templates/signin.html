@@ -36,6 +36,10 @@
             border: 1px solid black;
             font-weight: bold;
         }
+        
+        input[type=checkbox]:hover {
+			cursor: pointer;
+		}
     </style>
 
 </head>
@@ -57,10 +61,10 @@
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
                     <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
                         <div class="d-flex align-items-center justify-content-between mb-3">
-                            <a href="index.html" class="navbar-brand mx-4 mb-3 ms-5">
+                            <div class="navbar-brand mx-4 mb-3 ms-5">
                                 <img class="me-lg-2 ms-5" src="img/DAT Logo.png" alt="" style="width: 100px; height: 60px;">
                                 <h3 class="text-primary" style="margin-left: 30px;">CSMIS</h3>
-                            </a>
+                            </div>
                         </div>
                         
                         <form th:action="@{/authenticateTheUser}" 
@@ -70,62 +74,49 @@
 					    <div class="form-group">
 					        <div class="col-xs-15">
 					            <div>
-								
 									<!-- Check for login error -->
-								
 									<div th:if="${param.error}">
-										
 										<div class="alert alert-danger col-xs-offset-1 col-xs-10">
 											Invalid username and password.
 										</div>
-		
 									</div>
-										
 									<!-- Check for logout -->
-
 									<div th:if="${param.logout}">
-										            
 										<div class="alert alert-success col-xs-offset-1 col-xs-10">
 											You have been logged out.
 										</div>
-								    
 									</div>
-									
 					            </div>
 					        </div>
 					    </div>
 
 						<!-- User name -->
 						<div style="margin-bottom: 25px" class="input-group">
-							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
-							
-							<input type="text" name="username" placeholder="Staff ID" class="form-control">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input type="text" name="username" placeholder="Staff ID" class="form-control text-white">
 						</div>
 
 						<!-- Password -->
-						<div style="margin-bottom: 25px" class="input-group">
-							<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span> 
-							
-							<input type="password" name="password" placeholder="Password" class="form-control" >
+						<div style="margin-bottom: 25px;" class="input-group">
+						    <input type="password" class="form-control text-white" placeholder="Password" id="password" name="password" aria-describedby="togglePassword">
+							<button type="button" class="btn btn-outline-secondary" id="togglePassword">
+						        <i class="bi bi-eye"></i>
+						    </button>
 						</div>
 
-						<!-- Login/Submit Button -->
-						<div style="margin-top: 10px" class="form-group">						
-							<div class="col-sm-6 controls">
+					    <div class="row mb-4">
+						    <div class="col-sm-6">
 								<button type="submit" class="btn btn-success">Login</button>
-							</div>
+						    </div>
+						    <div class="col-sm-6">
+						        <a type="button" class="mt-1 link-danger text-decoration-underline float-end" style="font-size: small;" data-bs-toggle="modal" data-bs-target="#forgetPasswordModal">Forgot Password</a>
+						    </div>
 						</div>
 						
 					</form>
 					
-					  <div class="mb-4 text-center">
-                            <a type="button" class="link-danger text-decoration-underline fw-bold" data-bs-toggle="modal" data-bs-target="#forgetPasswordModal">Forget Password?</a>
-                        </div>
                         
-                        
-                        
-                        <span style="font-size:14px; color:rgb(97, 37, 238);" class="ms-2">DAT Castering Service Management System</span><br>
-                        <!-- <span style="font-size:14px;">Developed by TEAM ASCII</span> -->
+                    <span style="font-size:14px; color:rgb(97, 37, 238);" class="ms-4">Catering Service Management System</span><br>
 
                     </div>
                 </div>
@@ -191,10 +182,19 @@
     <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
     
-
-
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    <script>
+	  const togglePassword = document.querySelector('#togglePassword');
+	  const password = document.querySelector('#password');
+	  
+	  togglePassword.addEventListener('click', function() {
+	    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+	    password.setAttribute('type', type);
+	    this.querySelector('i').classList.toggle('bi-eye');
+	    this.querySelector('i').classList.toggle('bi-eye-slash');
+	  });
+	</script>
 </body>
 
 </html>

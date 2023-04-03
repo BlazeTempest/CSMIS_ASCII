@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dat.CateringService.entity.AvoidMeat;
 import com.dat.CateringService.entity.DailyDoorLog;
@@ -51,13 +51,32 @@ public class HomeController {
 	@Autowired
 	private DoorlogService doorService;
 	
+	@GetMapping("/importFiles")
+	public String importEmployeeFile(Authentication authentication, Model model) {
+		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+		return "admin/importFiles";
+	}
+	
+	@GetMapping("/importDoorFile")
+	public String importDoorFile(Authentication authentication, Model model) {
+		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+		return "admin/doorlogImport";
+	}
+	
+	@GetMapping("/importHolidayFile")
+	public String importHolidayFile(Authentication authentication, Model model) {
+		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+		return "admin/holidayImport";
+	}
+	
+	
 	@GetMapping("/detailCalendar")
 	public String calendarDetail(@RequestParam("id")String id, Model model, Authentication authentication) {
 		List<String> headers = new ArrayList<>(Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"));
 		List<LocalDate> holidays = new ArrayList<>();
 		List<Holidays> holidayEntity = holidayService.getAll();
 		for (Holidays d : holidayEntity) {
-			holidays.add(d.getHoliday_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			holidays.add(d.getHolidayDate());
 		}
 
 		LocalDate date = LocalDate.now(); // get the current date
@@ -123,7 +142,6 @@ public class HomeController {
 		if(!actualEatDates.isEmpty()) {
 			for(DailyDoorLog temp : actualEatDates) {
 				if(temp.getStaffID().equals(id)) {
-					System.out.println(temp.getDineDate());
 					actualDates.add(temp.getDineDate());
 				}
 			}
@@ -142,6 +160,8 @@ public class HomeController {
 			}
 		}
 		
+		model.addAttribute("plannedDates", registeredService.getRegisteredListByIdAndDate(id, firstDayOfMonth, lastDayOfMonth));
+		model.addAttribute("lastUpdate", staffService.getStaffById(id).getModify_date());
 		model.addAttribute("actual", actualDates);
 		model.addAttribute("staff", staffService.getStaffById(id));
 		model.addAttribute("checkedMeats", checkedMeats);
@@ -153,7 +173,7 @@ public class HomeController {
 		model.addAttribute("currentMonth", date.getMonth());
 		model.addAttribute("currentYear", date.getYear());
 		model.addAttribute("month", weeksInMonth);
-		return "calendarDetail";
+		return "admin/calendarDetail";
 	}
 	
 	@GetMapping("/employee-list")
@@ -315,7 +335,7 @@ public class HomeController {
 
 	@PostMapping("/importStaff")
 	public String importEmp(@RequestParam("file") MultipartFile file, @RequestParam("adminName") String adminName,
-			Model model, Authentication authentication) {
+			RedirectAttributes model, Authentication authentication) {
 		// read excel file
 		try {
 			InputStream inputStream = file.getInputStream();
@@ -330,20 +350,20 @@ public class HomeController {
 			for (Staff object : objects) {
 				// Update existing operator from excel file
 				if (ids.contains(object.getStaffID())) {
-					System.out.println("Updating");
+					System.out.println("Update");
 					Staff staff = staffService.getStaffById(object.getStaffID());
 					staff.setModify_date(LocalDateTime.now());
 					staff.setDivision(object.getDivision());
 					staff.setDept(object.getDept());
 					staff.setTeam(object.getTeam());
+					staff.setEmail(object.getEmail());
 					staff.setModify_by(adminName);
 					tempStaffs.add(staff);
 					ids.remove(ids.indexOf(object.getStaffID()));
-
 				}
 				// Add new operators
 				else if (!(ids.contains(object.getStaffID()))) {
-					System.out.println("Adding");
+					System.out.println("Add");
 					object.setCreated_date(LocalDateTime.now());
 					object.setCreated_by(adminName);
 					object.setEmail_noti((byte) 0);
@@ -353,40 +373,33 @@ public class HomeController {
 					tempStaffs.add(object);
 				}
 			}
+			String remove = null;
+			if(ids.contains("1")) remove="1";
+			ids.remove(remove);
+			System.out.println(ids);
 			// Change enabled to 0 (resigned operators)
 			if (ids != null) {
 				for (String id : ids) {
 					Staff staff = staffService.getStaffById(id);
-					if(staff.getStaffID()=="1" || staff.getName()=="Admin") {
-						continue;
-					}else {
-						System.out.println("Inactive");
-						List<Registered_list> registered = registeredService.getRegisteredStaffByDateAfter(LocalDate.now());
-						for(Registered_list temp : registered) {
-							temp.setDine(false);
-						}
-						staff.setStatus((byte) 0);
-						staff.setDelete_date(LocalDateTime.now());
-						staff.setDelete_by(adminName);
-						staff.setRole("operator");
-						staff.setPassword("$2a$04$WvPSakxEW208zFYymEfyFO90gtbmP5o.vrcEogJ0JRMLuK4Y0LxIi");
-						tempStaffs.add(staff);
+					List<Registered_list> registered = registeredService.getRegisteredStaffByDateAfter(LocalDate.now());
+					for(Registered_list temp : registered) {
+						temp.setDine(false);
 					}
+					staff.setStatus((byte) 0);
+					staff.setDelete_date(LocalDateTime.now());
+					staff.setDelete_by(adminName);
+					staff.setRole("operator");
+					staff.setPassword("$2a$04$WvPSakxEW208zFYymEfyFO90gtbmP5o.vrcEogJ0JRMLuK4Y0LxIi");
+					tempStaffs.add(staff);
 				}
 			}
+			
 			staffService.addAllStaff(tempStaffs);
-			staffs = staffService.getActiveStaffs(1);
-			model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
-			model.addAttribute("totalNum", staffs.size());
-			model.addAttribute("divs", staffService.getDivNames());
-			model.addAttribute("depts", staffService.getDeptNames());
-			model.addAttribute("teams", staffService.getTeamNames());
-			model.addAttribute("staffs", staffService.getAllStaffs());
-			model.addAttribute("success", "Uploaded Successfully");
-			return "admin/employee-list";
+			model.addFlashAttribute("success", "Uploaded Successfully");
+			return "redirect:/importFiles";
 		} catch (IOException e) {
 			model.addAttribute("error", "An error occurred while uploading the file" + e.toString());
-			return "admin/employee-list";
+			return "admin/importFiles";
 		}
 	}
 
@@ -413,14 +426,11 @@ public class HomeController {
 	@GetMapping("/saveEdit")
 	public String saveEditStaff(@ModelAttribute("staff") Staff tmpStaff, Authentication authentication) {
 		try{
-			Staff staff = staffService.getStaffById(tmpStaff.getStaffID());
-		String name = staffService.getStaffById(authentication.getName()).getName();
-		staff.setRole(tmpStaff.getRole());
-		staff.setModify_by(name);
-		staff.setModify_date(LocalDateTime.now());
-		staffService.addStaff(staff);
-		return "redirect:/employee-list";
-
+			String name = staffService.getStaffById(authentication.getName()).getName();
+			tmpStaff.setModify_by(name);
+			tmpStaff.setModify_date(LocalDateTime.now());
+			staffService.addStaff(tmpStaff);
+			return "redirect:/employee-list";
 		}catch(InvalidDataAccessApiUsageException e) {
 			return"404";
 		}

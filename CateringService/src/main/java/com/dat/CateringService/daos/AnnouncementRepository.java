@@ -7,6 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.dat.CateringService.entity.Announcement;
 
 public interface AnnouncementRepository extends JpaRepository<Announcement, Integer> {
-	
-
+	public List<Announcement> findAllByOrderByCreatedDateDesc();
 }

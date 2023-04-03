@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.dat.CateringService.DTO.ReportDTO;
 import com.dat.CateringService.entity.DailyDoorLog;
 import com.dat.CateringService.entity.Headcount;
 import com.dat.CateringService.entity.Registered_list;
@@ -25,7 +26,6 @@ import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.importHelper.DoorlogImporter;
 import com.dat.CateringService.service.DoorlogService;
 import com.dat.CateringService.service.HeadcountService;
-import com.dat.CateringService.service.PriceService;
 import com.dat.CateringService.service.RegisteredListService;
 import com.dat.CateringService.service.StaffService;
 
@@ -44,9 +44,6 @@ public class ReportController {
 	@Autowired
 	private HeadcountService headcountService;
 	
-	@Autowired
-	private PriceService priceService;
-	
 	@PostMapping("/addHeadcount")
 	public String addHeadcountManually(@RequestParam("invoiceDate")String invoiceDate, @RequestParam("actual")int actualCount, RedirectAttributes attr) {
 		Headcount temp = new Headcount();
@@ -56,11 +53,11 @@ public class ReportController {
 		temp.setDifference(registeredService.getRegisteredStaffByDate(LocalDate.now()).size() - actualCount);
 		headcountService.saveHeadcount(temp);
 		attr.addFlashAttribute("successHeadcount", "Imported headcount for " + invoiceDate + " successfully");
-		return "redirect:/registered-list";
+		return "redirect:/importFiles";
 	}
 	
 	@GetMapping("/registered-list")
-	public String plannedList(Model model, RedirectAttributes redirect) {
+	public String plannedList(Authentication authentication , Model model, RedirectAttributes redirect) {
 		List<Registered_list> registeredStaffs = registeredService.getRegisteredStaffByDate(LocalDate.now());
 		
 		Headcount temp = headcountService.getHeadcountByDate(LocalDate.now());
@@ -79,6 +76,7 @@ public class ReportController {
 			headcountService.saveHeadcount(temp);
 		}
 		
+		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("teams", staffService.getTeamNames());
 		model.addAttribute("divs", staffService.getDivNames());
 		model.addAttribute("depts", staffService.getDeptNames());
@@ -88,7 +86,7 @@ public class ReportController {
 	}
 	
 	@GetMapping("/searchRegistered")
-	public String searchRegistered(@RequestParam(name="division", required=false)String div, @RequestParam(name="dept", required=false)String dept, @RequestParam(name="team", required=false)String team, @RequestParam(name="start", required=false)String start, @RequestParam(name="end", required=false)String end, @RequestParam(name="name", required=false)String name, @RequestParam(name="id", required=false)String id, Model model) {
+	public String searchRegistered(Authentication authentication, @RequestParam(name="division", required=false)String div, @RequestParam(name="dept", required=false)String dept, @RequestParam(name="team", required=false)String team, @RequestParam(name="start", required=false)String start, @RequestParam(name="end", required=false)String end, @RequestParam(name="name", required=false)String name, @RequestParam(name="id", required=false)String id, Model model) {
 			
 			if(end=="") end = start;
 			List<Registered_list> registeredList = new ArrayList<>();
@@ -132,6 +130,8 @@ public class ReportController {
 				}
 				registeredList.removeAll(toRemove);
 			}
+			
+			model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 			model.addAttribute("teams", staffService.getTeamNames());
 			model.addAttribute("divs", staffService.getDivNames());
 			model.addAttribute("depts", staffService.getDeptNames());
@@ -141,9 +141,10 @@ public class ReportController {
 	}
 	
 	@GetMapping("/register-eat-list")
-	public String plannedEatList(Model model) {
+	public String plannedEatList(Authentication authentication, Model model) {
 		List<Registered_list> eatList = registeredService.getRegisteredStaffByStatusAndDineAndDate(true, true, LocalDate.now(), LocalDate.now());
-		    
+		   
+		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("start", LocalDate.now().minusDays(5));
 		model.addAttribute("end", LocalDate.now());
 		model.addAttribute("teams", staffService.getTeamNames());
@@ -155,7 +156,7 @@ public class ReportController {
 	}
 	
 	@GetMapping("/searchEat")
-	public String searchEat(@RequestParam(name="team", required=false)String team, @RequestParam(name="start", required=false)String start, @RequestParam(name="end", required=false)String end, @RequestParam(name="name", required=false)String name, @RequestParam(name="id", required=false)String id, @RequestParam(name = "division", required = false)String division, @RequestParam(name = "dept", required = false)String dept, Model model) {		
+	public String searchEat(Authentication authentication , @RequestParam(name="team", required=false)String team, @RequestParam(name="start", required=false)String start, @RequestParam(name="end", required=false)String end, @RequestParam(name="name", required=false)String name, @RequestParam(name="id", required=false)String id, @RequestParam(name = "division", required = false)String division, @RequestParam(name = "dept", required = false)String dept, Model model) {		
 		
 		if(end=="") end = start;
 		List<Registered_list> registeredList = new ArrayList<>();
@@ -201,6 +202,7 @@ public class ReportController {
 			registeredList.removeAll(toRemove);
 		}
 		
+		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("teams", staffService.getTeamNames());
 		model.addAttribute("eatStaffs", registeredList);
 		model.addAttribute("divs", staffService.getDivNames());
@@ -210,9 +212,10 @@ public class ReportController {
 	}
 	
 	@GetMapping("/register-not-eat-list")
-	public String plannedNotEatList(Model model) {
+	public String plannedNotEatList(Authentication authentication , Model model) {
 		List<Registered_list> eatList = registeredService.getRegisteredStaffByStatusAndDineAndDate(false, true, LocalDate.now(), LocalDate.now());
 		
+		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("eatStaffs", eatList);
 		model.addAttribute("teams", staffService.getTeamNames());
 		model.addAttribute("divs", staffService.getDivNames());
@@ -222,7 +225,7 @@ public class ReportController {
 	}
 	
 	@GetMapping("/searchCancel")
-	public String searchCancel(@RequestParam(name = "division", required = false)String division, @RequestParam(name = "dept", required = false)String dept, @RequestParam(name="team", required=false)String team, @RequestParam(name="start", required=false)String start, @RequestParam(name="end", required=false)String end, @RequestParam(name="name", required=false)String name, @RequestParam(name="id", required=false)String id, Model model) {
+	public String searchCancel(Authentication authentication, @RequestParam(name = "division", required = false)String division, @RequestParam(name = "dept", required = false)String dept, @RequestParam(name="team", required=false)String team, @RequestParam(name="start", required=false)String start, @RequestParam(name="end", required=false)String end, @RequestParam(name="name", required=false)String name, @RequestParam(name="id", required=false)String id, Model model) {
 		if(end=="") end = start;
 		List<Registered_list> registeredList = new ArrayList<>();
 		
@@ -261,6 +264,7 @@ public class ReportController {
 			registeredList.removeAll(toRemove);
 		}
 		
+		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("teams", staffService.getTeamNames());
 		model.addAttribute("eatStaffs", registeredList);
 		model.addAttribute("divs", staffService.getDivNames());
@@ -275,9 +279,10 @@ public class ReportController {
 	}
 
 	@GetMapping("/not-registereed-eat-list")
-	public String unplannedEatList(Model model) {
+	public String unplannedEatList(Authentication authentication, Model model) {
 		List<DailyDoorLog> doorlogs = doorlogService.getByRegisteredAndStaffID(false, LocalDate.now(), LocalDate.of(2023,3,28));
 		
+		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("totalNum", doorlogs.size());
 		model.addAttribute("staffs", doorlogs);
 		model.addAttribute("teams", staffService.getTeamNames());
@@ -287,7 +292,7 @@ public class ReportController {
 	}
 	
 	@GetMapping("searchUnregisteredEat")
-	public String searchUnregisteredEat(@RequestParam(name = "division", required = false)String division, @RequestParam(name = "dept", required = false)String dept, @RequestParam(name="team", required=false)String team, @RequestParam(name="start", required=false)String start, @RequestParam(name="end", required=false)String end, @RequestParam(name="name", required=false)String name, @RequestParam(name="id", required=false)String id, Model model) {
+	public String searchUnregisteredEat(Authentication authentication, @RequestParam(name = "division", required = false)String division, @RequestParam(name = "dept", required = false)String dept, @RequestParam(name="team", required=false)String team, @RequestParam(name="start", required=false)String start, @RequestParam(name="end", required=false)String end, @RequestParam(name="name", required=false)String name, @RequestParam(name="id", required=false)String id, Model model) {
 		if(end=="") end = start;
 		List<DailyDoorLog> doorlogs = new ArrayList<>();
 		if(name!="" || id!="" || team!="") {
@@ -323,6 +328,7 @@ public class ReportController {
 			doorlogs.removeAll(toRemove);
 		}
 		
+		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("team", team);
 		model.addAttribute("searchName", name);
 		model.addAttribute("id", id);
@@ -334,6 +340,81 @@ public class ReportController {
 		model.addAttribute("divs", staffService.getDivNames());
 		model.addAttribute("depts", staffService.getDeptNames());
 		return "admin/not-registereed-eat-list";
+	}
+	
+	@GetMapping("/summary")
+	public String summary(Authentication authentication, Model model, @RequestParam(name = "start", required = false)String start, @RequestParam(name = "end", required = false)String end) {
+		if((start == "" || start == null) && (end == "" || end == null)) {
+			start = end = LocalDate.now().toString();
+		}
+		if(end == "" || end == null) end = start; 
+		if(start == "" || start == null) start = end;
+		
+		List<Registered_list> registered = registeredService.getRegisteredStaffByStartDateAndEndDate(LocalDate.parse(start), LocalDate.parse(end));
+		List<DailyDoorLog> actual = doorlogService.getDoorlogByDineDate(LocalDate.parse(start), LocalDate.parse(end));
+		List<ReportDTO> staffs = new ArrayList<>();
+		List<String> ids = new ArrayList<>();
+		int type1 = 0;
+		int type2 = 0;
+		int type3 = 0;
+		
+		for(Registered_list temp:registered) {
+			if(temp.getStatus() == null) {
+				continue;
+			} else {
+				ReportDTO report = new ReportDTO();
+				report.setName(temp.getName());
+				report.setTeam(temp.getTeam());
+				report.setStaffID(temp.getStaffID());
+				report.setDineDate(temp.getDineDate());
+				//staffs who don't planned and skipped lunch
+				if(temp.getDine()==false && temp.getStatus()==false) continue;
+				//staffs who planned and finished lunch
+				if(temp.getDine()==true && temp.getStatus()==true) {
+					report.setRegisteredStatus(1);
+					type1++;
+				}
+				//staffs who planned but skipped lunch
+				if(temp.getDine()==true && temp.getStatus()==false) {
+					report.setRegisteredStatus(2);
+					type2++;
+				}
+				//staffs who didn't plan but finished lunch
+				if(temp.getDine()==false && temp.getStatus()==true) {
+					report.setRegisteredStatus(3);
+					type3++;
+				}
+				
+				ids.add(temp.getStaffID());
+				staffs.add(report);
+			}
+		}
+		
+		//staffs who didn't plan but finished lunch
+		for(DailyDoorLog temp:actual) {
+			ReportDTO report = new ReportDTO();
+			report.setName(temp.getName());
+			report.setTeam(temp.getTeam());
+			report.setStaffID(temp.getStaffID());
+			report.setDineDate(temp.getDineDate());
+			if(ids.contains(temp.getStaffID())) {
+				continue;
+			}else {
+				if(temp.getRegistered()==false) report.setRegisteredStatus(3);
+				type3++;
+			}
+			staffs.add(report);
+		}
+		
+		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+		model.addAttribute("type1", type1);
+		model.addAttribute("type2", type2);
+		model.addAttribute("type3", type3);
+		model.addAttribute("start", start);
+		model.addAttribute("end", end);
+		model.addAttribute("totalNum", staffs.size());
+		model.addAttribute("staffs", staffs);
+		return "admin/summary";
 	}
 	
 	@PostMapping("/importDoorlog")
@@ -403,7 +484,7 @@ public class ReportController {
 			}
 			
 			model.addFlashAttribute("success", "Uploaded Successfully");
-			return "redirect:/registered-list";
+			return "redirect:/importDoorFile";
 		} catch (IOException e) {
 			model.addFlashAttribute("error", "An error occurred while uploading the file" + e.toString());
 			return "redirect:/404";

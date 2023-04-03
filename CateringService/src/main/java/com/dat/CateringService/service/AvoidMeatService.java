@@ -9,4 +9,5 @@ public interface AvoidMeatService {
 	public AvoidMeat findById(int id);
 	public void save(AvoidMeat theAvoidMeat);
 	public AvoidMeat getAvoidMeatByType(String type);
+	public void deleteAvoidMeat(AvoidMeat avoidMeat);
 }
