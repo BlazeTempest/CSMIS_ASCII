@@ -92,9 +92,9 @@ i.fa-solid {
 				</div>
 
 				<div class="navbar-nav w-100">
-					<a th:href="@{/dashboard}" class="nav-item nav-link "><i
+					<a th:href="@{/dashboard}" class="nav-item nav-link"><i
 						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
-						href="employee-lunch-register.html" class="nav-item nav-link"><i
+						th:href="@{registration}" class="nav-item nav-link"><i
 						class="fas fa-hamburger me-2"></i>Lunch Register</a> <a
 						th:href="@{/userProfile}" class="nav-item nav-link active"><i
 						class="fas fa-user-tie me-2"></i>Profile</a>
@@ -145,11 +145,11 @@ i.fa-solid {
 		<!-- EmployeeProfile Start -->
 		<div class="container-fluid pt-4 px-4">
 			<div
-				class="row vh-100 bg-secondary rounded align-items-center justify-content-center mx-0">
+				class="row vh-80 bg-secondary rounded align-items-center justify-content-center mx-0">
 				<div class="bg-secondary rounded h-105 mb-5 ">
 					<div class="row">
 						<div class="col-lg-4">
-							<div class="card border-info mb-4 mt-3">
+							<div class="card border-info mb-2 mt-3">
 								<div class="card-body text-center bg-secondary ">
 									<img
 										src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
@@ -157,8 +157,6 @@ i.fa-solid {
 										style="width: 150px;">
 									<h5 class="my-3" th:text="${name}"></h5>
 									<p class="text-muted mb-1" th:text="${department}"></p>
-									<p class="text-muted mb-4"
-										sec:authentication="principal.authorities"></p>
 								</div>
 							</div>
 							<div class="card border-info mb-4 rounded-3">
@@ -166,7 +164,7 @@ i.fa-solid {
 									<ul class="list-group list-group-flush rounded-3 ">
 										<li
 											class="list-group-item d-flex text-center p-3 bg-secondary">
-											<p class="mb-0">
+											<p class="mb-0 text-end">
 												Registered days for this month: <b
 													style="text-decoration: underline;">20</b>
 											</p>
@@ -174,17 +172,20 @@ i.fa-solid {
 										<li
 											class="list-group-item d-flex text-center p-3 bg-secondary">
 
-											<p class="mb-0">
+											<p class="mb-0 float-end">
 												Total cost for this month: <b
 													style="text-decoration: underline;">20000</b>
 											</p>
 										</li>
 										<li
 											class="list-group-item d-flex text-center p-3 bg-secondary">
-											<p class="mb-0">
+											<p class="mb-0 float-end">
 												Total cost for previous month: <b
 													style="text-decoration: underline;">16000</b>
 											</p>
+										</li>
+										<li class="list-group-item d-flex text-center p-3 bg-secondary">
+											<a th:href="@{/detailCalendar(id=${id})}" style="text-decoration: underline;" th:text="${'Preview Plan of ' + month}"></a>
 										</li>
 									</ul>
 								</div>
@@ -222,7 +223,7 @@ i.fa-solid {
 									<hr>
 									<div class="row">
 										<div class="col-sm-3">
-											<p class="mb-0">Door Access Card ID</p>
+											<p class="mb-0">Door Access Card</p>
 										</div>
 										<div class="col-sm-9">
 											<p class="text-muted mb-0" th:text="*{doorLogNo}"></p>
@@ -294,26 +295,26 @@ i.fa-solid {
 					<div class="modal-header">
 						<h5 class="modal-title text-dark" id="exampleModalLabel">
 							Change Password</h5>
-
+						<a type="button" class="btn-lg btn-close bg-danger float-end ms-5 col-md-1" data-bs-dismiss="modal"></a>
 					</div>
 					<div class="modal-body">
 						<form action="/changePassword" method="get">
 							<div class="form-group">
 								<label for="oldPassword">Old Password:</label> <input
-									type="text" class="form-control" id="oldPassword"
+									type="text" class="form-control bg-white text-dark mt-2" id="oldPassword"
 									name="oldPassword" required>
 							</div>
 							<div class="form-group">
 								<label for="newPassword">New Password:</label> <input
-									type="text" class="form-control" id="newPassword"
+									type="text" class="form-control bg-white text-dark mt-2" id="newPassword"
 									name="newPassword" required>
 							</div>
 							<div class="form-group">
 								<label for="confirmPassword">Confirm Password:</label> <input
-									type="password" class="form-control" id="confirmPassword"
+									type="password" class="form-control bg-white text-dark mt-2" id="confirmPassword"
 									name="confirmPassword" required>
 							</div>
-							<button type="submit" class="btn btn-primary">Save
+							<button type="submit" class="btn btn-outline-dark float-end mt-2">Save
 								changes</button>
 						</form>
 					</div>
@@ -326,22 +327,21 @@ i.fa-solid {
 
 
 		<!-- Footer Start -->
-		<div class="container-fluid pt-4 px-4">
-			<div class="bg-secondary rounded-top p-4">
-				<div class="row">
-					<div class="col-12 col-sm-6 text-center text-sm-start">
-						&copy; <a href="#">Catering Service Management Information
-							System</a>, All Right Reserved.
-					</div>
-					<div class="col-12 col-sm-6 text-center text-sm-end">
-						<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-						Designed By <a href="https://htmlcodex.com">TEAM ASCII</a>
-						<!-- <br />Distributed By:
-                <a href="https://themewagon.com" target="_blank">ThemeWagon</a> -->
+		<div class="container-fluid pt-4 px-4 ">
+				<div class="bg-secondary rounded-top p-4 ">
+					<div class="row ">
+						<div class="col-12 col-sm-6 text-center text-sm-start ">
+							&copy; <a href="#" style="color: rgb(8, 50, 238);">Catering
+								Service Management System</a>, All Right Reserved.
+						</div>
+						<div class="col-12 col-sm-6 text-center text-sm-end">
+							<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal ". Thank you for your support. ***/-->
+							Designed By <a href="" style="color: rgb(8, 50, 238);">TEAM
+								ASCII</a>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 		<!-- Footer End -->
 	</div>
 	<!-- Content End -->

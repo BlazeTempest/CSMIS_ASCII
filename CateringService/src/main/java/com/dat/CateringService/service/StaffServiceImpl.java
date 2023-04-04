@@ -108,5 +108,8 @@ public class StaffServiceImpl implements StaffService {
 		return repository.getAdminTeam();
 	}
 
-
+	@Override
+	public List<Staff> getByAvoidMeatIds(String id) {
+		return repository.findByAvoidMeatIdsContains(id);
+	}
 }

@@ -278,26 +278,22 @@ body {
 					<span class="text-center text-white">Email </span>
 				</div>
 					<div class="nav-item">
-						<div class="nav-item dropdown">
-							<a href="#" class="nav-link dropdown-toggle"
-								data-bs-toggle="dropdown"> <img
-								class="rounded-circle me-lg-2" src="img/admin-logo.png" alt=""
-								style="width: 40px; height: 40px" /> <span
-								class="d-none d-lg-inline-flex" th:text=${name}></span>
-							</a>
-							<div
-								class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
-								<a th:href="@{/userProfile}" class="dropdown-item">Profile</a>
-								<form action="#" th:action="@{/logout}" method="POST">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img class="rounded-circle me-lg-2" src="img/admin-logo.png" alt="" style="width: 40px; height: 40px" />
+                            <span class="d-none d-lg-inline-flex" th:text=${name}></span>
+                        </a>
+                       <div class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
+                                <a th:href="@{/userProfile}" class="dropdown-item fw-bold text-center">Profile</a>
 
-									<input type="submit" value="Logout"
-										class="btn btn-outline-link bg-white fw-bold mt-1"
-										style="color: rgb(0, 0, 0); width: 100%; height: 45px;" />
-
-								</form>
-							</div>
-						</div>
-					</div>
+                                <form action="#" th:action="@{/logout}" method="POST">
+                                    <input type="submit" value="Logout"
+                                        class="dropdown-item fw-bold text-center"
+                                        style="color: rgb(0, 0, 0); width: 100%; height: 45px;" />
+                                </form>
+                            </div>
+                    </div>
+                </div>
 				</div>
 			</nav>
 		<!-- Navbar End -->
@@ -316,7 +312,7 @@ body {
 								<li class="list-group-item border-0"
 									th:each="announcement : ${announcements}">
 									<div class="d-flex justify-content-between align-items-center">
-										<span th:text="${#temporals.format(announcement.created_date, 'dd-MM-yyyy HH:mm:ss')}"></span>
+										<span th:text="${#temporals.format(announcement.createdDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
 									</div>
 									<div class="d-flex justify-content-between align-items-center">
 										<span th:text="${announcement.description}"></span>
@@ -391,30 +387,27 @@ body {
 		</div>
 		<!-- Menu List end -->
 		<!-- Footer Start -->
-		<div class="container-fluid pt-4 px-4">
-			<div class="bg-secondary rounded-top p-4">
-				<div class="row">
-					<div class="col-12 col-sm-6 text-center text-sm-start">
-						&copy; <a href="#">Catering Service Management Information
-							System</a>, All Right Reserved.
-					</div>
-					<div class="col-12 col-sm-6 text-center text-sm-end">
-						<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-						Designed By <a href="https://htmlcodex.com">TEAM ASCII</a>
-						<!-- <br />Distributed By:
-                <a href="https://themewagon.com" target="_blank">ThemeWagon</a> -->
+		<div class="container-fluid pt-4 px-4 ">
+				<div class="bg-secondary rounded-top p-4 ">
+					<div class="row ">
+						<div class="col-12 col-sm-6 text-center text-sm-start ">
+							&copy; <a href="#" style="color: rgb(8, 50, 238);">Catering
+								Service Management System</a>, All Right Reserved.
+						</div>
+						<div class="col-12 col-sm-6 text-center text-sm-end">
+							<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal ". Thank you for your support. ***/-->
+							Developed By <a href="" style="color: rgb(8, 50, 238);">TEAM @ASCII</a>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 		<!-- Footer End -->
 	</div>
 	<!-- Content End -->
-	<i
-      class="fa-regular fa-comment-dots fs-1 open-button"
+	
+	<i class="fa-regular fa-comment-dots fs-1 open-button"
       onclick="openForm()"
-      id="open"
-    ></i>
+      id="open"></i>
     <div class="form-popup bg-secondary" id="myForm">
       <form th:action="@{/addSuggestion}" method="POST" class="form-container bg-secondary">
         <h3 style="text-decoration: underline;">Suggestion

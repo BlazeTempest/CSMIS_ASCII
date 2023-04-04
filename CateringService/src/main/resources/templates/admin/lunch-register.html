@@ -35,8 +35,14 @@ td {
 	padding: 8px;
 }
 
-.holiday {
-	 color: red;
+.difMonth {
+	font-weight: bold;
+	color: lightgrey;
+}
+
+.weekends {
+	font-weight: bold;
+	color: red;
 }
 
 #date {
@@ -52,24 +58,42 @@ td {
 	cursor: pointer;
 }
 
+.difMonth:hover {
+	font-weight: bold !important;
+	color: lightgrey !important;
+	background-color: #eee !important;
+}
+
+.weekends:hover {
+	font-weight: bold !important;
+	color: red !important;
+	background-color: #eee !important;
+}
+
 input[type="checkbox"] {
 	display: none;
 }
 
 [type="checkbox"]:not(:checked)+#date:hover {
-	background-color: #215971;
-	color: white;
+	background-color: #eee;
+	color: black;
+	box-shadow: 2px 2px 2px 2px black;
+	border-color: blue;
+	border-radius: 5px;
 }
 
 input[type="checkbox"]:not(:checked)+label:active {
 	transform: translateY(0);
+	color: black;
+	border-radius: 5px;
 }
 
 input[type="checkbox"]:checked+#date {
 	transition: background-color 0.5s ease-in-out;
 	transform: rotate(0deg) scale(1);
-	background-color: darkblue;
-	color: white; 
+	background-color: grey;
+	color: white;
+	font-weight: bold;
 }
 
 input[type="checkbox"]:checked+#date:before {
@@ -82,8 +106,22 @@ input[type="checkbox"]:checked+#date:before {
 	font-size: 1.5rem;
 	line-height: 1;
 	text-align: center;
-	color: #71DFD4;
+	color: transparent;
 	animation: grow-and-turn 1s ease-in-out forwards;
+}
+
+.date-label .holiday {
+  color: green;
+  border: 3px solid green;
+  border-radius: 5px;
+  
+}
+
+.date-label .holiday:hover {
+  color: green !important;
+  border: 3px solid green !important;
+  border-radius: 5px !important;
+  box-shadow: none !important;
 }
 
 @keyframes grow-and-turn {
@@ -106,105 +144,6 @@ i.fa-solid {
 
 .fa-solid:hover {
 	color: rgb(250, 16, 75);
-}
-
-.switch {
-	position: relative;
-	display: inline-block;
-	width: 32px;
-	height: 18px;
-	margin: 10px;
-	border-radius: 9px;
-	background-color: #ccc;
-}
-
-.switch input {
-	opacity: 0;
-	width: 0;
-	height: 0;
-}
-
-.slider {
-	position: absolute;
-	cursor: pointer;
-	top: 1px;
-	left: 1px;
-	right: 1px;
-	bottom: 1px;
-	border-radius: 9px;
-	background-color: #fff;
-	transition: .4s;
-}
-
-.slider:before {
-	position: absolute;
-	content: "";
-	height: 12px;
-	width: 12px;
-	left: 2px;
-	bottom: 2px;
-	background-color: #ccc;
-	border-radius: 50%;
-	transition: .4s;
-}
-
-input:checked+.slider {
-	background-color: #2196F3;
-}
-
-input:focus+.slider {
-	box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked+.slider:before {
-	transform: translateX(12px);
-	background-color: #fff;
-}
-/* Tooltip container */
-.tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
-}
-
-/* Tooltip text */
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 120px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-
-  /* Position the tooltip text */
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -60px;
-
-  /* Fade in tooltip */
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-/* Tooltip arrow */
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
 }
 </style>
 <!-- Favicon -->
@@ -275,12 +214,33 @@ input:checked+.slider:before {
 				</div>
 
 				<div class="navbar-nav w-100">
-					<a th:href="@{dashboard}" class="nav-item nav-link"><i
+					<a href="index.html" class="nav-item nav-link"><i
 						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
-						th:href="@{registration}" class="nav-item nav-link active"><i
-						class="fas fa-hamburger me-2"></i>Lunch Register</a> <a
-						th:href="@{profile}" class="nav-item nav-link"><i
-						class="fas fa-user-tie me-2"></i>Profile</a>
+						th:href="@{/employee-list}" class="nav-item nav-link"><i
+						class="fas fa-users me-2"></i>Employee List</a>
+					<a th:href="@{registered-list}"  class="nav-item nav-link"
+            		><i class="fa fa-laptop me-2"></i>Report</a>
+					<a th:href="@{registration}" class="nav-item nav-link active"><i class="fas fa-pen me-2"></i>Lunch Register</a> 
+					<a th:href="@{/menu}" class="nav-item nav-link"><i class="fas fa-hamburger me-2"></i>Menu</a>
+					<a th:href="@{restaurant}" class="nav-item nav-link"><i
+						class="fas fa-home me-2"></i>Restaurant</a>
+					<div class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle"
+							data-bs-toggle="dropdown"><i class="fas fa-file me-2"></i>Invoice</a>
+						<div class="dropdown-menu bg-transparent border-0">
+							<a th:href="@{/weekly-invoice}" class="dropdown-item">Weekly
+								Invoice</a> <a th:href="@{/monthly_invoice}" class="dropdown-item">Monthly
+								Invoice</a>
+						</div>
+					</div>
+					<div class="nav-item">
+						<a th:href="@{suggestion}" class="nav-link"><i
+							class="far fa-file-alt me-2"></i>Suggestions</a>
+					</div>
+					<div class="nav-item">
+						<a th:href="@{holiday}" class="nav-link"><i
+							class="fa fa-mug-hot me-2"></i>Holidays</a>
+					</div>
 				</div>
 			</nav>
 		</div>
@@ -295,13 +255,12 @@ input:checked+.slider:before {
 					class="fa fa-bars"></i>
 				</a>
 				<div class="navbar-nav align-items-center ms-auto">
-					<div class="navbar-nav align-items-center ms-auto">
-						<div class="nav-item dropdown">
-							<label class="switch"> <input type="checkbox" th:checked="${noti}"
-								id="toggle-switch" /> <span class="slider"></span>
-							</label>
-							<span class="text-center text-white">Email </span>
-						</div>
+					<div class="nav-item dropdown">
+
+						<i onclick="myFunction(this)"
+							title="This is a mail notification on/off for lunch!"
+							class="fa-solid fa-bell"></i> <span
+							class="text-center text-white ms-2">Email </span>
 					</div>
 					<div class="nav-item">
 						<div class="nav-item dropdown">
@@ -311,17 +270,15 @@ input:checked+.slider:before {
 								style="width: 40px; height: 40px" /> <span
 								class="d-none d-lg-inline-flex" th:text=${name}></span>
 							</a>
-							<div
-								class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
-								<a th:href="@{/userProfile}" class="dropdown-item">Profile</a>
-								<form action="#" th:action="@{/logout}" method="POST">
+							<div class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
+                                <a th:href="@{/userProfile}" class="dropdown-item fw-bold text-center">Profile</a>
 
-									<input type="submit" value="Logout"
-										class="btn btn-outline-link bg-white fw-bold mt-1"
-										style="color: rgb(0, 0, 0); width: 100%; height: 45px;" />
-
-								</form>
-							</div>
+                                <form action="#" th:action="@{/logout}" method="POST">
+                                    <input type="submit" value="Logout"
+                                        class="dropdown-item fw-bold text-center"
+                                        style="color: rgb(0, 0, 0); width: 100%; height: 45px;" />
+                                </form>
+                            </div>
 						</div>
 					</div>
 				</div>
@@ -329,13 +286,46 @@ input:checked+.slider:before {
 			<!-- Navbar End -->
 			<!-- Sale & Revenue Start -->
 			<div class="container-fluid pt-4 px-4">
-				<div
-					class="row bg-secondary rounded align-items-center justify-content-center mx-0">
-
+				<div class="row bg-secondary rounded align-items-center justify-content-center mx-0">
 					<div class="rounded py-4">
 						<div class="row w-100">
 							<h2 class="text-center">Lunch Plan Registration</h2>
 						</div>
+						<hr>
+						<table class="mb-3">
+							<tbody>
+								<tr>
+									<td>
+										<label>
+											<input type="checkbox" disabled>
+											<span id="date">01</span>
+										</label>
+										<span>Unregistered</span>
+									</td>
+									<td>
+										<label>
+											<input type="checkbox" disabled>
+											<span class="weekends" id="date">02</span>
+										</label>
+										<span>Weekend</span>
+									</td>
+									<td>
+										<label class="date-label">
+											<input type="checkbox" disabled>
+											<span class="holiday" id="date">03</span>
+										</label>
+										Public Holiday
+									</td>
+									<td>
+										<label>
+											<input type="checkbox" checked disabled>
+											<span id="date">04</span>
+										</label>
+										Registered
+									</td>
+								</tr>
+							</tbody>
+						</table>
 						<hr>
 						<div class="alert alert-success" role="alert" th:text="${message}" th:if="${message}"></div>
 						<form th:action="@{/saveRegister}"
@@ -344,13 +334,13 @@ input:checked+.slider:before {
 							<table>
 								<thead>
 									<tr>
-										<th th:each="header:${headers}" th:text=${header} class="text-center"></th>
+										<th th:each="header: ${headers}" th:text="${header}" th:classappend="${header == 'Saturday' or header == 'Sunday'} ? 'text-center text-danger' : 'text-center'"></th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr th:each="week:${month}">
 										<td th:each="day:${week}">
-											<label>
+											<label class="date-label">
 												<input th:if="${day!=null && not #lists.isEmpty(checkedDates)}" type="checkbox"
 													th:checked="${day.getDayOfWeek().getValue() < 6 && day.getMonth==currentMonth && not #lists.contains(holidays, day) && #lists.contains(checkedDates, day)}" 
 													th:disabled="${day.getDayOfWeek().getValue() >= 6 || day.getMonth!=currentMonth || #lists.contains(holidays, day) || #lists.contains(disabledDates, day)}"
@@ -360,8 +350,12 @@ input:checked+.slider:before {
 													th:checked="${day.getDayOfWeek().getValue() < 6 && day.getMonth==currentMonth && not #lists.contains(holidays, day) && not #lists.contains(disabledDates, day)}" 
 													th:disabled="${day.getDayOfWeek().getValue() >= 6 || day.getMonth!=currentMonth || #lists.contains(holidays, day) || #lists.contains(disabledDates, day)}"
 													id="dates" name="dates" th:value="${day}"/>
-													
-												<span th:text="${#temporals.format(day, 'dd')}" id="date" class="" th:classappend="${#lists.contains(holidays, day) || day.getDayOfWeek().getValue() >= 6} ? holiday : normal"></span>
+												
+												<span th:if="${day.getMonth!=currentMonth && day.getDayOfWeek().getValue() < 6}" th:text="${#temporals.format(day, 'dd')}" id="date" th:classappend="${day.getMonth!=currentMonth} ? difMonth : ''"></span>
+												<span th:if="${day.getDayOfWeek().getValue() >= 6}" th:text="${#temporals.format(day, 'dd')}" id="date" class="" th:classappend="${day.getDayOfWeek().getValue() >= 6} ? weekends : ''"></span>
+												<span th:if="${day.getDayOfWeek().getValue() < 6 && day.getMonth==currentMonth && #lists.contains(holidays, day)}" th:text="${#temporals.format(day, 'dd')}" id="date" th:classappend="${day.getDayOfWeek().getValue() < 6 && #lists.contains(holidays, day)} ? holiday : disabled" data-bs-toggle="tooltip" data-bs-placement="top" title="Holiday"></span>
+												<span th:if="${day.getDayOfWeek().getValue() < 6 && day.getMonth==currentMonth && not #lists.contains(holidays, day)}" th:text="${#temporals.format(day, 'dd')}" id="date" th:classappend="${day.getDayOfWeek().getValue() < 6 && #lists.contains(holidays, day)} ? holiday : ''"></span>
+											
 											</label>
 											<input th:if="${day.getDayOfWeek().getValue() < 6 && day.getMonth==currentMonth && not #lists.contains(holidays, day)}" type="hidden" id="month" name="month" th:value="${day}">
 										</td>
@@ -371,9 +365,11 @@ input:checked+.slider:before {
 							<hr>
 							<h5>Select your avoid meats</h5>
 							<div class="row mt-3 ms-4">
-								<label th:each="avoidmeat:${avoidmeats}" class="col-md-2">
-									<input type="checkbox" th:checked="${#lists.contains(checkedMeats, avoidmeat)}" th:value="${avoidmeat.avoidmeat_ID}" th:text="${avoidmeat.type}" id="avoid" name="avoidMeats">
-								</label>
+								<div class="form-check col-md-2" th:each="avoidmeat:${avoidmeats}">
+								  <input class="form-check-input" type="checkbox" id="avoid" name="avoidMeats" th:value="${avoidmeat.avoidmeat_ID}" th:checked="${#lists.contains(checkedMeats, avoidmeat)}">
+								  <label class="form-check-label" for="defaultCheck1" th:text="${avoidmeat.type}">
+								  </label>
+								</div>
 							</div>
 							<hr>
 							<input type="hidden" th:value="${disabledDates}" name="disabledDates">

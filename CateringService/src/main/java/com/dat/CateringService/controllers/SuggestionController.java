@@ -2,9 +2,9 @@
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +29,9 @@ public class SuggestionController {
 		try {
 			String role = authentication.getAuthorities().toArray()[0].toString();
 			if (role.equals("admin")) {
-				model.addAttribute("suggestions", suggestionService.getAllSuggestions());
+				List<com.dat.CateringService.entity.Suggestion> suggestions = suggestionService.getAllSuggestions();
+				model.addAttribute("suggestions", suggestions);
+				model.addAttribute("totalnum", suggestions.size());
 				return "admin/suggestion";
 			}
 			return "redirect:/showMyLoginPage";
@@ -49,11 +51,18 @@ public class SuggestionController {
 	}
 
 	@GetMapping("/checkSuggestions")
-	public String checkSuggestions(@RequestParam("start") String startDate, @RequestParam("end") String endDate,
+	public String checkSuggestions(@RequestParam(name="start", required = false) String startDate, @RequestParam(name="end", required = false) String endDate,
 			Model model) {
+		if(startDate == "" || startDate == null) startDate = LocalDate.now().toString();
+		if(endDate == "") endDate = startDate;
 		LocalDate start = LocalDate.parse(startDate);
 		LocalDate end = LocalDate.parse(endDate);
-		model.addAttribute("suggestions", suggestionService.getByStartAndEndDate(start, end));
+		List<com.dat.CateringService.entity.Suggestion> suggestions = suggestionService.getByStartAndEndDate(start, end);
+		
+		model.addAttribute("start", startDate);
+		model.addAttribute("end", endDate);
+		model.addAttribute("suggestions", suggestions);
+		model.addAttribute("totalnum", suggestions.size());
 		return "admin/suggestion";
 	}
 }

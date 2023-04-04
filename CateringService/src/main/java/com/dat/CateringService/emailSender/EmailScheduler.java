@@ -10,12 +10,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import com.dat.CateringService.entity.Staff;
-import org.springframework.stereotype.Service;
-
-import com.dat.CateringService.entity.Staff;
 
 
 import com.dat.CateringService.service.StaffService;
@@ -29,29 +23,13 @@ public class EmailScheduler {
 	@Autowired
 	private StaffService staffService;
 
-	@Scheduled(cron = "0 46 13 ? * MON-FRI") // send email every day at 12pm
+	@Scheduled(cron = "0 5 16 ? * MON-FRI") // send email every day at 12pm
 	public void sendEmail() {
 		List<String> email = staffService.findActiveEmailNoti(true);
-//		String email=staff.getEmail();
-		System.out.println(email);
-//		for (String temp : email) {
-//			SimpleMailMessage message = new SimpleMailMessage();
-//			message.setTo("mr.bhonemyatp@gmail.com", "zhiendharuki89@gmail.com",
-//			"aung6997@gmail.com", "clandestine2002@gmail.com");
-//			message.setTo(temp);
-//	        String htmlMsg = "<html><body>"
-//		            + "<h3>Dear our valuable employee,</h3>"
-//		            + "<p>Remember to have lunch today!</p>"
-//		            + "</body></html>";
-//	        message.setText(htmlMsg);
-//
-//			String htmlContent = "<h1>Dear our valuable employee,</h1>"
-//					+ "<p>Remember to have lunch today!</p>";
-//			message.setContent(htmlContent, "text/html; charset=utf-8");
-//
-//			message.setSubject("Lunch Reminder");
-//			mailSender.send(message);
-//		}
+		for(String temp : email) {
+			if(temp==null) email.remove(email.indexOf(temp));
+			System.out.println(temp);
+		}
 	
 		for(String temp : email) {
 			MimeMessage message = mailSender.createMimeMessage();

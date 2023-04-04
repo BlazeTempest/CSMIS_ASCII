@@ -40,4 +40,6 @@ public interface StaffRepository extends JpaRepository<Staff, String> {
     
     @Query(value="SELECT email FROM staff WHERE email_noti=:email_noti", nativeQuery = true)
     public List<String> findActiveEmailNoti(@Param("email_noti") boolean email_noti);
+    
+    public List<Staff> findByAvoidMeatIdsContains(String avoidMeatIds);
 }

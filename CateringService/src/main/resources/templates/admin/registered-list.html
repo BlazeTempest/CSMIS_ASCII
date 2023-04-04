@@ -38,7 +38,10 @@
 <!-- font awesome -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap5.min.css" />
+	<script defer src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script defer src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+	<script defer src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap5.min.js"></script>
 <style>
 table tr th {
 	color: rgb(79, 30, 192);
@@ -57,22 +60,29 @@ i.fa-solid {
 
 /* start style for report btn */
 .btn-group {
-	padding-right: 20px;
+	padding-right: 30px;
 	padding-left: 30px;
 }
+
 .btn-group .btn {
-  border-radius: 10px;
+	border-radius: 10px;
 }
-.btn-check:checked+.btn-primary,
-.btn-check:active+.btn-primary,
-.btn-primary:active,
-.btn-primary.active,
-.show>.btn-primary.dropdown-toggle {
-    color: black;
-    background-color: white;
-    border-color: #b01111;
-    box-shadow: 5px 5px grey;
+
+.btn-check:checked+.btn-primary, .btn-check:active+.btn-primary,
+	.btn-primary:active, .btn-primary.active, .show>.btn-primary.dropdown-toggle
+	{
+	color: #06324d;
+	background-color: white;
+	border-color: #06324d;
+	box-shadow: 5px 5px #06324d;
 }
+.btn-primary:hover {
+	background-color: #06324d;
+	color: white;
+	transform: scale(1.1);
+	box-shadow: 0 0 20px #06324d;
+}
+
 /* end style for report btn */
 </style>
 <script>
@@ -121,31 +131,9 @@ table tr th {
 					<a th:href="@{dashboard}" class="nav-item nav-link"><i
 						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
 						th:href="@{/employee-list}" class="nav-item nav-link"><i
-						class="fas fa-users me-2"></i>Employee List</a> <a
-						th:href="@{registered-list}" class="nav-item nav-link active"><i
+						class="fas fa-users me-2"></i>Employee List</a> 
+					<a th:href="@{registered-list}" class="nav-item nav-link active"><i
 						class="fa fa-laptop me-2"></i>Report</a>
-					<!-- <div class="nav-item dropdown">
-              <a
-                href="#"
-                class="nav-link dropdown-toggle active"
-                data-bs-toggle="dropdown"
-                ><i class="fa fa-laptop me-2"></i>Report</a
-              >
-              <div class="dropdown-menu bg-transparent border-0">
-                <a th:href="@{registered-list}" class="dropdown-item active"
-                  >Registered List</a
-                >
-                <a th:href="@{register-eat-list}" class="dropdown-item"
-                  >Registered & Eat List</a
-                >
-                <a th:href="@{register-not-eat-list}" class="dropdown-item"
-                  >Registered & Not Eat List</a
-                >
-                <a th:href="@{not-registereed-eat-list}" class="dropdown-item"
-                  >Unregistered & Eat List</a
-                >
-              </div>
-            </div> -->
 					<a th:href="@{registration}" class="nav-item nav-link"><i
 						class="fas fa-pen me-2"></i>Lunch Register</a> <a th:href="@{menu}"
 						class="nav-item nav-link"><i class="fas fa-hamburger me-2"></i>Menu</a>
@@ -190,7 +178,6 @@ table tr th {
 							class="text-center text-white ms-2">Email</span>
 					</div>
 					<div class="nav-item">
-
 						<div class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle"
 								data-bs-toggle="dropdown"> <img
@@ -198,10 +185,13 @@ table tr th {
 								style="width: 40px; height: 40px" /> <span
 								class="d-none d-lg-inline-flex" th:text="${name}"></span>
 							</a>
-							<div
-								class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
-								<a href="profile.html" class="dropdown-item">Profile</a> <a
-									href="signin.html" class="dropdown-item">Log Out</a>
+							<div class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
+								<a th:href="@{/userProfile}" class="dropdown-item text-center">Profile</a>
+								<form action="#" th:action="@{/logout}" method="POST">
+                                    <input type="submit" value="Logout"
+                                        class="dropdown-item text-center"
+                                        style="color: rgb(0, 0, 0); width: 100%; height: 45px;" />
+                                </form>
 							</div>
 						</div>
 					</div>
@@ -210,62 +200,34 @@ table tr th {
 			<!-- Navbar End -->
 
 			<!-- Sale & Revenue Start -->
-			<div class="container-fluid pt-4 px-4">
-				<div class="btn-group d-flex justify-content-between" role="group"
-					aria-label="Button group with options">
-					<div role="group">
-						<a th:href="@{registered-list}" class="btn btn-primary active">Registered
-							List</a>
-					</div>
-					<div class="" role="group">
-						<a th:href="@{register-eat-list}" class="btn btn-primary">Registered
-							& Eat List</a>
-					</div>
-					<div class="" role="group">
-						<a th:href="@{register-not-eat-list}" class="btn btn-primary">Registered
-							& Not Eat List</a>
-					</div>
-					<div class="" role="group">
-						<a th:href="@{not-registereed-eat-list}" class="btn btn-primary">Unregistered
-							& Eat List</a>
+			<div class="container-fluid pt-4">
+				<div class="row">
+					<div class="btn-group d-flex justify-content-between" role="group"
+						aria-label="Button group with options">
+						<div role="group">
+							<a th:href="@{summary}" class="btn btn-primary">Summary
+								Report</a>
+						</div>
+						<div role="group">
+							<a th:href="@{registered-list}" class="btn btn-primary active">Registered
+								List</a>
+						</div>
+						<div class="" role="group">
+							<a th:href="@{register-eat-list}" class="btn btn-primary">Registered
+								- Eat List</a>
+						</div>
+						<div class="" role="group">
+							<a th:href="@{register-not-eat-list}" class="btn btn-primary">Registered
+								- Not Eat List</a>
+						</div>
+						<div class="" role="group">
+							<a th:href="@{not-registereed-eat-list}" class="btn btn-primary">Unregistered
+								- Eat List</a>
+						</div>
 					</div>
 				</div>
 				<div class="mt-3"></div>
-				<div class="bg-secondary rounded mb-3 p-4">
-					<h2 class="mb-4 text-center">Import Doorlog Data</h2>
-					<form class="row" method="post" enctype="multipart/form-data"
-						th:action="@{/importDoorlog}">
-						<div class="card-body my-2 text-center offset-1 col-7">
-							<input class="form-control form-control-lg bg-white fs-6"
-								name="file" accept=".xls,.xlsx,.csv" id="formFileLg" type="file"
-								required />
-						</div>
-						<div class="card-body my-2 text-center col-4">
-							<button type="submit" class="btn btn-outline-dark text-center">
-								<i class="fa fa-plus"></i>&nbsp; Upload
-							</button>
-						</div>
-						<div th:if="${success!=null}" class="alert alert-success"
-							th:text=${success}></div>
-						<div th:if="${error!=null}" class="alert alert-danger"
-							th:text=${error}></div>
-					</form>
-					<div class="alert alert-info text-center">In case of doorlog
-						system failure, you can input the following data to create invoice</div>
-					<form th:action="@{/addHeadcount}" method="post" class="row">
-						<input type="date" name="invoiceDate" class="ms-3 col-4">
-						<input type="number" name="actual" class="ms-3 col-4 float-end"
-							placeholder="Actual Completed lunch count">
-						<button type="submit"
-							class="ms-3 col-3 btn btn-outline-dark float-end">
-							<i class="fa fa-plus"></i>&nbsp; Add headcount
-						</button>
-					</form>
-					<div th:if=${successHeadcount} th:text=${successHeadcount}
-						class="alert alert-success"></div>
-				</div>
-				<div
-					class="row bg-secondary rounded align-items-center justify-content-center mx-0">
+				<div class="row bg-secondary rounded align-items-center justify-content-center mx-0">
 					<div class="bg-secondary rounded h-100 p-4">
 						<div class="row">
 							<h2 class="mb-4 text-end col-lg-8"
@@ -278,31 +240,34 @@ table tr th {
 							<form th:action="@{/searchRegistered}" method="get"
 								class="row g-3">
 								<div class="col-md-2">
-									<input class="form-control bg-white border-info" th:value=${id} name="id"
-										type="search" placeholder="By Id">
+									<input class="form-control bg-white border-info" th:value=${id}
+										name="id" type="search" placeholder="By Id">
 								</div>
 								<div class="col-md-2">
-									<input class="form-control bg-white border-info" th:value=${searchName}
-										name="name" type="search" placeholder="By Name">
+									<input class="form-control bg-white border-info"
+										th:value=${searchName} name="name" type="search"
+										placeholder="By Name">
 								</div>
 
 								<div class="col-md-2">
-									<input class="form-control bg-white border-info" th:value=${team}
-										list="teamList" name="team" type="search"
+									<input class="form-control bg-white border-info"
+										th:value=${team} list="teamList" name="team" type="search"
 										placeholder="By Team">
 									<datalist id="teamList">
 										<option th:each=team:${teams} th:text=${team}>
 									</datalist>
 								</div>
 								<div class="col-md-2">
-									<input class="form-control bg-white border-info" th:value=${start}
-										name="start" type="text" placeholder="From date"
-										onfocus="(this.type='date')" onblur="(this.type='text')">
+									<input class="form-control bg-white border-info"
+										th:value=${start} name="start" type="text"
+										placeholder="From date" onfocus="(this.type='date')"
+										onblur="(this.type='text')">
 								</div>
 								<div class="col-md-2">
-									<input class="form-control bg-white border-info" style="width: 150px;"
-										th:value=${end} name="end" type="text" placeholder="To date"
-										onfocus="(this.type='date')" onblur="(this.type='text')">
+									<input class="form-control bg-white border-info"
+										style="width: 150px;" th:value=${end} name="end" type="text"
+										placeholder="To date" onfocus="(this.type='date')"
+										onblur="(this.type='text')">
 								</div>
 								<div class="col-md-2">
 									<button type="submit" class="btn btn-outline-dark me-2">
@@ -347,8 +312,7 @@ table tr th {
 						<hr style="background-color: rgb(79, 30, 192); height: 2px;">
 
 						<div class="table-responsive">
-							<table th:if="${not #lists.isEmpty(registeredStaffs)}"
-								class="table rounded text-dark table-hover mt-4">
+							<table class="table rounded text-dark mt-4" id="empList">
 								<thead class="text-white">
 									<tr>
 										<th scope="col">Staff ID</th>
@@ -412,6 +376,12 @@ table tr th {
 
 	<!-- Template Javascript -->
 	<script src="js/main.js"></script>
+	<script type="text/javascript">
+	$(document).ready( function () {
+        $('#empList').DataTable({searching: false, info: false});
+        
+    } );
+	</script>
 </body>
 
 </html>

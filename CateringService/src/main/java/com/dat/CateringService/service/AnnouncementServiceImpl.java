@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.dat.CateringService.daos.AnnouncementRepository;
 import com.dat.CateringService.entity.Announcement;
+
 @Service
 public class AnnouncementServiceImpl implements AnnouncementService {
 	
@@ -46,6 +47,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 	@Override
 	public void delete(Announcement announcement) {
 		announcementRepository.delete(announcement);
+	}
+	@Override
+	public List<Announcement> orderByCreatedDate() {
+		return announcementRepository.findAllByOrderByCreatedDateDesc();
 	}
 
 }

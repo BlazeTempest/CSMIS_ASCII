@@ -3,7 +3,6 @@ package com.dat.CateringService.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.dat.CateringService.daos.AvoidMeatRepository;
@@ -40,6 +39,11 @@ public class AvoidMeatServiceImpl implements AvoidMeatService {
 	@Override
 	public AvoidMeat findById(int id) {
 		return avoidMeatRepository.getById(id);
+	}
+
+	@Override
+	public void deleteAvoidMeat(AvoidMeat avoidMeat) {
+		avoidMeatRepository.delete(avoidMeat);	
 	}
 
 }

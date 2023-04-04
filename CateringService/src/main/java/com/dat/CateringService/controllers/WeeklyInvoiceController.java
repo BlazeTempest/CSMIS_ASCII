@@ -133,9 +133,6 @@ public class WeeklyInvoiceController {
 
 			List<WeeklyInvoiceDTO> dto = new ArrayList<>();
 
-			System.out.println("This is last inserted date >>>>>>>>>>" + lastInsertedDate);
-			System.out.println("This is last start date >>>>>>>>>>" + startDate);
-
 			for (Headcount headcount : headcounts) {
 				WeeklyInvoiceDTO temp = new WeeklyInvoiceDTO();
 
@@ -284,7 +281,7 @@ public class WeeklyInvoiceController {
 		String start = invoiceStart1.format(formatter);
 		String end = invoiceEnd1.format(formatter);
 
-		String payDate = paymentDate.formatted(formatter);
+		String payDate = paymentDate1.format(formatter);
 
 		re.addAttribute("invoiceStart", start);
 		re.addAttribute("invoiceEnd", end);

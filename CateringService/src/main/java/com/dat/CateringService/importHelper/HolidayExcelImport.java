@@ -2,6 +2,7 @@ package com.dat.CateringService.importHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -40,10 +41,11 @@ public class HolidayExcelImport {
 					holidayObject.setHoliday_ID((int)cell.getNumericCellValue());
 					break;
 				case 1 :
-					holidayObject.setHoliday_date(cell.getDateCellValue());
+					LocalDateTime date = cell.getLocalDateTimeCellValue();
+					holidayObject.setHolidayDate(date.toLocalDate());
 					break;
 				case 2 :
-					holidayObject.setHoliday_name(cell.getStringCellValue());
+					holidayObject.setHolidayName(cell.getStringCellValue());
 				default :
 					break;
 				}

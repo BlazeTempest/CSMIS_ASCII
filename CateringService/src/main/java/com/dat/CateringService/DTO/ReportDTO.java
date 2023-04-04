@@ -1,11 +1,41 @@
 package com.dat.CateringService.DTO;
 
+import java.time.LocalDate;
+
 public class ReportDTO {
 	private String dept;
 	private String team;
 	private int registeredCount;
 	private int actualCount;
+	private String staffID;
+	private String name;
+	private int registeredStatus;
+	private LocalDate dineDate;
 	
+	public LocalDate getDineDate() {
+		return dineDate;
+	}
+	public void setDineDate(LocalDate dineDate) {
+		this.dineDate = dineDate;
+	}
+	public String getStaffID() {
+		return staffID;
+	}
+	public void setStaffID(String staffID) {
+		this.staffID = staffID;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getRegisteredStatus() {
+		return registeredStatus;
+	}
+	public void setRegisteredStatus(int registeredStatus) {
+		this.registeredStatus = registeredStatus;
+	}
 	public ReportDTO(int registeredCount, int actualCount) {
 		super();
 		this.registeredCount = registeredCount;

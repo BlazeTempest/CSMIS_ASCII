@@ -4,15 +4,12 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -49,14 +46,18 @@ public class RegistrationController {
 	@GetMapping("/registration")
 	public String showRegistrationForm(Model model, Authentication authentication) {
 		String role = authentication.getAuthorities().toArray()[0].toString();
+		List<String> headers = new ArrayList<>(Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"));
+		List<LocalDate> holidays = new ArrayList<>();
+		List<String> holidayNames = new ArrayList<>();
+		List<Holidays> holidayEntity = holidayService.getAll();
+		for (Holidays d : holidayEntity) {
+			if(d.getHolidayDate().getMonthValue()==LocalDate.now().getMonthValue()) {
+				holidays.add(d.getHolidayDate());
+				holidayNames.add(d.getHolidayName());
+			}
+		}
+		
 		if(role.equals("admin")) {
-			List<String> headers = new ArrayList<>(Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"));
-			List<LocalDate> holidays = new ArrayList<>();
-			List<Holidays> holidayEntity = holidayService.getAll();
-			for (Holidays d : holidayEntity) {
-				holidays.add(d.getHoliday_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-			}
-	
 			LocalDate date = LocalDate.now(); // get the current date
 			int month = date.getMonthValue();
 			WeekFields weekFields = WeekFields.of(Locale.getDefault());
@@ -176,25 +177,38 @@ public class RegistrationController {
 			}
 	
 			List<LocalDate> disabledDates = new ArrayList<>();
-			LocalDate currentDate = LocalDate.now();
-			LocalDate firstDayOfMonth2 = currentDate.with(TemporalAdjusters.firstDayOfMonth());
-			LocalDate lastDayOfMonth2 = currentDate.with(TemporalAdjusters.lastDayOfMonth());
-			LocalDate firstMonday = firstDayOfMonth2.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-			LocalDate lastFriday = lastDayOfMonth2.with(TemporalAdjusters.previous(DayOfWeek.FRIDAY));
-			LocalDate previousMonday = firstMonday.minusDays(7);
-			LocalDate previousFriday = lastFriday.minusDays(7);
-			disabledDates.addAll(previousMonday.datesUntil(previousFriday.plusDays(1)).collect(Collectors.toList()));
-			disabledDates.addAll(firstMonday.datesUntil(lastFriday.plusDays(1)).collect(Collectors.toList()));
-			LocalTime currentTime = LocalTime.now();
-			if (currentDate.getDayOfWeek() == DayOfWeek.FRIDAY && currentTime.isAfter(LocalTime.of(13, 0))) {
-				LocalDate nextMonday = currentDate.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-				LocalDate nextFriday = currentDate.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
-				disabledDates.addAll(nextMonday.datesUntil(nextFriday.plusDays(1)).collect(Collectors.toList()));
-			} else if (currentDate.getDayOfWeek().compareTo(DayOfWeek.FRIDAY) > 0) {
-				LocalDate nextMonday = currentDate.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-				LocalDate nextFriday = currentDate.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
-				disabledDates.addAll(nextMonday.datesUntil(nextFriday.plusDays(1)).collect(Collectors.toList()));
-			}
+
+	        // Add dates from previous weeks of the month
+	        LocalDate currentDate = LocalDate.of(2023, 4, 7);
+	        int currentWeekOfMonth = currentDate.get(WeekFields.of(DayOfWeek.MONDAY, 1).weekOfMonth());
+	        for (int i = 1; i < currentWeekOfMonth; i++) {
+	            LocalDate weekStart = firstDayOfMonth.plusDays((i - 1) * 7);
+	            LocalDate weekEnd = weekStart.plusDays(6);
+	            for (LocalDate temp = weekStart; !date.isAfter(weekEnd); date = date.plusDays(1)) {
+	                disabledDates.add(temp);
+	            }
+	        }
+
+	        // Add current week dates
+	        for (int i = 0; i < 7; i++) {
+	            disabledDates.add(currentDate.with(DayOfWeek.MONDAY).plusDays(i));
+	        }
+	        
+	        // Add next week dates if it is Friday
+	        LocalTime currentTime = LocalTime.now();
+	        if (currentDate.getDayOfWeek() == DayOfWeek.FRIDAY && currentTime.isAfter(LocalTime.of(13, 0))) {
+	            for (int i = 0; i < 7; i++) {
+	                disabledDates.add(currentDate.with(DayOfWeek.MONDAY).plusDays(7 + i));
+	            }
+	        }
+	        
+	        List<LocalDate> toRemove = new ArrayList<>();
+	        for(LocalDate temp:disabledDates) {
+	        	if(temp.getDayOfWeek()==DayOfWeek.SUNDAY || temp.getDayOfWeek()==DayOfWeek.SATURDAY) {
+	        		toRemove.add(temp);
+	        	}
+	        }
+	        disabledDates.removeAll(toRemove);
 			
 			List<AvoidMeat> avoidMeats = avoidMeatService.findAll();
 			String staffAvoidMeats = staffService.getStaffById(authentication.getName()).getAvoidMeatIds();
@@ -209,6 +223,9 @@ public class RegistrationController {
 	
 				}
 			}
+			
+			model.addAttribute("holidayNames", holidayNames);
+			model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 			model.addAttribute("currentDay", date.getDayOfMonth());
 			model.addAttribute("checkedMeats", checkedMeats);
 			model.addAttribute("avoidmeats", avoidMeats);
@@ -220,15 +237,8 @@ public class RegistrationController {
 			model.addAttribute("currentYear", date.getYear());
 			model.addAttribute("month", weeksInMonth);
 			model.addAttribute("disabledDates", disabledDates);
-			return "lunch-register";
+			return "admin/lunch-register";
 		}else {
-			List<String> headers = new ArrayList<>(Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"));
-			List<LocalDate> holidays = new ArrayList<>();
-			List<Holidays> holidayEntity = holidayService.getAll();
-			for (Holidays d : holidayEntity) {
-				holidays.add(d.getHoliday_date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-			}
-	
 			LocalDate date = LocalDate.now(); // get the current date
 			int month = date.getMonthValue();
 			WeekFields weekFields = WeekFields.of(Locale.getDefault());
@@ -348,28 +358,39 @@ public class RegistrationController {
 			}
 	
 			List<LocalDate> disabledDates = new ArrayList<>();
-			LocalDate currentDate = LocalDate.now();
-			LocalDate firstDayOfMonth2 = currentDate.with(TemporalAdjusters.firstDayOfMonth());
-			LocalDate lastDayOfMonth2 = currentDate.with(TemporalAdjusters.lastDayOfMonth());
-			LocalDate firstMonday = firstDayOfMonth2.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-			LocalDate lastFriday = lastDayOfMonth2.with(TemporalAdjusters.previous(DayOfWeek.FRIDAY));
-			LocalDate previousMonday = firstMonday.minusDays(7);
-			LocalDate previousFriday = lastFriday.minusDays(7);
-			disabledDates.addAll(previousMonday.datesUntil(previousFriday.plusDays(1)).collect(Collectors.toList()));
-			disabledDates.addAll(firstMonday.datesUntil(lastFriday.plusDays(1)).collect(Collectors.toList()));
-			LocalTime currentTime = LocalTime.now();
-			if (currentDate.getDayOfWeek() == DayOfWeek.FRIDAY && currentTime.isAfter(LocalTime.of(13, 0))) {
-				LocalDate nextMonday = currentDate.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-				LocalDate nextFriday = currentDate.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
-				disabledDates.addAll(nextMonday.datesUntil(nextFriday.plusDays(1)).collect(Collectors.toList()));
-			} else if (currentDate.getDayOfWeek().compareTo(DayOfWeek.FRIDAY) > 0) {
-				LocalDate nextMonday = currentDate.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-				LocalDate nextFriday = currentDate.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
-				disabledDates.addAll(nextMonday.datesUntil(nextFriday.plusDays(1)).collect(Collectors.toList()));
-			}
-			
-			
-	
+
+	        // Add dates from previous weeks of the month
+	        LocalDate currentDate = LocalDate.of(2023, 4, 7);
+	        int currentWeekOfMonth = currentDate.get(WeekFields.of(DayOfWeek.MONDAY, 1).weekOfMonth());
+	        for (int i = 1; i < currentWeekOfMonth; i++) {
+	            LocalDate weekStart = firstDayOfMonth.plusDays((i - 1) * 7);
+	            LocalDate weekEnd = weekStart.plusDays(6);
+	            for (LocalDate temp = weekStart; !date.isAfter(weekEnd); date = date.plusDays(1)) {
+	                disabledDates.add(temp);
+	            }
+	        }
+
+	        // Add current week dates
+	        for (int i = 0; i < 7; i++) {
+	            disabledDates.add(currentDate.with(DayOfWeek.MONDAY).plusDays(i));
+	        }
+
+	        // Add next week dates if it is Friday
+	        LocalTime currentTime = LocalTime.now();
+	        if (currentDate.getDayOfWeek() == DayOfWeek.FRIDAY && currentTime.isAfter(LocalTime.of(13, 0))) {
+	            for (int i = 0; i < 7; i++) {
+	                disabledDates.add(currentDate.with(DayOfWeek.MONDAY).plusDays(7 + i));
+	            }
+	        }
+	        
+	        List<LocalDate> toRemove = new ArrayList<>();
+	        for(LocalDate temp:disabledDates) {
+	        	if(temp.getDayOfWeek()==DayOfWeek.SUNDAY || temp.getDayOfWeek()==DayOfWeek.SATURDAY) {
+	        		toRemove.add(temp);
+	        	}
+	        }
+	        disabledDates.removeAll(toRemove);
+	        
 			List<AvoidMeat> avoidMeats = avoidMeatService.findAll();
 			String staffAvoidMeats = staffService.getStaffById(authentication.getName()).getAvoidMeatIds();
 			List<AvoidMeat> checkedMeats = new ArrayList<>();
@@ -383,6 +404,8 @@ public class RegistrationController {
 	
 				}
 			}
+			
+			model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 			model.addAttribute("currentDay", date.getDayOfMonth());
 			model.addAttribute("checkedMeats", checkedMeats);
 			model.addAttribute("avoidmeats", avoidMeats);
@@ -394,7 +417,7 @@ public class RegistrationController {
 			model.addAttribute("currentYear", date.getYear());
 			model.addAttribute("month", weeksInMonth);
 			model.addAttribute("disabledDates", disabledDates);
-			return "employee-lunch-register";
+			return "employee/employee-lunch-register";
 		}
 	}
 
@@ -416,6 +439,7 @@ public class RegistrationController {
 		Staff staff = staffService.getStaffById(authentication.getName());
 		if (status.equalsIgnoreCase("Update")) {
 			for (LocalDate dineDate : checkedDates) {
+				System.out.println(dineDate);
 				Registered_list registered = registeredService.getbyStaffIDAndDineDate(staff.getStaffID(), dineDate);
 				registered.setDine(true);
 				registered.setModify_date(LocalDateTime.now());
@@ -424,10 +448,12 @@ public class RegistrationController {
 			}
 			for (LocalDate dineDate : uncheckedDates) {
 				Registered_list registered = registeredService.getbyStaffIDAndDineDate(staff.getStaffID(), dineDate);
-				registered.setDine(false);
-				registered.setModify_date(LocalDateTime.now());
-				registeredService.addRegisteredDate(registered);
-				System.out.println("updated");
+				if(registered!=null) {
+					registered.setDine(false);
+					registered.setModify_date(LocalDateTime.now());
+					registeredService.addRegisteredDate(registered);
+					System.out.println("updated");
+				}
 			}
 			redirAttrs.addFlashAttribute("message", "Your changes Lunch plan is updated successfully!");
 		} else if (status.equalsIgnoreCase("Register")) {
@@ -449,9 +475,7 @@ public class RegistrationController {
 		}
 		String avoidMeatList = "";
 		if (avoidMeats != null) {
-
 			for (String avoidMeat : avoidMeats) {
-				System.out.println(avoidMeat);
 				if (avoidMeatList.isEmpty() || avoidMeatList.isEmpty()) {
 					avoidMeatList = avoidMeat;
 				} else {

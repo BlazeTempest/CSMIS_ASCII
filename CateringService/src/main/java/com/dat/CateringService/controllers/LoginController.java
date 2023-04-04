@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.dat.CateringService.DTO.ReportDTO;
 import com.dat.CateringService.daos.PriceRepository;
 import com.dat.CateringService.entity.Announcement;
+import com.dat.CateringService.entity.DailyDoorLog;
 import com.dat.CateringService.entity.Price;
 import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.service.AnnouncementService;
+import com.dat.CateringService.service.DoorlogService;
 import com.dat.CateringService.service.MenuPdfService;
 import com.dat.CateringService.service.PriceService;
 import com.dat.CateringService.service.RegisteredListService;
@@ -34,14 +36,21 @@ import com.dat.CateringService.service.StaffService;
 public class LoginController {
 	@Autowired
 	private PriceService priceService;
+	
 	@Autowired
 	private MenuPdfService menuPdfService;
+	
 	@Autowired
 	private StaffService staffService;
+	
 	@Autowired
 	private AnnouncementService announcementService;
+	
 	@Autowired
 	private RegisteredListService registeredService;
+	
+	@Autowired
+	private DoorlogService doorService;
 
 	@GetMapping("/showMyLoginPage")
 	public String showMyLoginPage() {
@@ -59,13 +68,12 @@ public class LoginController {
 
 	@GetMapping("/dashboard")
 	public String showDashboard(Model theModel, Authentication authentication) throws IOException {
-
 		try {
 			String role = authentication.getAuthorities().toArray()[0].toString();
 			if (role.equals("admin")) {
-				List<Announcement> announcements = announcementService.getAllAnnouncements();
+				List<Announcement> announcements = announcementService.orderByCreatedDate();
 				for(Announcement temp : announcements) {
-					if(temp.getDeleted_date()==LocalDate.now()) {
+					if(temp.getDeleted_date().equals(LocalDate.now())) {
 						announcementService.delete(temp);
 					}
 				}
@@ -107,16 +115,31 @@ public class LoginController {
 				Price activePrice = priceService.findActivePrice();
 				Byte status = activePrice.getStatus();
 				if (status != null || status.equals((byte)1)) {
-					
 					// perform actions when status is equal to myByteObject
 					theModel.addAttribute("totalPrice", activePrice.getTotal_price());
 					theModel.addAttribute("datPrice", activePrice.getDATprice());
 					theModel.addAttribute("staffPrice", activePrice.getStaff_price());
 				}
+				List<DailyDoorLog> doorlogs = doorService.getDoorlogByDineDate(LocalDate.now(), LocalDate.now());
+				List<DailyDoorLog> unregisteredComplete = new ArrayList<>();
+				for(DailyDoorLog temp : doorlogs) {
+					if(temp.getRegistered()==false) {
+						unregisteredComplete.add(temp);
+					}
+				}
+				String countGraph = "";
+				countGraph = registeredService.getRegisteredStaffByStatusAndDineAndDate(true, true, LocalDate.now(), LocalDate.now()).size() + "," + registeredService.getRegisteredStaffByStatusAndDineAndDate(false, true, LocalDate.now(), LocalDate.now()).size() + "," + unregisteredComplete.size();
+				System.out.println(countGraph);
+				theModel.addAttribute("countGraph", countGraph);
+				theModel.addAttribute("completedCount", registeredService.getRegisteredStaffByStatusAndDineAndDate(true, true, LocalDate.now(), LocalDate.now()).size());
+				theModel.addAttribute("skippedCount", registeredService.getRegisteredStaffByStatusAndDineAndDate(false, true, LocalDate.now(), LocalDate.now()).size());
+				theModel.addAttribute("unregisteredComplete", unregisteredComplete.size());
+				theModel.addAttribute("registeredCount", registeredService.getRegisteredStaffByDate(LocalDate.now()).size());
+				theModel.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+				theModel.addAttribute("announcements", announcements);
 				theModel.addAttribute("admins", admin);
 				theModel.addAttribute("teamCounts", teamCounts);
 				theModel.addAttribute("deptCounts", deptCounts);
-				theModel.addAttribute("totalRegistered", registeredService.getRegisteredStaffByStartDateAndEndDate(firstDay, lastDay).size());
 				theModel.addAttribute("totalTeam", teams.size());
 				theModel.addAttribute("totalDept", depts.size());
 				theModel.addAttribute("TeamNames", teams.size());
@@ -173,25 +196,16 @@ public class LoginController {
 	public void handleToggleSwitch(@RequestParam("isChecked") boolean isChecked ,Authentication authentication) {
 
 		String staffId=authentication.getName();
-		System.out.println(staffId);
-		System.out.println("Toggle switch is " + (isChecked ? "on" : "off"));
 		// JDBC or an ORM to save the value of the toggle switch to the database
 		// Example using JDBC:
 		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/csmis_service", "csmisadmin", "csmisdat")) {
 			
 			String sql = "UPDATE staff SET email_noti = ? WHERE staffID=?";
-			
 			PreparedStatement statement = conn.prepareStatement(sql);
 			 statement.setBoolean(1, isChecked);
 			 statement.setString(2, staffId);
-			 
-			 int rowsUpdated = statement.executeUpdate();
-			 System.out.println(rowsUpdated + " rows updated successfully.");
-
-			
+			 statement.executeUpdate();
 		} catch (SQLException e) {
-			
-			System.out.println("error");
 			e.printStackTrace();
 		}
 	}
