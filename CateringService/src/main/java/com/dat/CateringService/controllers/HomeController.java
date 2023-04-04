@@ -56,14 +56,11 @@ public class HomeController {
 	@Autowired
 	private DoorlogService doorService;
 	
-	@Autowired
-	private DoorlogService doorlogService;
-	
-	@Autowired
-	private HeadcountService headcountService;
-	
-	@Autowired
-	private PriceService priceService;
+	@GetMapping("/about")
+	public String about(Authentication authentication, Model model) {
+		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+		return "about";
+	}
 	
 	@GetMapping("/importFiles")
 	public String importEmployeeFile(Authentication authentication, Model model) {
@@ -403,8 +400,9 @@ public class HomeController {
 			for (Staff object : objects) {
 				// Update existing operator from excel file
 				if (ids.contains(object.getStaffID())) {
-					System.out.println("Update");
 					Staff staff = staffService.getStaffById(object.getStaffID());
+					staff.setDoorLogNo(object.getDoorLogNo());
+					staff.setEnabled((byte)1);
 					staff.setModify_date(LocalDateTime.now());
 					staff.setDivision(object.getDivision());
 					staff.setDept(object.getDept());
@@ -416,7 +414,6 @@ public class HomeController {
 				}
 				// Add new operators
 				else if (!(ids.contains(object.getStaffID()))) {
-					System.out.println("Add");
 					object.setCreated_date(LocalDateTime.now());
 					object.setCreated_by(adminName);
 					object.setEmail_noti((byte) 0);
@@ -429,7 +426,6 @@ public class HomeController {
 			String remove = null;
 			if(ids.contains("1")) remove="1";
 			ids.remove(remove);
-			System.out.println(ids);
 			// Change enabled to 0 (resigned operators)
 			if (ids != null) {
 				for (String id : ids) {
@@ -480,6 +476,7 @@ public class HomeController {
 	public String saveEditStaff(@ModelAttribute("staff") Staff tmpStaff, Authentication authentication) {
 		try{
 			String name = staffService.getStaffById(authentication.getName()).getName();
+			System.out.println(tmpStaff.getDept() + " " + tmpStaff.getDoorLogNo() + " " + tmpStaff.getAvoidMeatIds());
 			tmpStaff.setModify_by(name);
 			tmpStaff.setModify_date(LocalDateTime.now());
 			staffService.addStaff(tmpStaff);

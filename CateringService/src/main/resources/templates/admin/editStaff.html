@@ -56,46 +56,59 @@
 	      
 		  <div class="card-body">
 		  	  <form th:action="@{/saveEdit}" th:object="${staff}" method="get">
+		  	  		<input type="hidden" th:field="*{email_noti}">
+		  	  		<input type="hidden" th:field="*{doorLogNo}">
+		  	  		<input type="hidden" th:field="*{password}">
+		  	  		<input type="hidden" th:field="*{created_date}">
+		  	  		<input type="hidden" th:field="*{created_by}">
+		  	  		<input type="hidden" th:field="*{avoidMeatIds}">
+		  	  		<input type="hidden" th:field="*{enabled}">
+		  	  		<input type="hidden" th:field="*{modify_date}">
+		  	  		<input type="hidden" th:field="*{modify_by}">
+		  	  		<input type="hidden" th:field="*{delete_date}">
+		  	  		<input type="hidden" th:field="*{delete_by}">
+		  	  		<input type="hidden" th:field="*{modify_date}">
+		  	  		<input type="hidden" th:field="*{suggestion_count}">
 		  	  		<div class="mb-3 row">
 					    <label for="staffId" class="col-sm-3 col-form-label">Staff ID</label>
 					    <div class="col-sm-9">
-					      <input type="text" id="staffId" class="form-control bg-white text-dark" th:field="${staff.staffID}">
+					      <input type="text" id="staffId" class="form-control bg-white text-dark" th:field="*{staffID}">
 					    </div>
 					  </div>
 					  <div class="mb-3 row">
 					    <label for="name" class="col-sm-3 col-form-label">Name</label>
 					    <div class="col-sm-9">
-					      <input type="text" id="name" class="form-control bg-white text-dark" th:field="${staff.name}">
+					      <input type="text" id="name" class="form-control bg-white text-dark" th:field="*{name}">
 					    </div>
 					  </div>
 					  <div class="mb-3 row">
 					    <label for="email" class="col-sm-3 col-form-label">Email</label>
 					    <div class="col-sm-9">
-					      <input type="text" id="email" class="form-control bg-white text-dark" th:field="${staff.email}">
+					      <input type="text" id="email" class="form-control bg-white text-dark" th:field="*{email}">
 					    </div>
 					  </div>
 					  <div class="mb-3 row">
 					    <label for="div" class="col-sm-3 col-form-label">Division</label>
 					    <div class="col-sm-9">
-					      <input type="text" id="div" class="form-control bg-white text-dark" th:field="${staff.division}">
+					      <input type="text" id="div" class="form-control bg-white text-dark" th:field="*{division}">
 					    </div>
 					  </div>
 					  <div class="mb-3 row">
 					    <label for="dep" class="col-sm-3 col-form-label">Department</label>
 					    <div class="col-sm-9">
-					      <input type="text" id="dep" class="form-control bg-white text-dark" th:value="${staff.dept}">
+					      <input type="text" id="dep" class="form-control bg-white text-dark" th:field="*{dept}">
 					    </div>
 					  </div>
 					  <div class="mb-3 row">
 					    <label for="team" class="col-sm-3 col-form-label">Team</label>
 					    <div class="col-sm-9">
-					      <input type="text" id="team" class="form-control bg-white text-dark" th:field="${staff.team}">
+					      <input type="text" id="team" class="form-control bg-white text-dark" th:field="*{team}">
 					    </div>
 					  </div>
 					  <div class="mb-3 row">
 					    <label for="inputPassword" class="col-sm-3 col-form-label">Role</label>
 					    <div class="form-group col-sm-9">
-			            	<select class="form-select bg-white text-dark" id="role" th:field="${staff.role}">
+			            	<select class="form-select bg-white text-dark" id="role" th:field="*{role}">
 				            	<option th:selected="${staff.role == 'admin'}" th:value="admin">Administrator</option>
 				                <option th:selected="${staff.role == 'operator'}" th:value="operator">Operator</option>
 			               	</select>

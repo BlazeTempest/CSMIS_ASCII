@@ -267,39 +267,20 @@ input:checked+.slider:before {
                     </div>
                 </div>
 
-                <div class="navbar-nav w-100">
-                    <a href="/" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
-            >
-            <a th:href="@{/importFiles}" class="nav-item nav-link"
-              ><i class="fas fa-upload me-2"></i>Import Data</a
-            >
-            <a th:href="@{/employee-list}" class="nav-item nav-link"
-              ><i class="fas fa-users me-2"></i>Employee List</a
-            >
-            <a th:href="@{/summary}"  class="nav-item nav-link"
-            ><i class="fa fa-laptop me-2"></i>Report</a>
-            <a th:href="@{registration}"  class="nav-item nav-link"
-            ><i class="fas fa-pen me-2"></i>Lunch Register</a
-          >
-            <a th:href="@{/menu}" class="nav-item nav-link"
-              ><i class="fas fa-hamburger me-2"></i>Menu</a
-            >
-            <a th:href="@{restaurant}" class="nav-item nav-link"
-              ><i class="fas fa-home me-2"></i>Restaurant</a
-            >
-            <a th:href="@{/weekly-invoice}" class="nav-item nav-link"
-                  ><i class="fas fa-file me-2"></i> Invoice</a
-                >
-            <div class="nav-item">
-              <a th:href="@{/suggestion}" class="nav-link"
-                ><i class="far fa-file-alt me-2"></i>Suggestions</a
-              >
-            </div>
-            <div class="nav-item">
-              <a th:href="@{/holiday}" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
-                </div>
-        </div>
-        </nav>
+				<div class="navbar-nav w-100">
+					<a href="/" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a> 
+					<a th:href="@{/importFiles}" class="nav-item nav-link"><i class="fas fa-upload me-2"></i>Import Data</a> 
+					<a th:href="@{/employee-list}" class="nav-item nav-link"><i class="fas fa-users me-2"></i>Employee List</a> 
+					<a th:href="@{/summary}" class="nav-item nav-link"><i class="fa fa-laptop me-2"></i>Report</a> 
+					<a th:href="@{registration}" class="nav-item nav-link"><i class="fas fa-pen me-2"></i>Lunch Register</a> 
+					<a th:href="@{/menu}" class="nav-item nav-link"><i class="fas fa-hamburger me-2"></i>Menu</a> 
+					<a th:href="@{restaurant}" class="nav-item nav-link"><i class="fas fa-home me-2"></i>Restaurant</a> 
+					<a th:href="@{/weekly-invoice}" class="nav-item nav-link"><i class="fas fa-file me-2"></i> Invoice</a>		
+					<a th:href="@{/suggestion}" class="nav-item nav-link"><i class="far fa-file-alt me-2"></i>Suggestions</a>
+					<a th:href="@{/holiday}" class="nav-item nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
+					<a th:href="@{/about}" class="nav-item nav-link"><i class="fa fa-circle-question"></i>&nbsp; About</a>
+				</div>
+			</nav>
     </div>
     </div>
     <!-- Sidebar End -->
@@ -562,23 +543,23 @@ input:checked+.slider:before {
       onclick="openForm()"
       id="open"></i>
       <div class="form-popup bg-secondary" id="myForm">
-      <form th:action="@{/addSuggestion}" method="POST" class="form-container bg-secondary">
-        <h3 style="text-decoration: underline;">Suggestion
-        <i class="fa-solid fa-xmark btn cancel float-end"
-            onclick="closeForm()"
-            type="button"
-          ></i>
-		</h3>
-		<span class="text-center">(Your suggestion will be sent to system admin.)</span>
-		<div class="form-outline mt-2">
-	    	<textarea class="form-control bg-white" style="height: 100px;" maxlength="1000" placeholder="Something you want to suggest..." rows="4" id="suggestion" name="suggestion" required></textarea>
+	      <form th:action="@{/addSuggestion}" method="POST" class="form-container bg-secondary">
+	        <h3 style="text-decoration: underline;">Suggestion
+	        <i class="fa-solid fa-xmark btn cancel float-end"
+	            onclick="closeForm()"
+	            type="button"
+	          ></i>
+			</h3>
+			<span class="text-center">(Your suggestion will be sent to system admin.)</span>
+			<div class="form-outline mt-2">
+		    	<textarea class="form-control bg-white" style="height: 100px;" maxlength="1000" placeholder="Something you want to suggest..." rows="4" id="suggestion" name="suggestion" required></textarea>
+		    </div>
+			    <input type="text" value="0/1000" id="count" style="background-color: transparent; border: none; font-size: small;" disabled>
+		        <div class="float-end">
+		        	<button class="fa-solid fa-paper-plane fs-3 btn" type="submit"></button>
+		        </div>
+	      </form>
 	    </div>
-		    <input type="text" value="0/1000" id="count" style="background-color: transparent; border: none; font-size: small;" disabled>
-	        <div class="float-end">
-	        	<button class="fa-solid fa-paper-plane fs-3 btn" type="submit"></button>
-	        </div>
-      </form>
-    </div>
     <!-- End view all announcements -->
     <script>
     $(document).ready(function () {

@@ -214,6 +214,7 @@
 										</button>
 									</div>
 								</form>
+								<div class="alert alert-info text-center">You can add holidays which may only be known at a certain time or may vary based on location or culture.</div>
 								<form method="post" th:action="@{/addHoliday}" class="row">
 									<div class="col input-group" style="margin-left: 88px;">
 										<span class="input-group-text" id="basic-addon1">Date</span> 
@@ -227,7 +228,7 @@
 										<button type="submit" class="btn btn-outline-dark"><i class="fa fa-plus"></i>&nbsp; Add Holiday</button>
 									</div>
 								</form>
-								<div th:if=${message} th:text=${message} class="alert alert-info mt-3"></div>
+								<div th:if=${message} th:text=${message} class="alert alert-success mt-3"></div>
 				</div>
 			</div>
 			<!-- Employee List End -->

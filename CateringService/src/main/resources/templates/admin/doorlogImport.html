@@ -222,7 +222,7 @@
 					<div class="alert alert-info text-center">In case of doorlog
 						system failure, you can input the following data to create invoice</div>
 					<form th:action="@{/addHeadcount}" method="post" class="row">
-						<input type="date" name="invoiceDate" class="ms-3 col-4">
+						<input type="text" name="invoiceDate" class="ms-3 col-4" placeholder="Date of actual completed count" onfocus="this.type='date'">
 						<input type="number" name="actual" class="ms-3 col-4 float-end"
 							placeholder="Actual Completed lunch count">
 						<button type="submit"
@@ -256,10 +256,6 @@
 			<!-- Footer End -->
 		</div>
 		<!-- Content End -->
-
-		<!-- Back to Top -->
-		<a href="#" class="btn btn-lg btn-info btn-lg-square back-to-top"><i
-			class="bi bi-arrow-up "></i></a>
 	</div>
 	<!-- JavaScript Libraries -->
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
