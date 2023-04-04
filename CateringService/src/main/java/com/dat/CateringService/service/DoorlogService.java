@@ -15,4 +15,5 @@ public interface DoorlogService {
 	public DailyDoorLog getLastInserted();
 	public List<DailyDoorLog> getByRegisteredAndStaffID(Boolean registered, LocalDate dineDateStart, LocalDate dineDateEnd);
 	public List<DailyDoorLog> getByAll(Boolean registered, String name, String staffID, String team);
+	public DailyDoorLog getByIdAndDate(String id, LocalDate date);
 }

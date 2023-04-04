@@ -26,4 +26,6 @@ public interface DoorlogRepository extends JpaRepository<DailyDoorLog, Integer> 
 	public List<DailyDoorLog> findByRegisteredAndDineDateBetween(@Param("registered")Boolean registered, @Param("start")LocalDate dineDateStart, @Param("end")LocalDate dineDateEnd);
 
 	public List<DailyDoorLog> findByRegisteredAndNameContainsAndStaffIDContainsAndTeamContainsAllIgnoreCase(Boolean registered, String name, String staffID, String team);
+
+	public DailyDoorLog findByStaffIDAndDineDate(String staffID, LocalDate dineDate);
 }

@@ -206,6 +206,7 @@ public class LoginController {
 				String countGraph = "";
 				countGraph = registeredService.getRegisteredStaffByDate(LocalDate.now()).size() + "," + registeredService.getRegisteredStaffByStatusAndDineAndDate(true, true, LocalDate.now(), LocalDate.now()).size() + "," + registeredService.getRegisteredStaffByStatusAndDineAndDate(false, true, LocalDate.now(), LocalDate.now()).size() + "," + unregisteredComplete.size();
 				
+				theModel.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 				theModel.addAttribute("meatTypes", meatTypes);
 				theModel.addAttribute("staffCounts", staffCounts);
 				theModel.addAttribute("countGraph", countGraph);

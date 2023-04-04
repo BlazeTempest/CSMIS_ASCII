@@ -74,10 +74,12 @@ public class RegistrationController {
 			int firstWeekNumber = firstDayOfMonth.get(weekFields.weekOfWeekBasedYear());
 			int lastWeekNumber = lastDayOfMonth.get(weekFields.weekOfWeekBasedYear());
 			int currentWeeknumber = date.get(weekFields.weekOfWeekBasedYear());
-	
+			System.out.println(lastWeekNumber + " : " + currentWeeknumber);
 			String status = "Register";
-	
+			Boolean nextMonth = false;
 			if (currentWeeknumber == lastWeekNumber) {
+				nextMonth = true;
+				System.out.println("Last week");
 				LocalDate TempDate = date.plusMonths(1);
 				date = LocalDate.of(date.getYear(), TempDate.getMonth(), 1);
 				firstDayOfMonth = date.withDayOfMonth(1);
@@ -236,6 +238,15 @@ public class RegistrationController {
 					}
 	
 				}
+			}
+			if(nextMonth==true) {
+				List<LocalDate> nextRemove = new ArrayList<>();
+				for(LocalDate temp : disabledDates) {
+					if(temp.getMonthValue()!=LocalDate.now().getMonthValue()) {
+						nextRemove.add(temp);
+					}
+				}
+				disabledDates.removeAll(nextRemove);
 			}
 			
 			model.addAttribute("holidayNames", holidayNames);

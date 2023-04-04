@@ -41,6 +41,8 @@ public class WeeklyInvoiceController {
 
 	private HeadcountService headCountService;
 
+	private boolean printStatus = true,confirmStatus = true;
+	
 	@Autowired
 	public WeeklyInvoiceController(WeeklyInvoiceService weeklyInvoiceService, HeadcountService headCountService,
 			RestaurantService restaurantService, PriceService priceService, StaffService staffService) {
@@ -69,7 +71,7 @@ public class WeeklyInvoiceController {
 			@RequestParam(name = "invoiceEnd", required = false) String endDate,
 			@RequestParam(name = "paymentDate", required = false) String paymentDate,
 			@RequestParam(name = "voucherID", required = false) String voucherID, RedirectAttributes re) {
-
+		
 		List<Restaurant> restaurantNameList=restaurantService.getRestaurantName();
 		model.addAttribute("restaurantNameList",restaurantNameList);
 		
@@ -79,42 +81,56 @@ public class WeeklyInvoiceController {
 		String lastInsertedDate = weeklyInvoiceService.findLastInsertedToDate();
 		System.out.println("This is last inserted date from  weekly invoice >>>>>>>>>>" + lastInsertedDate);
 
-		int totalPrice = priceService.findActivePrice().getTotal_price();
-
 		int totalAmount;
-
 		int totalCost = 0;
 
-		int totalRegisterCount = 0;
-		int totalActualCount = 0;
-		int totalDifferenceCount = 0;
+		int dailyTotalAmount = 0;
+		int allDailyTotalAmount=0;
+		int totalDailyActualCount=0;
+		int totalDailyRegisteredCount=0;
+		int totalDailyDiffCount=0;
 
 		List<Headcount> dailyInvoiceList = headCountService.findAll();
 
 		List<WeeklyInvoiceDTO> dailyInvoiceList1 = new ArrayList<>();
 		for (Headcount headcount : dailyInvoiceList) {
-			int dailyTotalAmount = 0;
-
+			
+			System.out.println("Hello >>>>> "+priceService.findById(headcount.getPrice()).getTotal_price());
+			
 			WeeklyInvoiceDTO temp = new WeeklyInvoiceDTO();
+			
+			totalDailyRegisteredCount+=headcount.getRegisteredCount();
+			totalDailyDiffCount+=headcount.getDifference();
+			totalDailyActualCount+=headcount.getActualCount();
+			System.out.println("This is actual count >>> "+totalDailyActualCount);
 
 			if (headcount.getActualCount() >= headcount.getRegisteredCount()) {
-				dailyTotalAmount = headcount.getActualCount() * totalPrice;
+				dailyTotalAmount = headcount.getActualCount() * priceService.findById(headcount.getPrice()).getTotal_price();
+				allDailyTotalAmount+=dailyTotalAmount;
+				
 
 			} else {
-				dailyTotalAmount = headcount.getRegisteredCount() * totalPrice;
-
+				dailyTotalAmount = headcount.getRegisteredCount() * priceService.findById(headcount.getPrice()).getTotal_price();
+				allDailyTotalAmount+=dailyTotalAmount;
 			}
 
 			temp.setInvoiceDate(headcount.getInvoiceDate());
 			temp.setRegisteredCount(headcount.getRegisteredCount());
 			temp.setActualCount(headcount.getActualCount());
 			temp.setDifference(headcount.getDifference());
-			temp.setTotalPrice(totalPrice);
+			temp.setTotalPrice(priceService.findById(headcount.getPrice()).getTotal_price());
 			temp.setTotalAmount(dailyTotalAmount);
 
 			dailyInvoiceList1.add(temp);
 		}
+	
 		model.addAttribute("dailyInvoiceList", dailyInvoiceList1);
+		
+		model.addAttribute("totalDailyActualCount",totalDailyActualCount);
+		model.addAttribute("totalDailyDiffCount",totalDailyDiffCount);
+		model.addAttribute("totalDailyRegisteredCount",totalDailyRegisteredCount);
+		model.addAttribute("allDailyTotalAmount",allDailyTotalAmount);
+		
 		model.addAttribute("voucherID", voucherID);
 		model.addAttribute("invoiceStart", startDate);
 		model.addAttribute("invoiceEnd", endDate);
@@ -122,9 +138,10 @@ public class WeeklyInvoiceController {
 
 		PaymentVoucher weeklyInvoice = new PaymentVoucher();
 
-		// System.out.println(startDate + " : " + endDate);
-
 		int numberOfPax = 0;
+		int totalRegisterCount = 0;
+		int totalActualCount = 0;
+		int totalDifferenceCount = 0;
 
 		if (startDate != null) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -144,13 +161,13 @@ public class WeeklyInvoiceController {
 				temp.setRegisteredCount(registeredCount);
 				temp.setActualCount(actualCount);
 				temp.setDifference(differenceCount);
-				temp.setTotalPrice(totalPrice);
+				temp.setTotalPrice(priceService.findById(headcount.getPrice()).getTotal_price());
 
 				if (headcount.getActualCount() > headcount.getRegisteredCount()) {
-					totalAmount = headcount.getActualCount() * totalPrice;
+					totalAmount = headcount.getActualCount() * priceService.findById(headcount.getPrice()).getTotal_price();
 					numberOfPax += headcount.getActualCount();
 				} else {
-					totalAmount = headcount.getRegisteredCount() * totalPrice;
+					totalAmount = headcount.getRegisteredCount() * priceService.findById(headcount.getPrice()).getTotal_price();
 					numberOfPax += headcount.getRegisteredCount();
 				}
 
@@ -177,7 +194,13 @@ public class WeeklyInvoiceController {
 		model.addAttribute("received", restaurantService.findRestaurantReceiverName());
 		model.addAttribute("weeklyInvoice", weeklyInvoice);
 
-		// weeklyInvoiceService.save(paymentVoucher);
+		//----------- Print status ------------
+		model.addAttribute("printStatus",printStatus);
+		model.addAttribute("confirmStatus",confirmStatus);
+		
+		printStatus = true;
+		confirmStatus= true;
+		
 		return "admin/weekly-invoice";
 
 	}
@@ -197,14 +220,13 @@ public class WeeklyInvoiceController {
 		String start_date_str = paymentVoucher.getStart_date().format(formatter);
 		String end_date_str = paymentVoucher.getEnd_date().format(formatter);
 
-		String payment_date = paymentVoucher.getPayment_date().format(formatter);
+		String payment_date = paymentVoucher.getPaymentDate().format(formatter);
 		
 		LocalDate weekendDay = LocalDate.parse(start_date_str);
 		DayOfWeek dayOfWeek = weekendDay.getDayOfWeek();
 
 		if (lastInsertedDate == null) {
 
-			
 			if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
 				System.out.println(dayOfWeek + " is a weekend day !");
 				 re.addFlashAttribute("invoiceStartDateError", start_date_str +
@@ -216,7 +238,7 @@ public class WeeklyInvoiceController {
 				re.addFlashAttribute("voucherID", paymentVoucher.getVoucher_ID());
 				re.addFlashAttribute("restaurantName", paymentVoucher.getRestaurant_name());
 
-				re.addFlashAttribute("paymentDate", paymentVoucher.getPayment_date());
+				re.addFlashAttribute("paymentDate", paymentVoucher.getPaymentDate());
 
 				re.addAttribute("voucherID", paymentVoucher.getVoucher_ID());
 				re.addAttribute("invoiceStart", start_date_str);
@@ -226,6 +248,9 @@ public class WeeklyInvoiceController {
 				re.addFlashAttribute("invoiceStart", start_date_str);
 				re.addFlashAttribute("invoiceEnd", end_date_str);
 				
+				//----- confirm status ---
+				confirmStatus = false;
+				
 				return "redirect:/weekly-invoice";
 			}
 			
@@ -234,7 +259,7 @@ public class WeeklyInvoiceController {
 			re.addFlashAttribute("voucherID", paymentVoucher.getVoucher_ID());
 			re.addFlashAttribute("restaurantName", paymentVoucher.getRestaurant_name());
 
-			re.addFlashAttribute("paymentDate", paymentVoucher.getPayment_date());
+			re.addFlashAttribute("paymentDate", paymentVoucher.getPaymentDate());
 
 			re.addAttribute("voucherID", paymentVoucher.getVoucher_ID());
 			re.addAttribute("invoiceStart", start_date_str);
@@ -246,6 +271,9 @@ public class WeeklyInvoiceController {
 
 			re.addFlashAttribute("received", paymentVoucher.getReceived_by());
 
+			//----- confirm status ---
+			confirmStatus = false;
+			
 			return "redirect:/weekly-invoice";
 		} else {
 			 String dateStr = lastInsertedDate;
@@ -262,7 +290,7 @@ public class WeeklyInvoiceController {
 	public String saveInvoice(RedirectAttributes re, @RequestParam("voucherID") String voucherID,
 			@RequestParam("paymentDate") String paymentDate,
 			@RequestParam("invoiceStart") String invoiceStart, @RequestParam("invoiceEnd") String invoiceEnd,
-			@RequestParam("totalCost") int totalCost, @RequestParam("received") String received,
+			@RequestParam("totalCost") int totalCost, @RequestParam("selectedReceiverName") String selectedReceiverName,
 			@RequestParam("selectedCashier") String selectedCashier, @RequestParam("selectedApprover")String selectedApprover,
 			@RequestParam("selectedRestaurantName")String selectedRestaurantName,
 			@RequestParam("paymentMethod") String paymentMethod, @RequestParam("numberOfPax") int numberOfPax,
@@ -270,7 +298,15 @@ public class WeeklyInvoiceController {
 		
 		counter++;
 		
-		int totalPrice = priceService.findActivePrice().getTotal_price();
+		List<Headcount> dailyInvoiceList = headCountService.findAll();
+		
+		int totalPrice=0;
+	
+		for (Headcount headcount : dailyInvoiceList) {
+			totalPrice=priceService.findById(headcount.getPrice()).getTotal_price();
+		}
+		
+		/* int totalPrice = priceService.findActivePrice().getTotal_price(); */
 		LocalDate paymentDate1 = LocalDate.parse(paymentDate);
 		LocalDate invoiceStart1 = LocalDate.parse(invoiceStart);
 		LocalDate invoiceEnd1 = LocalDate.parse(invoiceEnd);
@@ -294,7 +330,7 @@ public class WeeklyInvoiceController {
 		paymentVoucher.setEnd_date(invoiceEnd1);
 		paymentVoucher.setRestaurant_name(selectedRestaurantName);
 		paymentVoucher.setCreated_date(LocalDate.now());
-		paymentVoucher.setReceived_by(received);
+		paymentVoucher.setReceived_by(selectedReceiverName);
 		paymentVoucher.setCashier(selectedCashier);
 		paymentVoucher.setApproved_by(selectedApprover);
 		paymentVoucher.setTotalPrice(totalPrice);
@@ -302,11 +338,14 @@ public class WeeklyInvoiceController {
 		paymentVoucher.setNo_of_pax(numberOfPax);
 		paymentVoucher.setTotalCost(totalCost);
 		paymentVoucher.setStatus("paid");
-		paymentVoucher.setPayment_date(paymentDate1);
+		paymentVoucher.setPaymentDate(paymentDate1);
 
 		/* paymentVoucher.setPayment_date(paymentDate); */
 		weeklyInvoiceService.save(paymentVoucher);
-
+		
+		//----- print status ---
+		printStatus = false;
+		confirmStatus = true;
 		re.addFlashAttribute("invoiceSuccessMessage",
 				voucherID + "From " + invoiceStart1 + " to " + invoiceEnd1 + " voucher created successfully!");
 

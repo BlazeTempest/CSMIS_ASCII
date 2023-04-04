@@ -20,7 +20,7 @@ public class PaymentVoucher {
 
 	@Column(name = "payment_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate payment_date;
+	private LocalDate paymentDate;
 
 	@Column(name = "from_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -76,7 +76,7 @@ public class PaymentVoucher {
 	    this.payment_method=payment_method;
 	    this.totalPrice=totalPrice;
 	    this.totalCost=totalCost;
-		this.payment_date = payment_date;
+		this.paymentDate = payment_date;
 		this.start_date = start_date;
 		this.end_date = end_date;
 
@@ -129,12 +129,12 @@ public class PaymentVoucher {
 		this.status = status;
 	}
 
-	public LocalDate getPayment_date() {
-		return payment_date;
+	public LocalDate getPaymentDate() {
+		return paymentDate;
 	}
 
-	public void setPayment_date(LocalDate payment_date) {
-		this.payment_date = payment_date;
+	public void setPaymentDate(LocalDate payment_date) {
+		this.paymentDate = payment_date;
 	}
 
 	public int getTotalPrice() {
