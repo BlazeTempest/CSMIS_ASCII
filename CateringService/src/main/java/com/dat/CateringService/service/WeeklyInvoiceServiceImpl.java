@@ -1,5 +1,6 @@
 package com.dat.CateringService.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,4 +29,9 @@ public class WeeklyInvoiceServiceImpl implements WeeklyInvoiceService {
     public String findLastInsertedToDate() {
         return weeklyInvoiceRepository.findLastInsertedToDate();
     }
+
+	@Override
+	public List<PaymentVoucher> findByPaymentDateBetween(LocalDate start, LocalDate end) {
+		return weeklyInvoiceRepository.findByPaymentDateBetween(start, end);
+	}
 }

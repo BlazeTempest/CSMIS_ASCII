@@ -73,39 +73,6 @@ public class HomeController {
 	
 	@GetMapping("/importDoorFile")
 	public String importDoorFile(Authentication authentication, Model model) {
-		List<Registered_list> registeredStaffs = registeredService.getRegisteredStaffByDate(LocalDate.now());
-		Headcount temp = headcountService.getHeadcountByDate(LocalDate.now());
-		Price price = priceService.findActivePrice();
-		int actual = doorlogService.getStaffIDByDineDate(LocalDate.now()).size();
-		int registered = registeredStaffs.size();
-		int amount = 0;
-		
-		// Update the headcount table with the total registered count
-		if(temp==null) {
-		    Headcount headcount = new Headcount();
-			headcount.setRegisteredCount(registered);
-			headcount.setActualCount(actual);
-			headcount.setInvoiceDate(LocalDate.now());
-			headcount.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
-			headcount.setPrice(price.getPrice_ID());
-			if(actual>registered) {
-				headcount.setAmount(amount * price.getTotal_price());
-			}else {
-				headcount.setAmount(amount * price.getTotal_price());
-			}
-			headcountService.saveHeadcount(headcount);
-		}else {
-			temp.setRegisteredCount(registeredStaffs.size());
-			temp.setActualCount(doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
-			temp.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
-			temp.setPrice(price.getPrice_ID());
-			if(actual>registered) {
-				temp.setAmount(amount * price.getTotal_price());
-			}else {
-				temp.setAmount(amount * price.getTotal_price());
-			}
-			headcountService.saveHeadcount(temp);
-		}
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		return "admin/doorlogImport";
 	}

@@ -13,6 +13,9 @@ public interface RegisteredListRepository extends JpaRepository<Registered_list,
 	@Query(value="SELECT * FROM registered_list WHERE staffID = :staffID AND dine = true AND dine_date BETWEEN :start AND :end", nativeQuery = true)
 	public List<Registered_list> findRegisteredListByStaffID(@Param("staffID")String staffID, @Param("start")LocalDate startDate,  @Param("end")LocalDate endDate);
 	
+	@Query(value="SELECT count(dine_date) FROM registered_list WHERE staffID = :staffID  AND dine_date BETWEEN :start AND :end", nativeQuery = true)
+	public int findByDineDateWithStaffID(@Param("staffID")String staffID, @Param("start")LocalDate startDate,  @Param("end")LocalDate endDate);
+	
 	@Query(value="SELECT COUNT(dept) FROM registered_list WHERE dept=:dept AND dine=:dine AND dine_date=:date", nativeQuery = true)
 	public int getDeptCount(@Param("dept")String dept, @Param("dine")Boolean dine, @Param("date")LocalDate date);
 	

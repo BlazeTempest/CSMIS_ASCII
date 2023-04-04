@@ -1,17 +1,23 @@
 package com.dat.CateringService.emailSender;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.transaction.Transactional;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-
+import com.dat.CateringService.entity.Registered_list;
+import com.dat.CateringService.entity.Staff;
+import com.dat.CateringService.service.RegisteredListService;
 import com.dat.CateringService.service.StaffService;
 
 @Component
@@ -22,16 +28,28 @@ public class EmailScheduler {
 
 	@Autowired
 	private StaffService staffService;
-
-	@Scheduled(cron = "0 5 16 ? * MON-FRI") // send email every day at 12pm
+	
+	@Autowired
+	private RegisteredListService registeredService;
+	
+	@Transactional
+	@Scheduled(cron = "0 10 15 ? * MON-FRI") // send email every day at 12pm
 	public void sendEmail() {
-		List<String> email = staffService.findActiveEmailNoti(true);
-		for(String temp : email) {
-			if(temp==null) email.remove(email.indexOf(temp));
-			System.out.println(temp);
+		List<String> activeEmails = new ArrayList<>();
+		List<Registered_list> registered = registeredService.getRegisteredStaffByDate(LocalDate.now());
+		for(Registered_list temp : registered) {
+			Staff staff = staffService.getStaffById(temp.getStaffID());
+			Hibernate.initialize(staff);
+			if(staff.getEmail_noti()==(byte)1) {
+				System.out.println("Email Noti ===> " + staff.getEmail_noti() + ". Email ====> " + staff.getEmail());
+				activeEmails.add(staff.getEmail());
+			}
+		}
+		for(String temp : activeEmails) {
+			if(temp==null) activeEmails.remove(activeEmails.indexOf(temp));
 		}
 	
-		for(String temp : email) {
+		for(String temp : activeEmails) {
 			MimeMessage message = mailSender.createMimeMessage();
 		    MimeMessageHelper helper = new MimeMessageHelper(message);
 		    

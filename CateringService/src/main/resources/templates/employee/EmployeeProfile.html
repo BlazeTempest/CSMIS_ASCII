@@ -166,7 +166,7 @@ i.fa-solid {
 											class="list-group-item d-flex text-center p-3 bg-secondary">
 											<p class="mb-0 text-end">
 												Registered days for this month: <b
-													style="text-decoration: underline;">20</b>
+													style="text-decoration: underline;" th:text=${totalDay}></b>
 											</p>
 										</li>
 										<li
@@ -174,14 +174,14 @@ i.fa-solid {
 
 											<p class="mb-0 float-end">
 												Total cost for this month: <b
-													style="text-decoration: underline;">20000</b>
+													style="text-decoration: underline;" th:text=${currentAmount}></b>
 											</p>
 										</li>
 										<li
 											class="list-group-item d-flex text-center p-3 bg-secondary">
 											<p class="mb-0 float-end">
 												Total cost for previous month: <b
-													style="text-decoration: underline;">16000</b>
+													style="text-decoration: underline;" th:text=${preAmount}></b>
 											</p>
 										</li>
 										<li class="list-group-item d-flex text-center p-3 bg-secondary">

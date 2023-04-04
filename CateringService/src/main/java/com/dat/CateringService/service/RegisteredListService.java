@@ -31,4 +31,5 @@ public interface RegisteredListService {
 	public List<Registered_list> getRegisteredStaffByAll(Boolean status, LocalDate start, LocalDate end, String name, String id, String team);
 	public int getDeptCount(String dept, Boolean dine);
 	public int getTeamCount(String team, Boolean dine);
+	public int findByDineDateWithStaffID(String id, LocalDate start, LocalDate end);
 }

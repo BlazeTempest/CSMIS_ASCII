@@ -72,32 +72,6 @@ i.fa-solid {
 .fa-solid:hover {
 	color: rgb(250, 16, 75);
 }
- /* start style for report btn */
-		.btn-group {
-			padding-right: 30px;
-			padding-left: 30px;
-		}
-		
-		.btn-group .btn {
-			border-radius: 10px;
-		}
-		
-		.btn-check:checked+.btn-primary, .btn-check:active+.btn-primary,
-			.btn-primary:active, .btn-primary.active, .show>.btn-primary.dropdown-toggle
-			{
-			color: #06324d;
-			background-color: white;
-			border-color: #06324d;
-			box-shadow: 5px 5px #06324d;
-		}
-		.btn-primary:hover {
-			background-color: #06324d;
-			color: white;
-			transform: scale(1.1);
-			box-shadow: 0 0 5px #06324d;
-		}
-		
-		/* end style for report btn */
 </style>
 <script>
         function myFunction(x) {
@@ -141,14 +115,11 @@ table tr th {
 
 				<div class="navbar-nav w-100">
 					<a href="/" class="nav-item nav-link"><i
-						class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-						<a th:href="@{/importFiles}" class="nav-item nav-link"
-              ><i class="fas fa-upload me-2"></i>Import Data</a
-            > <a
+						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
 						th:href="@{/employee-list}" class="nav-item nav-link"><i
 						class="fas fa-users me-2"></i>Employee List</a>
-					<a th:href="@{/summary}"  class="nav-item nav-link"
-            ><i class="fa fa-laptop me-2"></i>Report</a>
+					<a th:href="@{registered-list}"  class="nav-item nav-link"
+            		><i class="fa fa-laptop me-2"></i>Report</a>
 					<a th:href="@{registration}" class="nav-item nav-link"
               ><i class="fas fa-pen me-2"></i>Lunch Register</a
             >
@@ -158,18 +129,31 @@ table tr th {
             <a th:href="@{restaurant}" class="nav-item nav-link"
               ><i class="fas fa-home me-2"></i>Restaurant</a
             >
-                <a th:href="@{/weekly-invoice}" class="nav-item nav-link active"
-                  ><i class="fas fa-file me-2"></i> Invoice</a
+            <div class="nav-item dropdown">
+              <a
+                href="#"
+                class="nav-link dropdown-toggle active"
+                data-bs-toggle="dropdown"
+                ><i class="fas fa-file me-2"></i>Invoice</a
+              >
+              <div class="dropdown-menu bg-transparent border-0">
+                <a th:href="@{/weekly-invoice}" class="dropdown-item"
+                  >Weekly Invoice</a
                 >
-                <div class="nav-item">
-              <a th:href="@{/suggestion}" class="nav-link"
+                <a th:href="@{/monthly_invoice}" class="dropdown-item active"
+                  >Monthly Invoice</a
+                >
+              </div>
+            </div>
+            <div class="nav-item">
+              <a th:href="@{suggestion}" class="nav-link"
                 ><i class="far fa-file-alt me-2"></i>Suggestions</a
               >
             </div>
             <div class="nav-item">
-              <a th:href="@{/holiday}" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
+              <a th:href="@{holiday}" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
                 </div>
-            </div>
+				</div>
 			</nav>
 		</div>
 		<!-- Sidebar End -->
@@ -210,134 +194,56 @@ table tr th {
 			</nav>
 			<!-- Navbar End -->
 
-			<!-- Sale & Revenue Start -->
-			<!-- Weekly Invoice start -->
-			<!-- <div class="container-fluid ">
-				<div class="row my-3 bg-secondary ms-3 me-3 rounded">
-					<div class="mb-4">
-						<button class="btn btn-outline-dark float-end me-3 mt-4"
-							data-bs-toggle="modal" data-bs-target="#createInvoice">
-							<i class="fa fa-plus"></i>&nbsp; Create Monthly Invoice
-						</button>
-					</div>
-				</div>
-			</div>
- -->
-			<!-- Create invoice start -->
-			<!-- Modal start -->
-			<div class="modal fade" id="createInvoice" tabindex="-1"
-				aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered">
-					<div class="modal-content bg-secondary">
-						<div class="modal-header">
-							<h3 class="modal-title text-primary ms-2" id="exampleModalLabel">Create
-								monthly Invoice</h3>
-
-						</div>
-						<div class="modal-body bg-secondary">
-							<form>
-								<div class="row mb-3">
-									<label for="inputPassword3"
-										class="col-sm-4 col-form-label text-dark"> Start Date
-									</label>
-									<div class="col-sm-8 ">
-										<input type="date" class="form-control bg-white"
-											id="inputEmail3" placeholder="Restaurant Name">
-									</div>
-								</div>
-								<div class="row mb-3">
-									<label for="inputPassword3"
-										class="col-sm-4 col-form-label text-dark"> End Date </label>
-									<div class="col-sm-8">
-										<input type="date" class="form-control bg-white" value=""
-											id="inputPassword3">
-									</div>
-								</div>
-								<div class="row mb-3">
-									<label for="inputPassword3"
-										class="col-sm-4 col-form-label text-dark"> Report Date
-									</label>
-									<div class="col-sm-8">
-										<input type="date" class="form-control bg-white" value=""
-											id="inputPassword3">
-									</div>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-outline-danger"
-										data-bs-dismiss="modal">Close</button>
-									<button type="submit" class="btn btn-outline-dark">Save</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Create invoice end -->
-
 			<div class="container-fluid mt-4">
-				<div class="row">
-					<div class="btn-group d-flex justify-content-start mt-3 mb-4" role="group"
-						aria-label="Button group with options">
-						<div role="group">
-							<a th:href="@{weekly-invoice}" class="btn btn-primary me-5">Weekly Invoice</a>
-						</div>
-						<div role="group">
-							<a th:href="@{monthly_invoice}" class="btn btn-primary active">Monthly Invoice</a>
-						</div>
-					</div>
-				</div>
 				<div class="bg-secondary ms-3 me-3 rounded">
 					<div class="row py-3 text-center">
 						<div>
-							<img class="sidebar-logo mt-3 mb-3" src="img/dat logo.png"
-								alt="DAT Logo" style="width: 150px; height: 100px;" />
+							<img class="sidebar-logo mt-3 mb-2" src="img/dat logo.png"
+								alt="DAT Logo" style="width: 100px; height: 60px;" />
 						</div>
-						<h2 class="text-center text-decoration-underline">Paid
+						<h2 class="text-center text-decoration-underline mb-3">Paid
 							Voucher List</h2>
 					</div>
-					<!--  <div class="row ms-4  me-4 py-2">
-                    <div class="col-lg-6 ">
-                        <div class="row">
-                            <div class="col-md-6 text-dark">
-                                <span>Catering Service Name : </span><br>
-                                <span>Address : </span><br>
-                                <span>Contact number : </span>
-                            </div>
-                            <div class="col-md-6 text-dark">
-                                <span>Kaung Myait Hein</span>
-                                <span>Kamayut</span><br>
-                                <span>09-16884872398</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="offset-2 col-lg-4">
-                        <div class="row">
-                            <div class="col-md-5 text-dark">
-                                <span> Report Date : </span>
-
-                            </div>
-                            <div class=" col-md-6 text-dark">
-                                <span>05/03/2023</span><br>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
+					<div class="container-fluid">
+							<form th:action="@{/searchPaidVoucher}" method="get" class="row g-3 ms-2">
+								<div class=" col-md-3">
+									<input class="form-control bg-white border-info"
+										name="startDate" type="text" th:value=${start}
+										placeholder="From date" onfocus="(this.type='date')"
+										onblur="(this.type='text')">
+								</div>
+								<div class="col-md-3">
+									<input class="form-control bg-white border-info" th:value="${end}"
+										name="endDate" type="text"
+										placeholder="From date" onfocus="(this.type='date')"
+										onblur="(this.type='text')">
+								</div>
+								<div class="col-md-2">
+									<button type="submit" class="btn btn-outline-dark me-2">
+										<i class="fa fa-search"></i>&nbsp; Search
+									</button>
+								</div>
+							</form>
+						</div>
+					
+					
 					<div class="row bg-secondary ms-3 me-4 mt-3">
-							<table class="table text-dark shadow-md" id="monthlyInvoiceTable">
+							<div class="table-responsive">
+								<table style="width:1200px;" class="table text-dark shadow-md" id="monthlyInvoiceTable">
 								<thead>
 									<tr>
-										<th>#</th>
-										<th>Description</th>
-										<th>Restaurant Name</th>
-										<th>Cashier</th>
-										<th>Received By</th>
-										<th>Approved By</th>
-										<th>No. of Pax</th>
-										<th>Price</th>
-										<th>Amount</th>
-										<th>Payment Date</th>
+										<th style="padding-bottom:33px;">No</th>
+										<th class="w-25" style="padding-bottom:33px;">Description</th>
+										<th >Restaurant Name</th>
+										<th style="padding-bottom:33px;">Cashier</th>
+										<th class="w-25" style="padding-bottom:33px;">Received By</th>
+										<th class="w-25" style="padding-bottom:33px;">Approved By</th>
+										<th style="width:30%; padding-bottom:33px;" >No. of Pax</th>
+										<th style="padding-bottom:33px;">Price</th>
+										<th style="padding-bottom:33px;">Amount</th>
+										<th class="w-25" >Payment Date</th>
 										<th>Payment Method</th>
-										<th>Status</th>
+										<th style="padding-bottom:33px;"> Status</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -349,15 +255,21 @@ table tr th {
 										<td th:text="${temp.cashier}"></td>
 										<td th:text="${temp.received_by}"></td>
 										<td th:text="${temp.approved_by}"></td>
-										<td th:text="${temp.no_of_pax}"></td>
+										<td class="w-25" th:text="${temp.no_of_pax}"></td>
 										<td th:text="${temp.totalPrice}"></td>
 										<td th:text="${temp.totalCost}"></td>
-										<td th:text="${temp.payment_date}" ></td>
+										<td th:text="${temp.paymentDate}" ></td>
 										<td th:text="${temp.payment_method}" ></td>
 										<td th:text="${temp.status}">
 									</tr>
+									<tr>
+										<td colspan="6" class="text-center py-3 fs-5 fw-bold">Total Amount </td>
+										<td colspan="3" th:text="${totalAmount} +' MMK'" class="py-3 fs-5 text-center fw-bold"></td>
+										<td colspan="3"></td>
+									</tr>
 								</tbody>
 							</table>
+							</div>
 						</div>
 
 						<!-- 	<div class="mb-4">
