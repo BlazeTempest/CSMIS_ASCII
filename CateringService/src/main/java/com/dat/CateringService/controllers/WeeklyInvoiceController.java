@@ -281,7 +281,7 @@ public class WeeklyInvoiceController {
 		String start = invoiceStart1.format(formatter);
 		String end = invoiceEnd1.format(formatter);
 
-		String payDate = paymentDate.formatted(formatter);
+		String payDate = paymentDate1.format(formatter);
 
 		re.addAttribute("invoiceStart", start);
 		re.addAttribute("invoiceEnd", end);
