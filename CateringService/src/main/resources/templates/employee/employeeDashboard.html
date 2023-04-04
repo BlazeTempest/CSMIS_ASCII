@@ -301,30 +301,30 @@ body {
 		<!-- Dashboard Start -->
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-md-12 mt-3" style="background-color: #e6e9ee;">
-					<div class="card ">
-						<div class="card-header">
-							<h4 class="card-title">Announcements</h4>
-						</div>
-							
-						<div th:if="${not #lists.isEmpty(announcements)}">
-							<ul class="list-group ">
-								<li class="list-group-item border-0"
-									th:each="announcement : ${announcements}">
-									<div class="d-flex justify-content-between align-items-center">
-										<span th:text="${#temporals.format(announcement.createdDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
-									</div>
-									<div class="d-flex justify-content-between align-items-center">
-										<span th:text="${announcement.description}"></span>
-									</div>
-									<hr>
-								</li>
-							</ul>
-						</div>
-						<div th:if="${#lists.isEmpty(announcements)}">
-							<p>No announcements found</p>
-						</div>
-					</div>
+				<div class="col-md-12 mt-3 px-4 rounded" style="background-color: #e6e9ee;">
+					<div class="card">
+					    <div class="card-header">
+					    	<h4 class="card-title mt-2 mb-2">Announcements
+					        	<button type="button" class="btn-sm btn-outline-dark float-end mb-2 rounded" id="announcement-toggle-btn"><i class="fas fa-plus"></i> Show More</button>
+					        </h4>
+					    </div>
+				        <div class="announcement-container">
+					        <ul class="list-group">
+					          <li class="list-group-item border-0 announcement-item" th:each="announcement, i : ${announcements}">
+					            <div class="d-flex justify-content-between align-items-center">
+					              <span th:text="${#temporals.format(announcement.createdDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
+					            </div>
+					            <div class="d-flex justify-content-between align-items-center">
+					              <span th:text="${announcement.description}"></span>
+					            </div>
+					            <hr>
+					          </li>
+					        </ul>
+				        </div>
+				      	<div class="no-announcement-container" style="display: none;">
+				        	<p>No announcements found</p>
+				    	</div>
+				    </div>
 				</div>
 			</div>
 		</div>
@@ -405,10 +405,10 @@ body {
 	</div>
 	<!-- Content End -->
 	
-	<i class="fa-regular fa-comment-dots fs-1 open-button"
+	<i class="fa-solid fa-comment-dots fs-1 fw-1 mb-4 open-button text-dark"
       onclick="openForm()"
       id="open"></i>
-    <div class="form-popup bg-secondary" id="myForm">
+      <div class="form-popup bg-secondary" id="myForm">
       <form th:action="@{/addSuggestion}" method="POST" class="form-container bg-secondary">
         <h3 style="text-decoration: underline;">Suggestion
         <i class="fa-solid fa-xmark btn cancel float-end"
@@ -417,11 +417,13 @@ body {
           ></i>
 		</h3>
 		<span class="text-center">(Your suggestion will be sent to system admin.)</span>
-	    <input type="text" placeholder="Enter Your suggestion" style="height: 100px;" id="suggestion" name="suggestion" maxlength="1000" required />    
-	    <input type="text" id="count" style="background-color: transparent; font-size: small;" disabled>
-        <div class="float-end">
-          <button class="fa-solid fa-paper-plane fs-3 btn" type="submit"></button>
-        </div>
+		<div class="form-outline mt-2">
+	    	<textarea class="form-control bg-white" style="height: 100px;" maxlength="1000" placeholder="Something you want to suggest..." rows="4" id="suggestion" name="suggestion" required></textarea>
+	    </div>
+		    <input type="text" value="0/1000" id="count" style="background-color: transparent; border: none; font-size: small;" disabled>
+	        <div class="float-end">
+	        	<button class="fa-solid fa-paper-plane fs-3 btn" type="submit"></button>
+	        </div>
       </form>
     </div>
 	<script>
@@ -446,6 +448,33 @@ body {
           document.getElementById("open").style.display = "block";
         }, 500); // wait for the animation to finish before hiding the form
       }
+      $(document).ready(function() {
+    	  // Check if there are any announcements
+    	  if ($('.announcement-item').length > 0) {
+    	    // Hide all announcements except the first one
+    	    $('.announcement-item:gt(0)').hide();
+    	    // If there is only one announcement, hide the toggle button
+    	    if ($('.announcement-item').length === 1) {
+    	      $('#announcement-toggle-btn').hide();
+    	    }
+    	  } else {
+    	    // Hide the announcement and no announcement containers
+    	    $('.announcement-container, .no-announcement-container').hide();
+    	    // Change the button text to "No announcements found"
+    	    $('#announcement-toggle-btn').text('No announcements found').attr('disabled', true);
+    	  }
+    	  
+    	  // Add click event listener to toggle the announcement container
+    	  $('#announcement-toggle-btn').on('click', function() {
+    	    if ($(this).text().includes('Show Less')) {
+    	      $(this).html('<i class="fas fa-plus"></i> Show More');
+    	    } else {
+    	      $(this).html('<i class="fas fa-minus"></i> Show Less');
+    	    }
+    	    $('.announcement-item:gt(0)').toggle();
+    	  });
+    	});
+
     </script>
 
 	<!-- JavaScript Libraries -->

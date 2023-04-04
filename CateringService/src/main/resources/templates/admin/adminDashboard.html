@@ -42,6 +42,108 @@
 		td {
 		  white-space: nowrap;
 		}
+		body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      /* Button used to open the contact form - fixed at the bottom of the page */
+
+      .open-button {
+        border: none;
+        cursor: pointer;
+        opacity: 1;
+        position: fixed;
+        bottom: 23px;
+        right: 50px;
+      }
+
+      .open-button:hover {
+        color: darkblue;
+      }
+      /* The popup form - hidden by default */
+
+      .form-popup {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        right: 15px;
+        border: 3px solid #f1f1f1;
+        background-color: white;
+        z-index: 9;
+      }
+      /* Add animation to the form-popup */
+
+      .form-popup {
+        animation: fadeIn 0.5s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      /* Add animation to hide the form-popup */
+
+      .form-popup.hide {
+        animation: fadeOut 0.5s ease-in-out;
+      }
+
+      @keyframes fadeOut {
+        0% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+      }
+      /* Add styles to the form container */
+
+      .form-container {
+        max-width: 400px;
+        padding: 10px;
+        background-color: white;
+        margin-bottom: 10px;
+      }
+      /* Full-width input fields */
+
+      .form-container input[type="text"] {
+        width: 100%;
+        height: 30px;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        border: none;
+        background: #f1f1f1;
+      }
+      /* When the inputs get focus, do something */
+
+      .form-container input[type="text"]:focus {
+        outline: none;
+      }
+      /* Set a style for the submit/login button */
+
+      .form-container .btn {
+        color: black;
+        border: none;
+        cursor: pointer;
+        margin-bottom: 10px;
+        opacity: 0.8;
+      }
+      /* Add a red background color to the cancel button */
+
+      .form-container .btn:hover,
+      .open-button:hover {
+        opacity: 1;
+      }
     </style>
 
     <!-- Favicon -->
@@ -77,9 +179,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js"></script>
     <script>
 	    $(document).ready(function () {
-			var maxLength = 1000;
+			var maxLength = 2500;
 			$('#announcement').keyup(function () {
-	            var length = $(this).val().length + '/1000';
+	            var length = $(this).val().length + '/2500';
 	            console.log(maxLength);
 	            $('#announceCount').val(length);
 	        });
@@ -120,7 +222,7 @@
             <a th:href="@{/employee-list}" class="nav-item nav-link"
               ><i class="fas fa-users me-2"></i>Employee List</a
             >
-            <a th:href="@{registered-list}"  class="nav-item nav-link"
+            <a th:href="@{/summary}"  class="nav-item nav-link"
             ><i class="fa fa-laptop me-2"></i>Report</a>
             <a th:href="@{registration}"  class="nav-item nav-link"
             ><i class="fas fa-pen me-2"></i>Lunch Register</a
@@ -131,22 +233,9 @@
             <a th:href="@{restaurant}" class="nav-item nav-link"
               ><i class="fas fa-home me-2"></i>Restaurant</a
             >
-            <div class="nav-item dropdown">
-              <a
-                href="#"
-                class="nav-link dropdown-toggle"
-                data-bs-toggle="dropdown"
-                ><i class="fas fa-file me-2"></i>Invoice</a
-              >
-              <div class="dropdown-menu bg-transparent border-0">
-                <a th:href="@{/weekly-invoice}" class="dropdown-item"
-                  >Weekly Invoice</a
+            <a th:href="@{/weekly-invoice}" class="nav-item nav-link"
+                  ><i class="fas fa-file me-2"></i> Invoice</a
                 >
-                <a th:href="@{/monthly_invoice}" class="dropdown-item"
-                  >Monthly Invoice</a
-                >
-              </div>
-            </div>
             <div class="nav-item">
               <a th:href="@{/suggestion}" class="nav-link"
                 ><i class="far fa-file-alt me-2"></i>Suggestions</a
@@ -187,13 +276,11 @@
                                 <a th:href="@{/userProfile}" class="dropdown-item fw-bold text-center">Profile</a>
 
                                 <form action="#" th:action="@{/logout}" method="POST">
-
                                     <input type="submit" value="Logout"
-                                        class="btn btn-outline-link bg-white fw-bold mt-1"
+                                        class="dropdown-item fw-bold text-center"
                                         style="color: rgb(0, 0, 0); width: 100%; height: 45px;" />
-
                                 </form>
-                    	</div>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -239,17 +326,19 @@
         </div>
         
         <input type="hidden" id="countGraph" th:value="${countGraph}">
+        <input type="hidden" id="meatTypes" th:value="${meatTypes}">
+		<input type="hidden" id="staffCounts" th:value="${staffCounts}">
 
 		<div class="container-fluid pt-4 px-4 ">
             <div class="row g-4 ">
                 <div class="col-sm-6 col-xl-6">
                     <div class="bg-secondary rounded p-4">
-                       	<canvas id="lunchChart"></canvas>
+                       	<canvas id="lunchChart" width="450" height="250"></canvas>
                     </div>
                 </div>
                 <div class="col-sm-6 col-xl-6">
                     <div class="bg-secondary rounded p-4 ">
-                        <canvas id="myChart"></canvas>
+                        <canvas id="myChart" width="450" height="250"></canvas>
                     </div>
                 </div>
             </div>
@@ -257,14 +346,22 @@
 		<!-- Sale & Revenue End -->
         <div class="container-fluid">
 	        <div class="row bg-secondary mt-3 ms-2 me-2 rounded">
+	        	<div class="form-check mt-3" style="margin-left: 60px;">
+	        		 <label for="sendEmailCheckbox" class="form-check-label">Send email when announce</label>
+	        		 <input class="form-check-input" type="checkbox" id="sendEmailCheckbox" onclick="toggleEmailInput()">
+	        	</div>
 	                <form th:object="${announcement}" th:action="@{/announcement}" method="POST" class="row">
+	                	<div class="form-floating mb-3" id="emailInput" style="display: none;">
+							<input type="email" class="form-control bg-white col-md-9" id="floatingInput" placeholder="name@example.com" name="gpName" style="width: 400px; margin-left: 48px;">
+							<label for="floatingInput" style="padding-left: 70px;">Email address</label>
+						</div>
 	                	<input type="hidden" th:field="*{announce_ID}">
-	                    <div class="form-outline ms-5 mt-5 col-md-9">
-	                        <textarea class="form-control bg-white" style="height: 200px;" id="announcement" maxlength="1000"
+	                    <div class="form-outline ms-5 mt-3 col-md-9">
+	                        <textarea class="form-control bg-white" style="height: 200px;" id="announcement" maxlength="2500"
 	                                  placeholder="Something you want to announce..." rows="4" th:field="*{description}" required></textarea>
 	                    </div>
 	                    <button type="submit" class="mt-5 ms-5 btn btn-sm btn-outline-dark col-md-1" style="width:100px; height: 50px;" >Announce</button>
-	                    <input type="text" value="0/1000" class="ms-5" id="announceCount" style="background-color: transparent; border: none; font-size: small;" disabled>
+	                    <input type="text" value="0/2500" class="ms-5" id="announceCount" style="background-color: transparent; border: none; font-size: small;" disabled>
 	                    <div class="alert alert-success ms-2" th:text="${announceSuccess}" th:if="${announceSuccess}"></div>
 	                </form>
 	                <span data-bs-toggle="modal" data-bs-target="#viewAnnouncements" class="mt-3 ms-5 mb-3" style="text-decoration: underline; color: blue; cursor: pointer;">View Announcements</span>
@@ -409,8 +506,50 @@
                 </div>
             </div>
         </div>
+        <i class="fa-solid fa-comment-dots fs-1 fw-1 mb-4 open-button text-dark"
+      onclick="openForm()"
+      id="open"></i>
+      <div class="form-popup bg-secondary" id="myForm">
+      <form th:action="@{/addSuggestion}" method="POST" class="form-container bg-secondary">
+        <h3 style="text-decoration: underline;">Suggestion
+        <i class="fa-solid fa-xmark btn cancel float-end"
+            onclick="closeForm()"
+            type="button"
+          ></i>
+		</h3>
+		<span class="text-center">(Your suggestion will be sent to system admin.)</span>
+		<div class="form-outline mt-2">
+	    	<textarea class="form-control bg-white" style="height: 100px;" maxlength="1000" placeholder="Something you want to suggest..." rows="4" id="suggestion" name="suggestion" required></textarea>
+	    </div>
+		    <input type="text" value="0/1000" id="count" style="background-color: transparent; border: none; font-size: small;" disabled>
+	        <div class="float-end">
+	        	<button class="fa-solid fa-paper-plane fs-3 btn" type="submit"></button>
+	        </div>
+      </form>
+    </div>
     <!-- End view all announcements -->
     <script>
+    $(document).ready(function () {
+        var maxLength = 1000;
+        $('#suggestion').keyup(function () {
+            var length = $(this).val().length + '/1000';
+            $('#count').val(length);
+        });
+    });
+      function openForm() {
+        document.getElementById("myForm").style.display = "block";
+        document.getElementById("open").style.display = "none";
+      }
+
+      function closeForm() {
+        var form = document.getElementById("myForm");
+        form.classList.add("hide");
+        setTimeout(function () {
+          form.style.display = "none";
+          form.classList.remove("hide");
+          document.getElementById("open").style.display = "block";
+        }, 500); // wait for the animation to finish before hiding the form
+      }
 	    $(document).ready(function() {
 	    	const urlData = new URL(window.location.href);
 		    if(urlData.search!=''){
@@ -453,6 +592,15 @@
     	  var resetButton = form.querySelector("button[type='reset']");
           resetButton.style.display = "none";
       }
+      function toggleEmailInput() {
+    	  var emailInput = document.getElementById("emailInput");
+    	  var sendEmailCheckbox = document.getElementById("sendEmailCheckbox");
+    	  if (sendEmailCheckbox.checked) {
+    	    emailInput.style.display = "block";
+    	  } else {
+    	    emailInput.style.display = "none";
+    	  }
+    	}
     </script>
 
     <!-- JavaScript Libraries -->
@@ -472,7 +620,7 @@
 	var countGraphInput = document.getElementById("countGraph");
 	console.log(countGraphInput.value);
     // Parse the JSON-encoded array values
-    var typeOfLunch = ['Registered-Eat', 'Registered-Not Eat', 'Unregistered-Eat'];
+    var typeOfLunch = ['Registered List','Registered-Eat', 'Registered-Not Eat', 'Unregistered-Eat'];
     var countGraph = countGraphInput.value.split(',');
     console.log(typeOfLunch);
     
@@ -481,12 +629,48 @@
         datasets: [{
             label: 'Employee count',
             data: countGraph,
-            backgroundColor: 'black'
+            backgroundColor: 'navy'
         }]
     };
 
     // Get the context of the canvas element
     var ctx = document.getElementById('lunchChart').getContext('2d');
+
+    // Create the bar chart
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+            responsive: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            barThickness: 20
+        }
+    });
+    
+    var meatTypesInput = document.getElementById("meatTypes");
+    var staffCountsInput = document.getElementById("staffCounts");
+
+    // Parse the JSON-encoded array values
+    var meatTypes = meatTypesInput.value.split(',');
+    var staffCounts = staffCountsInput.value.split(',');
+    
+    var data = {
+        labels: meatTypes,
+        datasets: [{
+            label: 'Employee count',
+            data: staffCounts,
+            backgroundColor: 'navy'
+        }]
+    };
+
+    // Get the context of the canvas element
+    var ctx = document.getElementById('myChart').getContext('2d');
 
     // Create the bar chart
     var chart = new Chart(ctx, {

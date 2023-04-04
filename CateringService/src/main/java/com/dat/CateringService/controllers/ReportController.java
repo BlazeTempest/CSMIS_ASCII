@@ -60,22 +60,6 @@ public class ReportController {
 	public String plannedList(Authentication authentication , Model model, RedirectAttributes redirect) {
 		List<Registered_list> registeredStaffs = registeredService.getRegisteredStaffByDate(LocalDate.now());
 		
-		Headcount temp = headcountService.getHeadcountByDate(LocalDate.now());
-		// Update the headcount table with the total registered count
-		if(temp==null) {
-		    Headcount headcount = new Headcount();
-			headcount.setRegisteredCount(registeredStaffs.size());
-			headcount.setActualCount(doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
-			headcount.setInvoiceDate(LocalDate.now());
-			headcount.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
-			headcountService.saveHeadcount(headcount);
-		}else {
-			temp.setRegisteredCount(registeredStaffs.size());
-			temp.setActualCount(doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
-			temp.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
-			headcountService.saveHeadcount(temp);
-		}
-		
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("teams", staffService.getTeamNames());
 		model.addAttribute("divs", staffService.getDivNames());
@@ -462,8 +446,8 @@ public class ReportController {
 			
 			DailyDoorLog ddl = doorlogService.getLastInserted();
 			LocalDate start = ddl.getDineDate();
-			List<Registered_list> registered = registeredService.getRegisteredStaffByStartDateAndEndDate(start, LocalDate.of(2023,3,28));
-			List<DailyDoorLog> doorlog = doorlogService.getDoorlogByDineDate(start, LocalDate.of(2023,3,28));
+			List<Registered_list> registered = registeredService.getRegisteredStaffByStartDateAndEndDate(start, LocalDate.now());
+			List<DailyDoorLog> doorlog = doorlogService.getDoorlogByDineDate(start, LocalDate.now());
 			List<Registered_list> toRemove = new ArrayList<>();
 			for(Registered_list register: registered) {
 				for(DailyDoorLog log : doorlog) {
@@ -478,10 +462,14 @@ public class ReportController {
 				}
 			}
 			registered.removeAll(toRemove);
-			for(Registered_list temp : registered) {
-				temp.setStatus(false);
-				registeredService.addRegisteredDate(temp);
+			List<Registered_list> notEatList = registeredService.getRegisteredStaffByStartDateAndEndDate(start, LocalDate.now());
+			for(Registered_list temp : notEatList) {
+				if(temp.getStatus()==null) {
+					temp.setStatus(false);
+					registeredService.addRegisteredDate(temp);
+				}
 			}
+			
 			
 			model.addFlashAttribute("success", "Uploaded Successfully");
 			return "redirect:/importDoorFile";

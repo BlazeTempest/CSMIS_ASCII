@@ -11,7 +11,21 @@ public class ReportDTO {
 	private String name;
 	private int registeredStatus;
 	private LocalDate dineDate;
+	private String avoidMeats;
 	
+	public ReportDTO(String dept, String team, String staffID, String name) {
+		super();
+		this.dept = dept;
+		this.team = team;
+		this.staffID = staffID;
+		this.name = name;
+	}
+	public String getAvoidMeats() {
+		return avoidMeats;
+	}
+	public void setAvoidMeats(String avoidMeats) {
+		this.avoidMeats = avoidMeats;
+	}
 	public LocalDate getDineDate() {
 		return dineDate;
 	}

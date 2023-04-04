@@ -117,11 +117,14 @@
                 <div class="navbar-nav w-100">
                     <a th:href="@{dashboard}" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
             >
+            <a th:href="@{/importFiles}" class="nav-item nav-link"
+              ><i class="fas fa-upload me-2"></i>Import Data</a
+            >
             <a th:href="@{employee-list}" class="nav-item nav-link"
               ><i class="fas fa-users me-2"></i>Employee List</a
             >
-            <a th:href="@{registered-list}" class="nav-item nav-link active"><i
-						class="fa fa-laptop me-2"></i>Report</a>
+            <a th:href="@{/summary}"  class="nav-item nav-link active"
+            ><i class="fa fa-laptop me-2"></i>Report</a>
             <a th:href="@{registration}" class="nav-item nav-link"
               ><i class="fas fa-pen me-2"></i>Lunch Register</a
             >
@@ -131,22 +134,9 @@
             <a th:href="@{restaurant}" class="nav-item nav-link"
               ><i class="fas fa-home me-2"></i>Restaurant</a
             >
-            <div class="nav-item dropdown">
-              <a
-                href="#"
-                class="nav-link dropdown-toggle"
-                data-bs-toggle="dropdown"
-                ><i class="fas fa-file me-2"></i>Invoice</a
-              >
-              <div class="dropdown-menu bg-transparent border-0">
-                <a th:href="@{/weekly-invoice}" class="dropdown-item"
-                  >Weekly Invoice</a
+                <a th:href="@{/weekly-invoice}" class="nav-item nav-link"
+                  ><i class="fas fa-file me-2"></i> Invoice</a
                 >
-                <a th:href="@{/monthly_invoice}" class="dropdown-item"
-                  >Monthly Invoice</a
-                >
-              </div>
-            </div>
             <div class="nav-item">
               <a th:href="@{suggestion}" class="nav-link"
                 ><i class="far fa-file-alt me-2"></i>Suggestions</a

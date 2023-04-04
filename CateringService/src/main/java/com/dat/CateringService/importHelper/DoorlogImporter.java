@@ -28,7 +28,6 @@ public class DoorlogImporter {
         Sheet sheet = workbook.getSheetAt(0); // assuming only one sheet in the workbook
         Iterator<Row> iterator = sheet.iterator();
         int doorId = 0;
-        System.out.println("Start: " + doorId);
         while (iterator.hasNext()) {
             Row row = iterator.next();
             if (row.getRowNum() == 0) { // skip the header row
@@ -50,9 +49,9 @@ public class DoorlogImporter {
                     	object.setDoorLogNo(doorlog);
                         break;
                     case 3:
-                    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-                    	LocalDate date = LocalDate.parse(cell.getStringCellValue(), formatter);
-                    	object.setDineDate(date);
+                    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy H:mm:ss");
+                    	LocalDateTime dateTime = LocalDateTime.parse(cell.getStringCellValue(), formatter);
+                    	object.setDineDate(dateTime.toLocalDate());
                     	break;
                     default:
                         break;

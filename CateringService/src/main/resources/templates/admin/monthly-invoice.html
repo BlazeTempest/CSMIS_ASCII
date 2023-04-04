@@ -72,6 +72,32 @@ i.fa-solid {
 .fa-solid:hover {
 	color: rgb(250, 16, 75);
 }
+ /* start style for report btn */
+		.btn-group {
+			padding-right: 30px;
+			padding-left: 30px;
+		}
+		
+		.btn-group .btn {
+			border-radius: 10px;
+		}
+		
+		.btn-check:checked+.btn-primary, .btn-check:active+.btn-primary,
+			.btn-primary:active, .btn-primary.active, .show>.btn-primary.dropdown-toggle
+			{
+			color: #06324d;
+			background-color: white;
+			border-color: #06324d;
+			box-shadow: 5px 5px #06324d;
+		}
+		.btn-primary:hover {
+			background-color: #06324d;
+			color: white;
+			transform: scale(1.1);
+			box-shadow: 0 0 5px #06324d;
+		}
+		
+		/* end style for report btn */
 </style>
 <script>
         function myFunction(x) {
@@ -115,11 +141,14 @@ table tr th {
 
 				<div class="navbar-nav w-100">
 					<a href="/" class="nav-item nav-link"><i
-						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
+						class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+						<a th:href="@{/importFiles}" class="nav-item nav-link"
+              ><i class="fas fa-upload me-2"></i>Import Data</a
+            > <a
 						th:href="@{/employee-list}" class="nav-item nav-link"><i
 						class="fas fa-users me-2"></i>Employee List</a>
-					<a th:href="@{registered-list}"  class="nav-item nav-link"
-            		><i class="fa fa-laptop me-2"></i>Report</a>
+					<a th:href="@{/summary}"  class="nav-item nav-link"
+            ><i class="fa fa-laptop me-2"></i>Report</a>
 					<a th:href="@{registration}" class="nav-item nav-link"
               ><i class="fas fa-pen me-2"></i>Lunch Register</a
             >
@@ -129,31 +158,18 @@ table tr th {
             <a th:href="@{restaurant}" class="nav-item nav-link"
               ><i class="fas fa-home me-2"></i>Restaurant</a
             >
-            <div class="nav-item dropdown">
-              <a
-                href="#"
-                class="nav-link dropdown-toggle active"
-                data-bs-toggle="dropdown"
-                ><i class="fas fa-file me-2"></i>Invoice</a
-              >
-              <div class="dropdown-menu bg-transparent border-0">
-                <a th:href="@{/weekly-invoice}" class="dropdown-item"
-                  >Weekly Invoice</a
+                <a th:href="@{/weekly-invoice}" class="nav-item nav-link active"
+                  ><i class="fas fa-file me-2"></i> Invoice</a
                 >
-                <a th:href="@{/monthly_invoice}" class="dropdown-item active"
-                  >Monthly Invoice</a
-                >
-              </div>
-            </div>
-            <div class="nav-item">
-              <a th:href="@{suggestion}" class="nav-link"
+                <div class="nav-item">
+              <a th:href="@{/suggestion}" class="nav-link"
                 ><i class="far fa-file-alt me-2"></i>Suggestions</a
               >
             </div>
             <div class="nav-item">
-              <a th:href="@{holiday}" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
+              <a th:href="@{/holiday}" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
                 </div>
-				</div>
+            </div>
 			</nav>
 		</div>
 		<!-- Sidebar End -->
@@ -259,6 +275,17 @@ table tr th {
 			<!-- Create invoice end -->
 
 			<div class="container-fluid mt-4">
+				<div class="row">
+					<div class="btn-group d-flex justify-content-start mt-3 mb-4" role="group"
+						aria-label="Button group with options">
+						<div role="group">
+							<a th:href="@{weekly-invoice}" class="btn btn-primary me-5">Weekly Invoice</a>
+						</div>
+						<div role="group">
+							<a th:href="@{monthly_invoice}" class="btn btn-primary active">Monthly Invoice</a>
+						</div>
+					</div>
+				</div>
 				<div class="bg-secondary ms-3 me-3 rounded">
 					<div class="row py-3 text-center">
 						<div>

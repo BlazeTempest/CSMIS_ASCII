@@ -30,10 +30,12 @@ import com.dat.CateringService.daos.AvoidMeatRepository;
 import com.dat.CateringService.daos.PriceRepository;
 import com.dat.CateringService.entity.AvoidMeat;
 import com.dat.CateringService.entity.Price;
+import com.dat.CateringService.entity.Registration_time;
 import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.service.AvoidMeatService;
 import com.dat.CateringService.service.MenuPdfService;
 import com.dat.CateringService.service.PriceService;
+import com.dat.CateringService.service.RegistrationTimeService;
 import com.dat.CateringService.service.StaffService;
 
 @Controller
@@ -49,6 +51,9 @@ public class MenuController {
 
 	@Autowired
 	private AvoidMeatRepository avoidMeatRepository;
+	
+	@Autowired
+	private RegistrationTimeService registrationTimeService;
 
 	private AvoidMeatService avoidMeatService;
 	private PriceService priceService;
@@ -92,6 +97,18 @@ public class MenuController {
 		}
 		
 		attr.addAttribute("scroll", "scroll");
+		return "redirect:/menu";
+	}
+	
+	@PostMapping("/changeLockTime")
+	public String changeLockTime(@RequestParam("hour")int hour, @RequestParam("minute")int minute, @RequestParam("day")int day, Model model) {
+		System.out.println("Hour: " + hour + " Minute: " + minute + " Day: " + day);
+		
+		Registration_time time = registrationTimeService.getRegistration_time(1);
+		time.setHour(hour);
+		time.setMinute(minute);
+		time.setDay(day);
+		registrationTimeService.addTime(time);
 		return "redirect:/menu";
 	}
 	
@@ -195,8 +212,12 @@ public class MenuController {
 				} else {
 					meatTypes = meatTypes + "," + meat.getType();
 				}
-				System.out.println(meat.getType() + "==>" + staffs.size());
 			}
+			theModel.addAttribute("registrationTime", registrationTimeService.getRegistration_time(1));
+			
+			List<String> dayNames = new ArrayList<>(Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"));
+			
+			theModel.addAttribute("dayNames", dayNames);
 			theModel.addAttribute("meatTypes", meatTypes);
 			theModel.addAttribute("staffCounts", staffCounts);
 			return "admin/menu";

@@ -22,14 +22,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.dat.CateringService.DTO.ReportDTO;
 import com.dat.CateringService.entity.AvoidMeat;
 import com.dat.CateringService.entity.DailyDoorLog;
+import com.dat.CateringService.entity.Headcount;
 import com.dat.CateringService.entity.Holidays;
 import com.dat.CateringService.entity.Registered_list;
 import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.importHelper.ExcelImporter;
 import com.dat.CateringService.service.AvoidMeatService;
 import com.dat.CateringService.service.DoorlogService;
+import com.dat.CateringService.service.HeadcountService;
 import com.dat.CateringService.service.HolidayService;
 import com.dat.CateringService.service.RegisteredListService;
 import com.dat.CateringService.service.StaffService;
@@ -51,6 +54,12 @@ public class HomeController {
 	@Autowired
 	private DoorlogService doorService;
 	
+	@Autowired
+	private DoorlogService doorlogService;
+	
+	@Autowired
+	private HeadcountService headcountService;
+	
 	@GetMapping("/importFiles")
 	public String importEmployeeFile(Authentication authentication, Model model) {
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
@@ -59,6 +68,22 @@ public class HomeController {
 	
 	@GetMapping("/importDoorFile")
 	public String importDoorFile(Authentication authentication, Model model) {
+		List<Registered_list> registeredStaffs = registeredService.getRegisteredStaffByDate(LocalDate.now());
+		Headcount temp = headcountService.getHeadcountByDate(LocalDate.now());
+		// Update the headcount table with the total registered count
+		if(temp==null) {
+		    Headcount headcount = new Headcount();
+			headcount.setRegisteredCount(registeredStaffs.size());
+			headcount.setActualCount(doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+			headcount.setInvoiceDate(LocalDate.now());
+			headcount.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+			headcountService.saveHeadcount(headcount);
+		}else {
+			temp.setRegisteredCount(registeredStaffs.size());
+			temp.setActualCount(doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+			temp.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+			headcountService.saveHeadcount(temp);
+		}
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		return "admin/doorlogImport";
 	}
@@ -174,6 +199,45 @@ public class HomeController {
 		model.addAttribute("currentYear", date.getYear());
 		model.addAttribute("month", weeksInMonth);
 		return "admin/calendarDetail";
+	}
+	
+	@GetMapping("/avoidmeatList")
+	public String avoidmeatList(Model model) {
+		List<Staff> tempStaffs = staffService.getActiveStaffs(1);
+		List<ReportDTO> staffs = new ArrayList<>();
+		
+		for(Staff tempStaff:tempStaffs) {
+			if(!tempStaff.getName().equals("Admin") && tempStaff.getAvoidMeatIds()!=null && !tempStaff.getAvoidMeatIds().isEmpty()) {
+				ReportDTO staff = new ReportDTO(tempStaff.getDept(), tempStaff.getTeam(), tempStaff.getName(), tempStaff.getStaffID());
+				String avoidMeat = "";
+				String[] meats = tempStaff.getAvoidMeatIds().split(",");
+				
+				for(String meat : meats) {
+					if(!meat.isEmpty()) {
+						if(avoidMeat=="") {
+							avoidMeat = avoidMeatService.findById(Integer.parseInt(meat)).getType();
+						}else {
+							avoidMeat = avoidMeat + ", " + avoidMeatService.findById(Integer.parseInt(meat)).getType();
+						}
+					}
+				}
+				staff.setAvoidMeats(avoidMeat);
+				staffs.add(staff);
+			}
+		}
+		
+		List<AvoidMeat> avoidMeats = avoidMeatService.findAll();
+		List<String> meatTypes = new ArrayList<>();
+		List<String> staffCounts = new ArrayList<>();
+		for(AvoidMeat meat : avoidMeats) {
+			List<Staff> Staffs = staffService.getByAvoidMeatIds(String.valueOf(meat.getAvoidmeat_ID()));
+			staffCounts.add(String.valueOf(Staffs.size()));
+			meatTypes.add(meat.getType());
+		}
+		model.addAttribute("meatTypes", meatTypes);
+		model.addAttribute("staffCounts", staffCounts);
+		model.addAttribute("staffs", staffs);
+		return "admin/avoidmeatList";
 	}
 	
 	@GetMapping("/employee-list")

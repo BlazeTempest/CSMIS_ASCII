@@ -22,10 +22,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.dat.CateringService.DTO.ReportDTO;
 import com.dat.CateringService.daos.PriceRepository;
 import com.dat.CateringService.entity.Announcement;
+import com.dat.CateringService.entity.AvoidMeat;
 import com.dat.CateringService.entity.DailyDoorLog;
 import com.dat.CateringService.entity.Price;
+import com.dat.CateringService.entity.Registered_list;
 import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.service.AnnouncementService;
+import com.dat.CateringService.service.AvoidMeatService;
 import com.dat.CateringService.service.DoorlogService;
 import com.dat.CateringService.service.MenuPdfService;
 import com.dat.CateringService.service.PriceService;
@@ -48,6 +51,9 @@ public class LoginController {
 	
 	@Autowired
 	private RegisteredListService registeredService;
+	
+	@Autowired
+	private AvoidMeatService avoidMeatService;
 	
 	@Autowired
 	private DoorlogService doorService;
@@ -93,10 +99,6 @@ public class LoginController {
 					}
 				}
 				
-				LocalDate today = LocalDate.now();
-				LocalDate firstDay = today.withDayOfMonth(1);
-				LocalDate lastDay = today.withDayOfMonth(today.lengthOfMonth());
-				
 				for(String dept : depts) {
 					ReportDTO dto = new ReportDTO(registeredService.getDeptCount(dept, true), registeredService.getDeptCount(dept, false));
 					dto.setDept(dept);
@@ -127,9 +129,44 @@ public class LoginController {
 						unregisteredComplete.add(temp);
 					}
 				}
+				
+				//For graph
+				List<Registered_list> registered = registeredService.getRegisteredStaffByDate(LocalDate.now());
+				List<String> registeredIds = new ArrayList<>();
+				for(Registered_list temp:registered) {
+					registeredIds.add(temp.getStaffID());
+				}
+				List<AvoidMeat> avoidMeats = avoidMeatService.findAll();
+				String meatTypes = "";
+				String staffCounts = "";
+				for(AvoidMeat meat : avoidMeats) {
+					List<Staff> tempStaffs = staffService.getByAvoidMeatIds(String.valueOf(meat.getAvoidmeat_ID()));
+					List<Staff> toRemove = new ArrayList<>();
+					for(Staff staff:tempStaffs) {
+						if(!registeredIds.contains(staff.getStaffID())) {
+							toRemove.add(staff);
+						}
+					}
+					tempStaffs.removeAll(toRemove);
+					if(staffCounts=="") {
+						staffCounts = String.valueOf(tempStaffs.size());
+					}else {
+						staffCounts = staffCounts + "," + tempStaffs.size();
+					}
+					
+					if(meatTypes=="") {
+						meatTypes = meat.getType();
+					} else {
+						meatTypes = meatTypes + "," + meat.getType();
+					}
+				}
+				
+				
 				String countGraph = "";
-				countGraph = registeredService.getRegisteredStaffByStatusAndDineAndDate(true, true, LocalDate.now(), LocalDate.now()).size() + "," + registeredService.getRegisteredStaffByStatusAndDineAndDate(false, true, LocalDate.now(), LocalDate.now()).size() + "," + unregisteredComplete.size();
-				System.out.println(countGraph);
+				countGraph = registeredService.getRegisteredStaffByDate(LocalDate.now()).size() + "," + registeredService.getRegisteredStaffByStatusAndDineAndDate(true, true, LocalDate.now(), LocalDate.now()).size() + "," + registeredService.getRegisteredStaffByStatusAndDineAndDate(false, true, LocalDate.now(), LocalDate.now()).size() + "," + unregisteredComplete.size();
+				
+				theModel.addAttribute("meatTypes", meatTypes);
+				theModel.addAttribute("staffCounts", staffCounts);
 				theModel.addAttribute("countGraph", countGraph);
 				theModel.addAttribute("completedCount", registeredService.getRegisteredStaffByStatusAndDineAndDate(true, true, LocalDate.now(), LocalDate.now()).size());
 				theModel.addAttribute("skippedCount", registeredService.getRegisteredStaffByStatusAndDineAndDate(false, true, LocalDate.now(), LocalDate.now()).size());
@@ -152,7 +189,7 @@ public class LoginController {
 				Staff staff = staffService.getStaffById(authentication.getName());
 				theModel.addAttribute("name", staff.getName());
 				theModel.addAttribute("noti", staff.getEmail_noti());
-				List<Announcement> announcements = announcementService.getAllAnnouncements();
+				List<Announcement> announcements = announcementService.orderByCreatedDate();
 				theModel.addAttribute("announcements", announcements);
 				
 					String pdfFileName = "currentweek.pdf";

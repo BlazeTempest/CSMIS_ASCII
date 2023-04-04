@@ -23,10 +23,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.dat.CateringService.entity.AvoidMeat;
 import com.dat.CateringService.entity.Holidays;
 import com.dat.CateringService.entity.Registered_list;
+import com.dat.CateringService.entity.Registration_time;
 import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.service.AvoidMeatService;
 import com.dat.CateringService.service.HolidayService;
 import com.dat.CateringService.service.RegisteredListService;
+import com.dat.CateringService.service.RegistrationTimeService;
 import com.dat.CateringService.service.StaffService;
 
 @Controller
@@ -42,6 +44,9 @@ public class RegistrationController {
 
 	@Autowired
 	private AvoidMeatService avoidMeatService;
+	
+	@Autowired
+	private RegistrationTimeService registrationTimeService;
 
 	@GetMapping("/registration")
 	public String showRegistrationForm(Model model, Authentication authentication) {
@@ -193,10 +198,19 @@ public class RegistrationController {
 	        for (int i = 0; i < 7; i++) {
 	            disabledDates.add(currentDate.with(DayOfWeek.MONDAY).plusDays(i));
 	        }
-
+	        
+	        Registration_time time = registrationTimeService.getRegistration_time(1);
+	        DayOfWeek day = DayOfWeek.MONDAY;
+	        switch(time.getDay()) {
+	        	case 1: day = DayOfWeek.MONDAY; break;
+	        	case 2: day = DayOfWeek.TUESDAY; break;
+	        	case 3: day = DayOfWeek.WEDNESDAY; break;
+	        	case 4: day = DayOfWeek.THURSDAY; break;
+	        	case 5: day = DayOfWeek.FRIDAY; break;
+	        }
 	        // Add next week dates if it is Friday
 	        LocalTime currentTime = LocalTime.now();
-	        if (currentDate.getDayOfWeek() == DayOfWeek.FRIDAY && currentTime.isAfter(LocalTime.of(13, 0))) {
+	        if (currentDate.getDayOfWeek() == day && currentTime.isAfter(LocalTime.of(time.getHour(), time.getMinute()))) {
 	            for (int i = 0; i < 7; i++) {
 	                disabledDates.add(currentDate.with(DayOfWeek.MONDAY).plusDays(7 + i));
 	            }

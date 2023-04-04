@@ -53,7 +53,6 @@ public class EmailScheduler {
 
 		    mailSender.send(message);
 		}
-
 	}
 }
 
