@@ -27,6 +27,7 @@ import com.dat.CateringService.entity.AvoidMeat;
 import com.dat.CateringService.entity.DailyDoorLog;
 import com.dat.CateringService.entity.Headcount;
 import com.dat.CateringService.entity.Holidays;
+import com.dat.CateringService.entity.Price;
 import com.dat.CateringService.entity.Registered_list;
 import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.importHelper.ExcelImporter;
@@ -34,6 +35,7 @@ import com.dat.CateringService.service.AvoidMeatService;
 import com.dat.CateringService.service.DoorlogService;
 import com.dat.CateringService.service.HeadcountService;
 import com.dat.CateringService.service.HolidayService;
+import com.dat.CateringService.service.PriceService;
 import com.dat.CateringService.service.RegisteredListService;
 import com.dat.CateringService.service.StaffService;
 
@@ -60,6 +62,9 @@ public class HomeController {
 	@Autowired
 	private HeadcountService headcountService;
 	
+	@Autowired
+	private PriceService priceService;
+	
 	@GetMapping("/importFiles")
 	public String importEmployeeFile(Authentication authentication, Model model) {
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
@@ -70,18 +75,35 @@ public class HomeController {
 	public String importDoorFile(Authentication authentication, Model model) {
 		List<Registered_list> registeredStaffs = registeredService.getRegisteredStaffByDate(LocalDate.now());
 		Headcount temp = headcountService.getHeadcountByDate(LocalDate.now());
+		Price price = priceService.findActivePrice();
+		int actual = doorlogService.getStaffIDByDineDate(LocalDate.now()).size();
+		int registered = registeredStaffs.size();
+		int amount = 0;
+		
 		// Update the headcount table with the total registered count
 		if(temp==null) {
 		    Headcount headcount = new Headcount();
-			headcount.setRegisteredCount(registeredStaffs.size());
-			headcount.setActualCount(doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+			headcount.setRegisteredCount(registered);
+			headcount.setActualCount(actual);
 			headcount.setInvoiceDate(LocalDate.now());
 			headcount.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+			headcount.setPrice(price.getPrice_ID());
+			if(actual>registered) {
+				headcount.setAmount(amount * price.getTotal_price());
+			}else {
+				headcount.setAmount(amount * price.getTotal_price());
+			}
 			headcountService.saveHeadcount(headcount);
 		}else {
 			temp.setRegisteredCount(registeredStaffs.size());
 			temp.setActualCount(doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
 			temp.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+			temp.setPrice(price.getPrice_ID());
+			if(actual>registered) {
+				temp.setAmount(amount * price.getTotal_price());
+			}else {
+				temp.setAmount(amount * price.getTotal_price());
+			}
 			headcountService.saveHeadcount(temp);
 		}
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());

@@ -31,6 +31,17 @@ public class Headcount {
 	
 	@Column(name="difference")
 	private int difference;
+	
+	@Column(name="price")
+	private int price;
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
 
 	public Headcount() {
 		super();
