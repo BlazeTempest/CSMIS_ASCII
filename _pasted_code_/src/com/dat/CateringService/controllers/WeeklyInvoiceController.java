@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,6 +70,13 @@ public class WeeklyInvoiceController {
 			@RequestParam(name = "invoiceEnd", required = false) String endDate,
 			@RequestParam(name = "paymentDate", required = false) String paymentDate,
 			@RequestParam(name = "voucherID", required = false) String voucherID, RedirectAttributes re) {
+
+		/*
+		 * String lastInsertedInviceDate=headCountService.findLastInsertedInvoiceDate();
+		 * System.out.
+		 * println("This is last inserted invoice date from headcount table >>>>>> "
+		 * +lastInsertedInviceDate);
+		 */
 
 		List<Restaurant> restaurantNameList=restaurantService.getRestaurantName();
 		model.addAttribute("restaurantNameList",restaurantNameList);
@@ -133,6 +141,9 @@ public class WeeklyInvoiceController {
 
 			List<WeeklyInvoiceDTO> dto = new ArrayList<>();
 
+			System.out.println("This is last inserted date >>>>>>>>>>" + lastInsertedDate);
+			System.out.println("This is last start date >>>>>>>>>>" + startDate);
+
 			for (Headcount headcount : headcounts) {
 				WeeklyInvoiceDTO temp = new WeeklyInvoiceDTO();
 
@@ -192,6 +203,13 @@ public class WeeklyInvoiceController {
 
 		paymentVoucher.setVoucher_ID("CS" + generateSuffix());
 		System.out.println("CS" + generateSuffix());
+
+		/*
+		 * paymentVoucher.setRestaurant_name(restaurantService.findActiveRestaurantName(
+		 * ));
+		 * paymentVoucher.setReceived_by(restaurantService.findRestaurantReceiverName())
+		 * ;
+		 */
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String start_date_str = paymentVoucher.getStart_date().format(formatter);
@@ -281,14 +299,13 @@ public class WeeklyInvoiceController {
 		String start = invoiceStart1.format(formatter);
 		String end = invoiceEnd1.format(formatter);
 
-		String payDate = paymentDate1.format(formatter);
+		String payDate = paymentDate.formatted(formatter);
 
 		re.addAttribute("invoiceStart", start);
 		re.addAttribute("invoiceEnd", end);
 		re.addAttribute("voucherID", voucherID);
 		re.addAttribute("paymentDate", payDate);
-		
-		paymentVoucher.setCreated_by(staffService.getStaffById(authentication.getName()).getName());
+
 		paymentVoucher.setVoucher_ID(voucherID);
 		paymentVoucher.setStart_date(invoiceStart1);
 		paymentVoucher.setEnd_date(invoiceEnd1);
