@@ -24,12 +24,14 @@ import com.dat.CateringService.daos.PriceRepository;
 import com.dat.CateringService.entity.Announcement;
 import com.dat.CateringService.entity.AvoidMeat;
 import com.dat.CateringService.entity.DailyDoorLog;
+import com.dat.CateringService.entity.Headcount;
 import com.dat.CateringService.entity.Price;
 import com.dat.CateringService.entity.Registered_list;
 import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.service.AnnouncementService;
 import com.dat.CateringService.service.AvoidMeatService;
 import com.dat.CateringService.service.DoorlogService;
+import com.dat.CateringService.service.HeadcountService;
 import com.dat.CateringService.service.MenuPdfService;
 import com.dat.CateringService.service.PriceService;
 import com.dat.CateringService.service.RegisteredListService;
@@ -57,6 +59,12 @@ public class LoginController {
 	
 	@Autowired
 	private DoorlogService doorService;
+	
+	@Autowired
+	private DoorlogService doorlogService;
+	
+	@Autowired
+	private HeadcountService headcountService;
 
 	@GetMapping("/showMyLoginPage")
 	public String showMyLoginPage() {
@@ -75,6 +83,39 @@ public class LoginController {
 	@GetMapping("/dashboard")
 	public String showDashboard(Model theModel, Authentication authentication) throws IOException {
 		try {
+			List<Registered_list> registeredStaffs = registeredService.getRegisteredStaffByDate(LocalDate.now());
+			Headcount tempHeadcount = headcountService.getHeadcountByDate(LocalDate.now());
+			Price price = priceService.findActivePrice();
+			int actual = doorlogService.getStaffIDByDineDate(LocalDate.now()).size();
+			int registeredCount = registeredStaffs.size();
+			int amount = 0;
+			
+			// Update the headcount table with the total registered count
+			if(tempHeadcount==null) {
+			    Headcount headcount = new Headcount();
+				headcount.setRegisteredCount(registeredCount);
+				headcount.setActualCount(actual);
+				headcount.setInvoiceDate(LocalDate.now());
+				headcount.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+				headcount.setPrice(price.getPrice_ID());
+				if(actual>registeredCount) {
+					headcount.setAmount(amount * price.getTotal_price());
+				}else {
+					headcount.setAmount(amount * price.getTotal_price());
+				}
+				headcountService.saveHeadcount(headcount);
+			}else {
+				tempHeadcount.setRegisteredCount(registeredStaffs.size());
+				tempHeadcount.setActualCount(doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+				tempHeadcount.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+				tempHeadcount.setPrice(price.getPrice_ID());
+				if(actual>registeredCount) {
+					tempHeadcount.setAmount(amount * price.getTotal_price());
+				}else {
+					tempHeadcount.setAmount(amount * price.getTotal_price());
+				}
+				headcountService.saveHeadcount(tempHeadcount);
+			}
 			String role = authentication.getAuthorities().toArray()[0].toString();
 			if (role.equals("admin")) {
 				List<Announcement> announcements = announcementService.orderByCreatedDate();
