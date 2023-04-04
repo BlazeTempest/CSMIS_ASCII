@@ -193,7 +193,7 @@ public class RegistrationController {
 	        for (int i = 0; i < 7; i++) {
 	            disabledDates.add(currentDate.with(DayOfWeek.MONDAY).plusDays(i));
 	        }
-	        
+
 	        // Add next week dates if it is Friday
 	        LocalTime currentTime = LocalTime.now();
 	        if (currentDate.getDayOfWeek() == DayOfWeek.FRIDAY && currentTime.isAfter(LocalTime.of(13, 0))) {
