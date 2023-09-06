@@ -30,7 +30,9 @@ public class SuggestionController {
 			String role = authentication.getAuthorities().toArray()[0].toString();
 			if (role.equals("admin")) {
 				List<com.dat.CateringService.entity.Suggestion> suggestions = suggestionService.getAllSuggestions();
+		        model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 				model.addAttribute("suggestions", suggestions);
+				model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 				model.addAttribute("totalnum", suggestions.size());
 				return "admin/suggestion";
 			}
@@ -52,13 +54,14 @@ public class SuggestionController {
 
 	@GetMapping("/checkSuggestions")
 	public String checkSuggestions(@RequestParam(name="start", required = false) String startDate, @RequestParam(name="end", required = false) String endDate,
-			Model model) {
+			Model model,Authentication authentication) {
 		if(startDate == "" || startDate == null) startDate = LocalDate.now().toString();
 		if(endDate == "") endDate = startDate;
 		LocalDate start = LocalDate.parse(startDate);
 		LocalDate end = LocalDate.parse(endDate);
 		List<com.dat.CateringService.entity.Suggestion> suggestions = suggestionService.getByStartAndEndDate(start, end);
-		
+		model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
+        model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("start", startDate);
 		model.addAttribute("end", endDate);
 		model.addAttribute("suggestions", suggestions);

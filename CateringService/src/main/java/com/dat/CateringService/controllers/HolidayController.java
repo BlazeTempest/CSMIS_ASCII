@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +23,13 @@ import com.dat.CateringService.entity.Registered_list;
 import com.dat.CateringService.importHelper.HolidayExcelImport;
 import com.dat.CateringService.service.HolidayService;
 import com.dat.CateringService.service.RegisteredListService;
+import com.dat.CateringService.service.StaffService;
 
 @Controller
 public class HolidayController {
+	
+	@Autowired
+	private StaffService staffService;
 	
 	private HolidayService holidayService;
 	private RegisteredListService registeredService;
@@ -53,6 +59,8 @@ public class HolidayController {
 					holidays.add(temp);
 				}
 			}
+			theModel.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
+	        theModel.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 			theModel.addAttribute("totalNum", holidays.size());
 			theModel.addAttribute("currentYear", LocalDate.now().getYear());
 			theModel.addAttribute("totalHolidays",holidays);

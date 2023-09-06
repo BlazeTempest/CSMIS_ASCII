@@ -11,4 +11,5 @@ public interface WeeklyInvoiceService {
     public void save(PaymentVoucher thePaymentVoucher);
     public List<PaymentVoucher> findByPaymentDateBetween(LocalDate start, LocalDate end);
     public String findLastInsertedToDate();
+    public String findLastInsertedVoucherID();
 }

@@ -2,6 +2,7 @@ package com.dat.CateringService.controllers;
 
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -10,8 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.method.annotation.RedirectAttributesMethodArgumentResolver;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dat.CateringService.entity.DailyDoorLog;
+import com.dat.CateringService.entity.Registered_list;
 import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.service.DoorlogService;
 import com.dat.CateringService.service.HeadcountService;
@@ -52,29 +56,22 @@ public class ProfileController {
 			LocalDate firstDayOfMonth = LocalDate.now().withDayOfMonth(1);
 			LocalDate lastDayOfMonth = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
 			int currentAmount = 0;
-			int preAmount = 0;
-			
 			if (role.equals("admin")) { 
 				Staff staff = staffService.getStaffById(authentication.getName());
 				if (staff != null) {
-					for(LocalDate i=LocalDate.now().withDayOfMonth(1); i.isBefore(LocalDate.now().plusDays(1)); i.plusDays(1)) {
-						DailyDoorLog log = doorlogService.getByIdAndDate(staff.getStaffID(), i);
-						if(log!=null) {
-							currentAmount += priceService.findById(headcountService.getHeadcountByDate(i).getPrice()).getStaff_price();
+					List<Registered_list> list = registeredService.getRegisteredListByStaffID(staff.getStaffID(), firstDayOfMonth, lastDayOfMonth);
+					currentAmount += list.size() * priceService.findActivePrice().getStaff_price();
+					
+					List<Registered_list> registered = registeredService.getRegisteredListByIdAndDate(staff.getStaffID(), firstDayOfMonth, lastDayOfMonth);
+					int totalDay = 0;
+					for(Registered_list temp:registered) {
+						if(temp.getDine()==true) {
+							totalDay += 1;
 						}
-						i = i.plusDays(1);
 					}
 					
-					for(LocalDate i=LocalDate.now().minusMonths(1).withDayOfMonth(1); i.isBefore(LocalDate.now().minusMonths(1).plusDays(1)); i.plusDays(1)) {
-						DailyDoorLog log = doorlogService.getByIdAndDate(staff.getStaffID(), i);
-						if(log!=null) {
-							preAmount += priceService.findById(headcountService.getHeadcountByDate(i).getPrice()).getStaff_price();
-						}
-						i = i.plusDays(1);
-					}
-					
-					model.addAttribute("totalDay", registeredService.findByDineDateWithStaffID(staff.getStaffID(), firstDayOfMonth, lastDayOfMonth));
-					model.addAttribute("preAmount", preAmount);
+					model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
+					model.addAttribute("totalDay", totalDay);
 					model.addAttribute("currentAmount", currentAmount);
 					model.addAttribute("month", LocalDate.now().getMonth());
 					model.addAttribute("id", staff.getStaffID());
@@ -92,24 +89,19 @@ public class ProfileController {
 			} else if (role.equals("operator")) {
 				Staff staff = staffService.getStaffById(authentication.getName());
 				if (staff != null) {
-					for(LocalDate i=LocalDate.now().withDayOfMonth(1); i.isBefore(LocalDate.now().plusDays(1)); i.plusDays(1)) {
-						DailyDoorLog log = doorlogService.getByIdAndDate(staff.getStaffID(), i);
-						if(log!=null) {
-							currentAmount += priceService.findById(headcountService.getHeadcountByDate(i).getPrice()).getStaff_price();
+					List<Registered_list> list = registeredService.getRegisteredListByStaffID(staff.getStaffID(), firstDayOfMonth, lastDayOfMonth);
+					currentAmount += list.size() * priceService.findActivePrice().getStaff_price();
+					
+					List<Registered_list> registered = registeredService.getRegisteredListByIdAndDate(staff.getStaffID(), firstDayOfMonth, lastDayOfMonth);
+					int totalDay = 0;
+					for(Registered_list temp:registered) {
+						if(temp.getDine()==true) {
+							totalDay += 1;
 						}
-						i = i.plusDays(1);
 					}
 					
-					for(LocalDate i=LocalDate.now().minusMonths(1).withDayOfMonth(1); i.isBefore(LocalDate.now().minusMonths(1).plusDays(1)); i.plusDays(1)) {
-						DailyDoorLog log = doorlogService.getByIdAndDate(staff.getStaffID(), i);
-						if(log!=null) {
-							preAmount += priceService.findById(headcountService.getHeadcountByDate(i).getPrice()).getStaff_price();
-						}
-						i = i.plusDays(1);
-					}
-					
-					model.addAttribute("totalDay", registeredService.findByDineDateWithStaffID(staff.getStaffID(), firstDayOfMonth, lastDayOfMonth));
-					model.addAttribute("preAmount", preAmount);
+					model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
+					model.addAttribute("totalDay", totalDay);
 					model.addAttribute("currentAmount", currentAmount);
 					model.addAttribute("month", LocalDate.now().getMonth());
 					model.addAttribute("id", staff.getStaffID());
@@ -134,7 +126,7 @@ public class ProfileController {
 	
 	
 	@GetMapping("/changePassword")
-	public String changePassword(Model model, Authentication authentication,@RequestParam("oldPassword") String oldPassword,@RequestParam("newPassword") String newPassword,@RequestParam("confirmPassword") String confirmPassword) {
+	public String changePassword(Model model,RedirectAttributes re, Authentication authentication,@RequestParam("oldPassword") String oldPassword,@RequestParam("newPassword") String newPassword,@RequestParam("confirmPassword") String confirmPassword) {
 	
 		if (authentication != null) {
 			String userId = authentication.getName();
@@ -150,7 +142,9 @@ public class ProfileController {
 					model.addAttribute("errorMsg", "New password and confirm password do not match");
 				}
 			} else {
-				model.addAttribute("errorMsg", "Invalid old password");
+				System.out.println("old pass error");
+				re.addFlashAttribute("oldPasswordErrorMsg", "Invalid old password");
+				re.addAttribute("showMessage","show");
 			}
 			
 			return "redirect:/userProfile";

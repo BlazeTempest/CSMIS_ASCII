@@ -25,17 +25,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.dat.CateringService.DTO.ReportDTO;
 import com.dat.CateringService.entity.AvoidMeat;
 import com.dat.CateringService.entity.DailyDoorLog;
-import com.dat.CateringService.entity.Headcount;
 import com.dat.CateringService.entity.Holidays;
-import com.dat.CateringService.entity.Price;
 import com.dat.CateringService.entity.Registered_list;
 import com.dat.CateringService.entity.Staff;
 import com.dat.CateringService.importHelper.ExcelImporter;
 import com.dat.CateringService.service.AvoidMeatService;
 import com.dat.CateringService.service.DoorlogService;
-import com.dat.CateringService.service.HeadcountService;
 import com.dat.CateringService.service.HolidayService;
-import com.dat.CateringService.service.PriceService;
 import com.dat.CateringService.service.RegisteredListService;
 import com.dat.CateringService.service.StaffService;
 
@@ -58,24 +54,35 @@ public class HomeController {
 	
 	@GetMapping("/about")
 	public String about(Authentication authentication, Model model) {
-		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
-		return "about";
+		String role = authentication.getAuthorities().toArray()[0].toString();
+		if(role.equals("admin")) {
+			model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
+			model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+			return "admin/about";
+		}else {
+			model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
+			model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+			return "employee/op-about";
+		}
 	}
 	
 	@GetMapping("/importFiles")
 	public String importEmployeeFile(Authentication authentication, Model model) {
+		model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		return "admin/importFiles";
 	}
 	
 	@GetMapping("/importDoorFile")
 	public String importDoorFile(Authentication authentication, Model model) {
+		model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		return "admin/doorlogImport";
 	}
 	
 	@GetMapping("/importHolidayFile")
 	public String importHolidayFile(Authentication authentication, Model model) {
+		model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		return "admin/holidayImport";
 	}
@@ -170,7 +177,8 @@ public class HomeController {
 				}
 			}
 		}
-		
+		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+		model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 		model.addAttribute("plannedDates", registeredService.getRegisteredListByIdAndDate(id, firstDayOfMonth, lastDayOfMonth));
 		model.addAttribute("lastUpdate", staffService.getStaffById(id).getModify_date());
 		model.addAttribute("actual", actualDates);
@@ -188,7 +196,7 @@ public class HomeController {
 	}
 	
 	@GetMapping("/avoidmeatList")
-	public String avoidmeatList(Model model) {
+	public String avoidmeatList(Model model,Authentication authentication) {
 		List<Staff> tempStaffs = staffService.getActiveStaffs(1);
 		List<ReportDTO> staffs = new ArrayList<>();
 		
@@ -220,6 +228,8 @@ public class HomeController {
 			staffCounts.add(String.valueOf(Staffs.size()));
 			meatTypes.add(meat.getType());
 		}
+		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+		model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 		model.addAttribute("meatTypes", meatTypes);
 		model.addAttribute("staffCounts", staffCounts);
 		model.addAttribute("staffs", staffs);
@@ -240,7 +250,8 @@ public class HomeController {
 					}
 				}
 				staffs.removeAll(toRemove);
-
+				model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+				model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 				model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 				model.addAttribute("teams", staffService.getTeamNames());
 				model.addAttribute("divs", staffService.getDivNames());
@@ -318,7 +329,8 @@ public class HomeController {
 						}
 					}
 					staffs.removeAll(toRemove);
-					
+					model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+					model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 					model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 					model.addAttribute("divs", staffService.getDivNames());
 					model.addAttribute("depts", staffService.getDeptNames());
@@ -344,7 +356,8 @@ public class HomeController {
 			String role = authentication.getAuthorities().toArray()[0].toString();
 			if (role.equals("admin")) {
 				List<Staff> staffs = staffService.getActiveStaffs(status);
-
+				model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+				model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 				model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 				model.addAttribute("divs", staffService.getDivNames());
 				model.addAttribute("depts", staffService.getDeptNames());
@@ -366,7 +379,8 @@ public class HomeController {
 
 			if (Role.equals("admin")) {
 				List<Staff> staffs = staffService.filterByRole(role);
-
+				model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+				model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 				model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 				model.addAttribute("divs", staffService.getDivNames());
 				model.addAttribute("depts", staffService.getDeptNames());

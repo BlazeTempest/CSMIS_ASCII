@@ -4892,7 +4892,6 @@ fieldset:disabled .btn {
 }
 
 .page-item.active .page-link {
-    z-index: 3;
     color: #fff;
     background-color: #eb1616;
     border-color: #eb1616;

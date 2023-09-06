@@ -192,9 +192,11 @@ public class MenuController {
 						System.err.println("Error reading file: " + e.getMessage());
 					}
 				}
+			theModel.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 			theModel.addAttribute("datPrice", activePrice.getDATprice());
 			theModel.addAttribute("staffPrice", activePrice.getStaff_price());
-			
+	        theModel.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+
 			}
 			List<AvoidMeat> avoidMeats = avoidMeatService.findAll();
 			String meatTypes = "";

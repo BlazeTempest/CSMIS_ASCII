@@ -41,7 +41,6 @@ public class WeeklyInvoiceController {
 
 	private HeadcountService headCountService;
 
-	private boolean printStatus = true,confirmStatus = true;
 	
 	@Autowired
 	public WeeklyInvoiceController(WeeklyInvoiceService weeklyInvoiceService, HeadcountService headCountService,
@@ -54,155 +53,260 @@ public class WeeklyInvoiceController {
 		this.staffService=staffService;
 	}
 
-	/* generate voucher_ID like CS001-currentdate */
-	private static int counter = 1;
-
-	private String generateSuffix() {
-
-		System.out.println("generateSuffix() called, counter = " + counter);
-		String dateStr = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-
-		return String.format("%03d-%s", counter, dateStr);
-	}
-
+	/* generate voucher_ID like CS001-paymentdate */
+	
+	private static int id = 1;
+	
 	@RequestMapping("/weekly-invoice")
-	public String weeklyInvoice(Model model, PaymentVoucher paymentVoucher,
+	public String weeklyInvoice(Authentication authentication,Model model, PaymentVoucher paymentVoucher,
 			@RequestParam(name = "invoiceStart", required = false) String startDate,
 			@RequestParam(name = "invoiceEnd", required = false) String endDate,
 			@RequestParam(name = "paymentDate", required = false) String paymentDate,
 			@RequestParam(name = "voucherID", required = false) String voucherID, RedirectAttributes re) {
-		
-		List<Restaurant> restaurantNameList=restaurantService.getRestaurantName();
-		model.addAttribute("restaurantNameList",restaurantNameList);
-		
-		List<Staff> adminTeam=staffService.getAdminTeam();
-		model.addAttribute("adminTeam",adminTeam);
-	
-		String lastInsertedDate = weeklyInvoiceService.findLastInsertedToDate();
-		System.out.println("This is last inserted date from  weekly invoice >>>>>>>>>>" + lastInsertedDate);
-
-		int totalAmount;
-		int totalCost = 0;
-
-		int dailyTotalAmount = 0;
-		int allDailyTotalAmount=0;
-		int totalDailyActualCount=0;
-		int totalDailyRegisteredCount=0;
-		int totalDailyDiffCount=0;
-
-		List<Headcount> dailyInvoiceList = headCountService.findAll();
-
-		List<WeeklyInvoiceDTO> dailyInvoiceList1 = new ArrayList<>();
-		for (Headcount headcount : dailyInvoiceList) {
-			
-			System.out.println("Hello >>>>> "+priceService.findById(headcount.getPrice()).getTotal_price());
-			
-			WeeklyInvoiceDTO temp = new WeeklyInvoiceDTO();
-			
-			totalDailyRegisteredCount+=headcount.getRegisteredCount();
-			totalDailyDiffCount+=headcount.getDifference();
-			totalDailyActualCount+=headcount.getActualCount();
-			System.out.println("This is actual count >>> "+totalDailyActualCount);
-
-			if (headcount.getActualCount() >= headcount.getRegisteredCount()) {
-				dailyTotalAmount = headcount.getActualCount() * priceService.findById(headcount.getPrice()).getTotal_price();
-				allDailyTotalAmount+=dailyTotalAmount;
+		try {
+			String role = authentication.getAuthorities().toArray()[0].toString();
+			if (role.equals("admin")) {
 				
+				String generatedVoucherID;
+				
+				String lastInsertedVoucherID=weeklyInvoiceService.findLastInsertedVoucherID();
+				
+				List<Restaurant> restaurantNameList=restaurantService.getRestaurantName();
+				model.addAttribute("restaurantNameList",restaurantNameList);
+				
+				List<Staff> adminTeam=staffService.getAdminTeam();
+				model.addAttribute("adminTeam",adminTeam);
+			
+				String lastInsertedDate = weeklyInvoiceService.findLastInsertedToDate();
+				System.out.println("This is last inserted date from  weekly invoice >>>>>>>>>>" + lastInsertedDate);
 
-			} else {
-				dailyTotalAmount = headcount.getRegisteredCount() * priceService.findById(headcount.getPrice()).getTotal_price();
-				allDailyTotalAmount+=dailyTotalAmount;
-			}
+				int totalAmount;
+				int totalCost = 0;
 
-			temp.setInvoiceDate(headcount.getInvoiceDate());
-			temp.setRegisteredCount(headcount.getRegisteredCount());
-			temp.setActualCount(headcount.getActualCount());
-			temp.setDifference(headcount.getDifference());
-			temp.setTotalPrice(priceService.findById(headcount.getPrice()).getTotal_price());
-			temp.setTotalAmount(dailyTotalAmount);
+				int dailyTotalAmount = 0;
+				int allDailyTotalAmount=0;
+				int totalDailyActualCount=0;
+				int totalDailyRegisteredCount=0;
+				int totalDailyDiffCount=0;
 
-			dailyInvoiceList1.add(temp);
-		}
-	
-		model.addAttribute("dailyInvoiceList", dailyInvoiceList1);
-		
-		model.addAttribute("totalDailyActualCount",totalDailyActualCount);
-		model.addAttribute("totalDailyDiffCount",totalDailyDiffCount);
-		model.addAttribute("totalDailyRegisteredCount",totalDailyRegisteredCount);
-		model.addAttribute("allDailyTotalAmount",allDailyTotalAmount);
-		
-		model.addAttribute("voucherID", voucherID);
-		model.addAttribute("invoiceStart", startDate);
-		model.addAttribute("invoiceEnd", endDate);
-		model.addAttribute("paymentDate", paymentDate);
+				List<Headcount> dailyInvoiceList = headCountService.findAll();
 
-		PaymentVoucher weeklyInvoice = new PaymentVoucher();
+				List<WeeklyInvoiceDTO> dailyInvoiceList1 = new ArrayList<>();
+				for (Headcount headcount : dailyInvoiceList) {
+					
+					WeeklyInvoiceDTO temp = new WeeklyInvoiceDTO();
+					
+					totalDailyRegisteredCount+=headcount.getRegisteredCount();
+					totalDailyDiffCount+=headcount.getDifference();
+					totalDailyActualCount+=headcount.getActualCount();
+					
 
-		int numberOfPax = 0;
-		int totalRegisterCount = 0;
-		int totalActualCount = 0;
-		int totalDifferenceCount = 0;
+					if (headcount.getActualCount() >= headcount.getRegisteredCount()) {
+						dailyTotalAmount = headcount.getActualCount() * priceService.findById(headcount.getPrice()).getTotal_price();
+						allDailyTotalAmount+=dailyTotalAmount;
+						
 
-		if (startDate != null) {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			List<Headcount> headcounts = headCountService.findByInvoiceDateBetween(
-					LocalDate.parse(startDate, formatter), LocalDate.parse(endDate, formatter));
+					} else {
+						dailyTotalAmount = headcount.getRegisteredCount() * priceService.findById(headcount.getPrice()).getTotal_price();
+						allDailyTotalAmount+=dailyTotalAmount;
+					}
 
-			List<WeeklyInvoiceDTO> dto = new ArrayList<>();
+					temp.setInvoiceDate(headcount.getInvoiceDate());
+					temp.setRegisteredCount(headcount.getRegisteredCount());
+					temp.setActualCount(headcount.getActualCount());
+					temp.setDifference(headcount.getDifference());
+					temp.setTotalPrice(priceService.findById(headcount.getPrice()).getTotal_price());
+					temp.setTotalAmount(dailyTotalAmount);
 
-			for (Headcount headcount : headcounts) {
-				WeeklyInvoiceDTO temp = new WeeklyInvoiceDTO();
-
-				int registeredCount = headcount.getRegisteredCount();
-				int actualCount = headcount.getActualCount();
-				int differenceCount = headcount.getDifference();
-
-				temp.setInvoiceDate(headcount.getInvoiceDate());
-				temp.setRegisteredCount(registeredCount);
-				temp.setActualCount(actualCount);
-				temp.setDifference(differenceCount);
-				temp.setTotalPrice(priceService.findById(headcount.getPrice()).getTotal_price());
-
-				if (headcount.getActualCount() > headcount.getRegisteredCount()) {
-					totalAmount = headcount.getActualCount() * priceService.findById(headcount.getPrice()).getTotal_price();
-					numberOfPax += headcount.getActualCount();
-				} else {
-					totalAmount = headcount.getRegisteredCount() * priceService.findById(headcount.getPrice()).getTotal_price();
-					numberOfPax += headcount.getRegisteredCount();
+					dailyInvoiceList1.add(temp);
 				}
+				
+				if(lastInsertedVoucherID == null)
+				{
+				
+					generatedVoucherID="CS"+ String.format("%03d", id) + '-'+ paymentDate;
+					
+					model.addAttribute("dailyInvoiceList", dailyInvoiceList1);
+					model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
+					model.addAttribute("totalDailyActualCount",totalDailyActualCount);
+					model.addAttribute("totalDailyDiffCount",totalDailyDiffCount);
+					model.addAttribute("totalDailyRegisteredCount",totalDailyRegisteredCount);
+					model.addAttribute("allDailyTotalAmount",allDailyTotalAmount);
+					model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+					model.addAttribute("voucherID", generatedVoucherID);
+					model.addAttribute("invoiceStart", startDate);
+					model.addAttribute("invoiceEnd", endDate);
+					model.addAttribute("paymentDate", paymentDate);
+				
+			
+				PaymentVoucher weeklyInvoice = new PaymentVoucher();
 
-				temp.setNumberOfPax(numberOfPax);
-				temp.setTotalAmount(totalAmount);
-				totalCost += totalAmount;
+				int numberOfPax = 0;
+				int totalRegisterCount = 0;
+				int totalActualCount = 0;
+				int totalDifferenceCount = 0;
 
-				totalRegisterCount += registeredCount;
+				if (startDate != null) {
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					List<Headcount> headcounts = headCountService.findByInvoiceDateBetween(
+							LocalDate.parse(startDate, formatter), LocalDate.parse(endDate, formatter));
 
-				totalActualCount += actualCount;
+					List<WeeklyInvoiceDTO> dto = new ArrayList<>();
 
-				totalDifferenceCount += differenceCount;
+					for (Headcount headcount : headcounts) {
+						WeeklyInvoiceDTO temp = new WeeklyInvoiceDTO();
 
-				dto.add(temp);
-			}
-			model.addAttribute("dto", dto);
+						int registeredCount = headcount.getRegisteredCount();
+						int actualCount = headcount.getActualCount();
+						int differenceCount = headcount.getDifference();
+
+						temp.setInvoiceDate(headcount.getInvoiceDate());
+						temp.setRegisteredCount(registeredCount);
+						temp.setActualCount(actualCount);
+						temp.setDifference(differenceCount);
+						temp.setTotalPrice(priceService.findById(headcount.getPrice()).getTotal_price());
+
+						if (headcount.getActualCount() > headcount.getRegisteredCount()) {
+							totalAmount = headcount.getActualCount() * priceService.findById(headcount.getPrice()).getTotal_price();
+							numberOfPax += headcount.getActualCount();
+						} else {
+							totalAmount = headcount.getRegisteredCount() * priceService.findById(headcount.getPrice()).getTotal_price();
+							numberOfPax += headcount.getRegisteredCount();
+						}
+
+						temp.setNumberOfPax(numberOfPax);
+						temp.setTotalAmount(totalAmount);
+						totalCost += totalAmount;
+
+						totalRegisterCount += registeredCount;
+
+						totalActualCount += actualCount;
+
+						totalDifferenceCount += differenceCount;
+
+						dto.add(temp);
+					}
+					model.addAttribute("dto", dto);
+				}
+				model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+				model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
+				model.addAttribute("numberOfPax", numberOfPax);
+				model.addAttribute("totalCost", totalCost);
+				model.addAttribute("totalRegisterCount", totalRegisterCount);
+				model.addAttribute("totalActualCount", totalActualCount);
+				model.addAttribute("totalDifferenceCount", totalDifferenceCount);
+				model.addAttribute("restaurantName", restaurantService.findActiveRestaurantName());
+				model.addAttribute("received", restaurantService.findRestaurantReceiverName());
+				model.addAttribute("weeklyInvoice", weeklyInvoice);
+
+			
+				 
+				
+				return "admin/weekly-invoice";
+				}
+				else {
+					
+					System.out.println("This is last inserted voucher ID >>>> "+lastInsertedVoucherID);
+					
+					String courseCode = lastInsertedVoucherID.substring(0, 2); // Extract "CS" from the start of the string
+					String courseNumber = lastInsertedVoucherID.substring(2, 5); // Extract "001" from the middle of the string
+					String date = lastInsertedVoucherID.substring(5); // Extract "2023-04-06" from the end of the string
+					date = date.replace("-", "-"); // Replace "-" with "/" to match the desired format
+					String result = courseCode + "   " + courseNumber + "     " + date;
+					System.out.println(courseNumber);
+					int courseNumber1=Integer.parseInt(courseCode);
+					courseNumber1++;
+					
+					
+					generatedVoucherID=courseCode + String.format("%03d", courseNumber1) +'-'+ paymentDate;
+					
+					System.out.println(generatedVoucherID);
+					
+					model.addAttribute("dailyInvoiceList", dailyInvoiceList1);
+					model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
+					model.addAttribute("totalDailyActualCount", totalDailyActualCount);
+					model.addAttribute("totalDailyDiffCount", totalDailyDiffCount);
+					model.addAttribute("totalDailyRegisteredCount", totalDailyRegisteredCount);
+					model.addAttribute("allDailyTotalAmount", allDailyTotalAmount);
+					model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+					 model.addAttribute("voucherID", generatedVoucherID); 
+					model.addAttribute("invoiceStart", startDate);
+					model.addAttribute("invoiceEnd", endDate);
+					model.addAttribute("paymentDate", paymentDate);
+
+					PaymentVoucher weeklyInvoice = new PaymentVoucher();
+
+					int numberOfPax = 0;
+					int totalRegisterCount = 0;
+					int totalActualCount = 0;
+					int totalDifferenceCount = 0;
+
+					if (startDate != null) {
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+						List<Headcount> headcounts = headCountService.findByInvoiceDateBetween(
+								LocalDate.parse(startDate, formatter), LocalDate.parse(endDate, formatter));
+
+						List<WeeklyInvoiceDTO> dto = new ArrayList<>();
+
+						for (Headcount headcount : headcounts) {
+							WeeklyInvoiceDTO temp = new WeeklyInvoiceDTO();
+
+							int registeredCount = headcount.getRegisteredCount();
+							int actualCount = headcount.getActualCount();
+							int differenceCount = headcount.getDifference();
+
+							temp.setInvoiceDate(headcount.getInvoiceDate());
+							temp.setRegisteredCount(registeredCount);
+							temp.setActualCount(actualCount);
+							temp.setDifference(differenceCount);
+							temp.setTotalPrice(priceService.findById(headcount.getPrice()).getTotal_price());
+
+							if (headcount.getActualCount() > headcount.getRegisteredCount()) {
+								totalAmount = headcount.getActualCount()
+										* priceService.findById(headcount.getPrice()).getTotal_price();
+								numberOfPax += headcount.getActualCount();
+							} else {
+								totalAmount = headcount.getRegisteredCount()
+										* priceService.findById(headcount.getPrice()).getTotal_price();
+								numberOfPax += headcount.getRegisteredCount();
+							}
+
+							temp.setNumberOfPax(numberOfPax);
+							temp.setTotalAmount(totalAmount);
+							totalCost += totalAmount;
+
+							totalRegisterCount += registeredCount;
+
+							totalActualCount += actualCount;
+
+							totalDifferenceCount += differenceCount;
+
+							dto.add(temp);
+						}
+						model.addAttribute("dto", dto);
+					}
+					model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+					model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
+					model.addAttribute("numberOfPax", numberOfPax);
+					model.addAttribute("totalCost", totalCost);
+					model.addAttribute("totalRegisterCount", totalRegisterCount);
+					model.addAttribute("totalActualCount", totalActualCount);
+					model.addAttribute("totalDifferenceCount", totalDifferenceCount);
+					model.addAttribute("restaurantName", restaurantService.findActiveRestaurantName());
+					model.addAttribute("received", restaurantService.findRestaurantReceiverName());
+					model.addAttribute("weeklyInvoice", weeklyInvoice);
+
+				;
+					
+					return "admin/weekly-invoice";
+				}
+			
+			}return "404";
+		}catch(NullPointerException e) {
+			
+			return "redirect:/showMyLoginPage";
 		}
-		model.addAttribute("numberOfPax", numberOfPax);
-		model.addAttribute("totalCost", totalCost);
-		model.addAttribute("totalRegisterCount", totalRegisterCount);
-		model.addAttribute("totalActualCount", totalActualCount);
-		model.addAttribute("totalDifferenceCount", totalDifferenceCount);
-		model.addAttribute("restaurantName", restaurantService.findActiveRestaurantName());
-		model.addAttribute("received", restaurantService.findRestaurantReceiverName());
-		model.addAttribute("weeklyInvoice", weeklyInvoice);
-
-		//----------- Print status ------------
-		model.addAttribute("printStatus",printStatus);
-		model.addAttribute("confirmStatus",confirmStatus);
 		
-		printStatus = true;
-		confirmStatus= true;
-		
-		return "admin/weekly-invoice";
-
 	}
 
 	@PostMapping("/saveWeeklyInvoice")
@@ -213,12 +317,9 @@ public class WeeklyInvoiceController {
 		String lastInsertedDate = weeklyInvoiceService.findLastInsertedToDate();
 		System.out.println("This is last inserted date from save weekly invoice >>>>>>>>>>" + lastInsertedDate);
 
-		paymentVoucher.setVoucher_ID("CS" + generateSuffix());
-		System.out.println("CS" + generateSuffix());
-
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		String start_date_str = paymentVoucher.getStart_date().format(formatter);
-		String end_date_str = paymentVoucher.getEnd_date().format(formatter);
+		String start_date_str = paymentVoucher.getStartDate().format(formatter);
+		String end_date_str = paymentVoucher.getEndDate().format(formatter);
 
 		String payment_date = paymentVoucher.getPaymentDate().format(formatter);
 		
@@ -229,8 +330,8 @@ public class WeeklyInvoiceController {
 
 			if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
 				System.out.println(dayOfWeek + " is a weekend day !");
-				 re.addFlashAttribute("invoiceStartDateError", start_date_str +
-						 " is weekend day!");
+				 re.addFlashAttribute("invoiceStartDateError", " Start Date (" + start_date_str +
+						 ") is weekend day!");
 						
 				return "redirect:/weekly-invoice";
 			} else {
@@ -248,8 +349,7 @@ public class WeeklyInvoiceController {
 				re.addFlashAttribute("invoiceStart", start_date_str);
 				re.addFlashAttribute("invoiceEnd", end_date_str);
 				
-				//----- confirm status ---
-				confirmStatus = false;
+	
 				
 				return "redirect:/weekly-invoice";
 			}
@@ -271,17 +371,15 @@ public class WeeklyInvoiceController {
 
 			re.addFlashAttribute("received", paymentVoucher.getReceived_by());
 
-			//----- confirm status ---
-			confirmStatus = false;
-			
+
 			return "redirect:/weekly-invoice";
 		} else {
 			 String dateStr = lastInsertedDate;
 		        LocalDate date = LocalDate.parse(dateStr);
 			  DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("MMMM d',' yyyy");
 			  String formattedDate1 = date.format(formatter1);
-			  System.out.println("This is last inserted date from error>>>>>>" +formattedDate1);
-			re.addFlashAttribute("incvoiceError", " A voucher had already been created prior to " + formattedDate1 + " .");
+			  
+			re.addFlashAttribute("incvoiceError", " Voucher had already been created prior to " + formattedDate1 + " .");
 			return "redirect:/weekly-invoice";
 		}
 	}
@@ -296,8 +394,6 @@ public class WeeklyInvoiceController {
 			@RequestParam("paymentMethod") String paymentMethod, @RequestParam("numberOfPax") int numberOfPax,
 			PaymentVoucher paymentVoucher, Authentication authentication) {
 		
-		counter++;
-		
 		List<Headcount> dailyInvoiceList = headCountService.findAll();
 		
 		int totalPrice=0;
@@ -306,7 +402,6 @@ public class WeeklyInvoiceController {
 			totalPrice=priceService.findById(headcount.getPrice()).getTotal_price();
 		}
 		
-		/* int totalPrice = priceService.findActivePrice().getTotal_price(); */
 		LocalDate paymentDate1 = LocalDate.parse(paymentDate);
 		LocalDate invoiceStart1 = LocalDate.parse(invoiceStart);
 		LocalDate invoiceEnd1 = LocalDate.parse(invoiceEnd);
@@ -326,8 +421,8 @@ public class WeeklyInvoiceController {
 		
 		paymentVoucher.setCreated_by(staffService.getStaffById(authentication.getName()).getName());
 		paymentVoucher.setVoucher_ID(voucherID);
-		paymentVoucher.setStart_date(invoiceStart1);
-		paymentVoucher.setEnd_date(invoiceEnd1);
+		paymentVoucher.setStartDate(invoiceStart1);
+		paymentVoucher.setEndDate(invoiceEnd1);
 		paymentVoucher.setRestaurant_name(selectedRestaurantName);
 		paymentVoucher.setCreated_date(LocalDate.now());
 		paymentVoucher.setReceived_by(selectedReceiverName);
@@ -343,11 +438,11 @@ public class WeeklyInvoiceController {
 		/* paymentVoucher.setPayment_date(paymentDate); */
 		weeklyInvoiceService.save(paymentVoucher);
 		
-		//----- print status ---
-		printStatus = false;
-		confirmStatus = true;
+		id++;
+
+		 
 		re.addFlashAttribute("invoiceSuccessMessage",
-				voucherID + "From " + invoiceStart1 + " to " + invoiceEnd1 + " voucher created successfully!");
+				voucherID + " From " + invoiceStart1 + " to " + invoiceEnd1 + " voucher created successfully!");
 
 		return "redirect:/weekly-invoice";
 	}

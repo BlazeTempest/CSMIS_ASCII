@@ -10,7 +10,7 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: "/send-otp",
-            data: $('#forgetPasswordModal form').serialize(), // serialize the form data
+            data: $('#forgetPasswordModal form:first').serialize(), // serialize the first form data inside the modal
             success: function() {
                 // handle the successful form submission
             },
@@ -20,6 +20,24 @@ $(document).ready(function() {
         });
     });
 });
+ $(document).ready(function() {
+          // Disable the confirm button by default
+          $("#confirmBtn").prop("disabled", true);
+
+          // Listen for changes to the password and confirm password fields
+          $("input[name='newPassword'], input[name='confirmPassword']").on("input", function() {
+            var password = $("input[name='newPassword']").val();
+            var confirmPassword = $("input[name='confirmPassword']").val();
+
+            // If the passwords match, enable the confirm button
+            if (password === confirmPassword) {
+              $("#confirmBtn").prop("disabled", false);
+            } else {
+              // Otherwise, disable the confirm button
+              $("#confirmBtn").prop("disabled", true);
+            }
+          });
+        });
 
   // Spinner
   var spinner = function () {
@@ -62,12 +80,3 @@ $(document).ready(function() {
 
   // Calender
 })(jQuery);
-
-//mail on/off btn in Employee Dashboard Screen
-const toggle = document.querySelector("#mail-toggle");
-toggle.addEventListener(() => {
-  const onOff = toggle.parentNode.querySelector(".changes");
-  onOff.innerHTML = toggle.checked
-    ? '<i class="fa-solid fa-bell"></i>Mail '
-    : '<i class="fa-solid fa-bell"></i>Email';
-});

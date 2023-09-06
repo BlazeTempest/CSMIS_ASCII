@@ -3,7 +3,7 @@
 
 <head>
 <meta charset="utf-8" />
-<title>DarkPan - Bootstrap 5 Admin Template</title>
+<title>CSMIS</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 <meta content="" name="keywords" />
 <meta content="" name="description" />
@@ -253,9 +253,9 @@ body {
 					<a th:href="@{/dashboard}" class="nav-item nav-link active"><i
 						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
 						th:href="@{registration}" class="nav-item nav-link"><i
-						class="fas fa-hamburger me-2"></i>Lunch Register</a> <a
-						th:href="@{/userProfile}" class="nav-item nav-link"><i
-						class="fas fa-user-tie me-2"></i>Profile</a>
+						class="fas fa-hamburger me-2"></i>Lunch Register</a>
+						<a
+						th:href="@{/about}" class="nav-item nav-link"><i class="fa fa-circle-question"></i>&nbsp;&nbsp;About</a>
 				</div>
 			</nav>
 		</div>
@@ -330,6 +330,33 @@ body {
 		</div>
 		<!-- Dashboard End -->
 		
+		<!-- Cost  section start -->
+		<div class="containet-fluid rounded mt-3 bg-white ms-4 me-4 ">
+			<div class="row  py-3">
+				<div class=" offset-2 col-md-5">
+					<h3 >Total Cost  for lunch </h3>
+				</div>
+				<div class="col-md-2">
+					<h3 style="color:#097aeb;" th:text="'- '+ ${totalPrice} +'MMK'"></h3>
+				</div>
+			</div>
+			<div class="row py-3">
+				<div class="col-md-3 ms-5">
+					<h3>DAT Cost for lunch </h3>
+				</div>
+				<div class="col-md-2">
+					<h3  style="color:#097aeb;" th:text="'- ' +${datPrice} +'MMK'"></h3>
+				</div>
+				<div class="col-md-4">
+					<h3>Staff Cost for lunch </h3>
+				</div>
+				<div class="col-md-2">
+					<h3  style="color:#097aeb;" th:text="'- '+${staffPrice} +'MMK'"></h3>
+				</div>
+			</div>
+			
+		</div>
+		<!-- Cost section end -->
 		
 		<!-- Menu List Start -->
 		<div class="container-fluid pt-4 px-4">
@@ -350,12 +377,7 @@ body {
 								<span>Please select file</span>
 							</div>
 						</div>
-						<div class="card-footer"
-							style="color: #06324d; text-align: center; font-size: 13px;">
-							<span th:text="'DAT price : ' + ${datPrice}"></span>
-		                    <span th:text="'Staff price : ' + ${staffPrice}"></span> 
-		                    <span th:text="'Total price : ' + ${totalPrice}"></span>
-						</div>
+						
 					</div>
 
 				</div>
@@ -374,12 +396,7 @@ body {
 								<span>Please select file</span>
 							</div>
 						</div>
-						<div class="card-footer"
-							style="color: #06324d; text-align: center; font-size: 13px;">
-							<span th:text="'DAT price : ' + ${datPrice}"></span>
-		                    <span th:text="'Staff price : ' + ${staffPrice}"></span> 
-		                    <span th:text="'Total price : ' + ${totalPrice}"></span>
-						</div>
+						
 					</div>
 				</div>
 

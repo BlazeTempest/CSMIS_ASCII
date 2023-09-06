@@ -6,9 +6,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -67,10 +72,19 @@ public class LoginController {
 	private HeadcountService headcountService;
 
 	@GetMapping("/showMyLoginPage")
-	public String showMyLoginPage() {
-
+	public String showMyLoginPage(Model model) {
+		String emails = "";
+		for(Staff staff:staffService.getActiveStaffs(1)) {
+			if(emails=="") {
+				emails = staff.getEmail();
+			} else {
+				emails = emails + "," + staff.getEmail();
+			}
+			
+		}
+		
+		model.addAttribute("emails", emails);
 		return "signin";
-
 	}
 
 	@GetMapping("/access-denied")
@@ -88,36 +102,29 @@ public class LoginController {
 			Price price = priceService.findActivePrice();
 			int actual = doorlogService.getStaffIDByDineDate(LocalDate.now()).size();
 			int registeredCount = registeredStaffs.size();
-			int amount = 0;
 			
-			// Update the headcount table with the total registered count
-			if(tempHeadcount==null) {
-			    Headcount headcount = new Headcount();
-				headcount.setRegisteredCount(registeredCount);
-				headcount.setActualCount(actual);
-				headcount.setInvoiceDate(LocalDate.now());
-				headcount.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
-				headcount.setPrice(price.getPrice_ID());
-				if(actual>registeredCount) {
-					headcount.setAmount(amount * price.getTotal_price());
-				}else {
-					headcount.setAmount(amount * price.getTotal_price());
-				}
-				headcountService.saveHeadcount(headcount);
-			}else {
-				tempHeadcount.setRegisteredCount(registeredStaffs.size());
-				tempHeadcount.setActualCount(doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
-				tempHeadcount.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
-				tempHeadcount.setPrice(price.getPrice_ID());
-				if(actual>registeredCount) {
-					tempHeadcount.setAmount(amount * price.getTotal_price());
-				}else {
-					tempHeadcount.setAmount(amount * price.getTotal_price());
-				}
-				headcountService.saveHeadcount(tempHeadcount);
-			}
 			String role = authentication.getAuthorities().toArray()[0].toString();
 			if (role.equals("admin")) {
+				// Update the headcount table with the total registered count
+				if(tempHeadcount==null) {
+				    Headcount headcount = new Headcount();
+					headcount.setRegisteredCount(registeredCount);
+					headcount.setActualCount(actual);
+					headcount.setInvoiceDate(LocalDate.now());
+					headcount.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+					headcount.setPrice(price.getPrice_ID());
+					
+					headcountService.saveHeadcount(headcount);
+				}else {
+					tempHeadcount.setRegisteredCount(registeredStaffs.size());
+					tempHeadcount.setActualCount(doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+					tempHeadcount.setDifference(registeredStaffs.size() - doorlogService.getStaffIDByDineDate(LocalDate.now()).size());
+					tempHeadcount.setPrice(price.getPrice_ID());
+					
+					headcountService.saveHeadcount(tempHeadcount);
+				}
+				
+				//Announcement
 				List<Announcement> announcements = announcementService.orderByCreatedDate();
 				for(Announcement temp : announcements) {
 					if(temp.getDeleted_date().equals(LocalDate.now())) {
@@ -125,6 +132,7 @@ public class LoginController {
 					}
 				}
 				theModel.addAttribute("announcement", new Announcement());
+				
 				//dashboard overview counts
 				List<String> teams = staffService.getTeamNames();
 				List<String> depts = staffService.getDeptNames();
@@ -202,6 +210,104 @@ public class LoginController {
 					}
 				}
 				
+				//Weekly headcount for catering service order
+				LocalDate date = LocalDate.now();
+				List<LocalDate> nextWeek = new ArrayList<>();
+				List<LocalDate> currentWeek = new ArrayList<>();
+				List<String> nextWeekReportDay = new ArrayList<>();
+				List<String> currentWeekReportDay = new ArrayList<>();
+				for(int i=0; i<4; i++) {
+					DayOfWeek day = DayOfWeek.MONDAY;
+					switch(i) {
+						case 0: day = DayOfWeek.MONDAY; break;
+						case 1: day = DayOfWeek.TUESDAY; break;
+						case 2: day = DayOfWeek.WEDNESDAY; break;
+						case 3: day = DayOfWeek.THURSDAY; break;
+					}
+					LocalDate temp = date.with(TemporalAdjusters.next(day));
+					nextWeek.add(temp);
+					currentWeek.add(temp.minusDays(7));
+					nextWeekReportDay.add(temp + " (" + day + ")");
+					currentWeekReportDay.add(temp.minusDays(7) + " (" + day + ")");
+				}
+				LocalDate nextMonday = nextWeek.get(0);
+				LocalDate nextFriday = nextMonday.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
+				nextWeek.add(nextFriday);
+				currentWeek.add(nextFriday.minusDays(7));
+				nextWeekReportDay.add(nextFriday + " (FRIDAY)");
+				currentWeekReportDay.add(nextFriday.minusDays(7) + " (FRIDAY)");
+				
+				List<List<Integer>> currentTotalCount = new ArrayList<>();
+				List<List<Integer>> totalCount = new ArrayList<>();
+				List<String> types = new ArrayList<>();
+				List<String> typeOfMeat = new ArrayList<>();
+				List<Integer> registeredCountOfNextWeek = new ArrayList<>();
+				List<Integer> currentRegisteredCountOfNextWeek = new ArrayList<>();
+				
+				for(AvoidMeat temp:avoidMeatService.findAll()) {
+					types.add(String.valueOf(temp.getAvoidmeat_ID()));
+					typeOfMeat.add(temp.getType());
+				}
+				for(LocalDate temp:currentWeek) {
+					List<String> ids = new ArrayList<>();
+					currentRegisteredCountOfNextWeek.add(registeredService.getRegisteredStaffByDate(temp).size());
+					for(Registered_list temp1:registeredService.getRegisteredStaffByDate(temp)) {
+						ids.add(temp1.getStaffID());
+					}
+					List<Integer> count = new ArrayList<>();
+					for(String meat:types) {
+						List<Staff> tempStaffs = staffService.getByAvoidMeatIds(String.valueOf(avoidMeatService.findById(Integer.parseInt(meat)).getAvoidmeat_ID()));
+						List<Staff> toRemove = new ArrayList<>();
+						for(Staff staff:tempStaffs) {
+							if(!ids.contains(staff.getStaffID())) {
+								toRemove.add(staff);
+							}
+						}
+						tempStaffs.removeAll(toRemove);
+						count.add(tempStaffs.size());
+					}
+					currentTotalCount.add(count);
+				}
+				
+				for(LocalDate temp:nextWeek) {
+					List<String> ids = new ArrayList<>();
+					registeredCountOfNextWeek.add(registeredService.getRegisteredStaffByDate(temp).size());
+					for(Registered_list temp1:registeredService.getRegisteredStaffByDate(temp)) {
+						ids.add(temp1.getStaffID());
+					}
+					
+					List<Integer> count = new ArrayList<>();
+					for(String meat:types) {
+						List<Staff> tempStaffs = staffService.getByAvoidMeatIds(String.valueOf(avoidMeatService.findById(Integer.parseInt(meat)).getAvoidmeat_ID()));
+						List<Staff> toRemove = new ArrayList<>();
+						for(Staff staff:tempStaffs) {
+							if(!ids.contains(staff.getStaffID())) {
+								toRemove.add(staff);
+							}
+						}
+						tempStaffs.removeAll(toRemove);
+						count.add(tempStaffs.size());
+					}
+					totalCount.add(count);
+				}
+				if(registeredCountOfNextWeek.size()==4) {
+					registeredCountOfNextWeek.add(0);
+					
+				}
+				
+				if(currentRegisteredCountOfNextWeek.size()==4) {
+					currentRegisteredCountOfNextWeek.add(0);
+				}
+				System.out.println(registeredCountOfNextWeek);
+				System.out.println(currentRegisteredCountOfNextWeek);
+				
+				theModel.addAttribute("currentRegisteredCountOfNextWeek", currentRegisteredCountOfNextWeek);
+				theModel.addAttribute("currentWeekReportDay", currentWeekReportDay);
+				theModel.addAttribute("registeredCountOfNextWeek", registeredCountOfNextWeek);
+				theModel.addAttribute("nextWeek", nextWeekReportDay);
+				theModel.addAttribute("meatCounts", totalCount);
+				theModel.addAttribute("currentTotalCount", currentTotalCount);
+				theModel.addAttribute("types", typeOfMeat);
 				
 				String countGraph = "";
 				countGraph = registeredService.getRegisteredStaffByDate(LocalDate.now()).size() + "," + registeredService.getRegisteredStaffByStatusAndDineAndDate(true, true, LocalDate.now(), LocalDate.now()).size() + "," + registeredService.getRegisteredStaffByStatusAndDineAndDate(false, true, LocalDate.now(), LocalDate.now()).size() + "," + unregisteredComplete.size();

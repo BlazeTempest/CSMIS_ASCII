@@ -19,4 +19,6 @@ public interface RestaurantService {
 	public List<Restaurant> getRestaurantName();
 	
 	public String findRestaurantReceiverName();
+	
+	public String findDuplicateRestaurantName(String restaurantName,String phone,String email);
 }

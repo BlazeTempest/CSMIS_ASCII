@@ -13,4 +13,7 @@ public interface WeeklyInvoiceRepository extends JpaRepository<PaymentVoucher, S
 
     @Query(value="SELECT to_date FROM payment_voucher ORDER BY to_date DESC LIMIT 1", nativeQuery = true)
     public String findLastInsertedToDate();
+    
+    @Query(value="SELECT voucher_ID FROM payment_voucher ORDER BY to_date DESC LIMIT 1", nativeQuery = true)
+    public String findLastInsertedVoucherID();
 }

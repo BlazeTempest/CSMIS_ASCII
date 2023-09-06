@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Lunch Catering Management Information System-CSMIS</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="keywords" />
+    <meta content="" name="description" />
+    <style>
+      /* Style for the toggle switch */
+	.switch {
+		position: relative;
+		display: inline-block;
+		width: 32px;
+		height: 18px;
+		margin: 10px;
+		border-radius: 9px;
+		background-color: #ccc;
+	}
+	
+	.switch input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+	
+	.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 1px;
+		left: 1px;
+		right: 1px;
+		bottom: 1px;
+		border-radius: 9px;
+		background-color: #fff;
+		transition: .4s;
+	}
+	
+	.slider:before {
+		position: absolute;
+		content: "";
+		height: 12px;
+		width: 12px;
+		left: 2px;
+		bottom: 2px;
+		background-color: #ccc;
+		border-radius: 50%;
+		transition: .4s;
+	}
+	
+	input:checked+.slider {
+		background-color: #2196F3;
+	}
+	
+	input:focus+.slider {
+		box-shadow: 0 0 1px #2196F3;
+	}
+	
+	input:checked+.slider:before {
+		transform: translateX(12px);
+		background-color: #fff;
+	}
+	/* end Style for the toggle switch */
+    </style>
+
+    <!-- Favicon -->
+    <link th:href="@{/img/favicon.ico}" rel="icon" />
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+  
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet" />
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <!-- Template Stylesheet -->
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <style>
+    	.about-section {
+		  margin: 30px 30px 30px 30px;
+		  padding: 20px;
+		  border: 1px solid #ccc;
+		  border-radius: 5px;
+		  font-family: Arial, sans-serif;
+		  font-size: 16px;
+		  line-height: 1.5;
+		}
+		
+		.about-section h2 {
+		  font-size: 28px;
+		  font-weight: bold;
+		  margin-bottom: 20px;
+		}
+		
+		.about-section h3 {
+		  font-size: 20px;
+		  font-weight: bold;
+		  margin-top: 20px;
+		  margin-bottom: 10px;
+		}
+		
+		.about-section ul {
+		  list-style: disc;
+		  margin-left: 20px;
+		}
+		
+		.about-section a {
+		  color: #007bff;
+		  text-decoration: none;
+		}
+		
+		.about-section a:hover {
+		  text-decoration: underline;
+		}
+		td {
+			white-space: nowrap;
+		}
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        
+        <!-- Spinner End -->
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-secondary navbar-dark">
+                <div class="sidebar-head">
+                    <div>
+                        <img class="sidebar-logo mt-0" src="img/dat logo.png" alt="DAT Logo" />
+                    </div>
+                    <div>
+                    	<a href="index.html" class="navbar-brand mb-3">
+                            <h3 class="text-primary">CSMIS</h3>
+                        </a>
+                    </div>
+                </div>
+
+				<div class="navbar-nav w-100">
+					<a href="/" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a> 
+					<a th:href="@{/importFiles}" class="nav-item nav-link"><i class="fas fa-upload me-2"></i>Import Data</a> 
+					<a th:href="@{/employee-list}" class="nav-item nav-link"><i class="fas fa-users me-2"></i>Employee List</a> 
+					<a th:href="@{/summary}" class="nav-item nav-link"><i class="fa fa-laptop me-2"></i>Report</a> 
+					<a th:href="@{registration}" class="nav-item nav-link"><i class="fas fa-pen me-2"></i>Lunch Register</a> 
+					<a th:href="@{/menu}" class="nav-item nav-link"><i class="fas fa-hamburger me-2"></i>Menu</a> 
+					<a th:href="@{restaurant}" class="nav-item nav-link"><i class="fas fa-home me-2"></i>Restaurant</a> 
+					<a th:href="@{/weekly-invoice}" class="nav-item nav-link"><i class="fas fa-file me-2"></i> Invoice</a>		
+					<a th:href="@{/suggestion}" class="nav-item nav-link"><i class="far fa-file-alt me-2"></i>Suggestions</a>
+					<a th:href="@{/holiday}" class="nav-item nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
+					<a th:href="@{/about}" class="nav-item nav-link active"><i class="fa fa-circle-question"></i>&nbsp;&nbsp;About</a>
+				</div>
+			</nav>
+    </div>
+    </div>
+    <!-- Sidebar End -->
+
+    <!-- Content Start -->
+    <div class="content">
+        <!-- Navbar Start -->
+        <nav class="navbar navbar-expand bg-secondary-nav navbar-dark sticky-top px-4 py-0">
+            <a href="#" class="sidebar-toggler flex-shrink-0">
+                <i class="fa fa-bars"></i>
+            </a>
+               <div class="navbar-nav align-items-center ms-auto">
+					<div class="nav-item dropdown">
+					<label class="switch"> <input type="checkbox" th:checked="${noti}"
+						id="toggle-switch" /> <span class="slider"></span>
+					</label>
+					<span class="text-center text-white">Email </span>
+				</div>
+                <div class="nav-item">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img class="rounded-circle me-lg-2" src="img/admin-logo.png" alt="" style="width: 40px; height: 40px" />
+                            <span class="d-none d-lg-inline-flex" th:text=${name}></span>
+                        </a>
+                       <div class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
+                                <a th:href="@{/userProfile}" class="dropdown-item fw-bold text-center">Profile</a>
+
+                                <form action="#" th:action="@{/logout}" method="POST">
+                                    <input type="submit" value="Logout"
+                                        class="dropdown-item fw-bold text-center"
+                                        style="color: rgb(0, 0, 0); width: 100%; height: 45px;" />
+                                </form>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Navbar End -->
+        
+        <div class="container-fluid px-4">
+            <div class="about-section bg-secondary">
+				 <h2 class="text-center">About</h2>
+				  <p class="ms-5">Name: Catering Service Management Information System</p>
+				  <p class="ms-5">Version: 1.0</p>
+				  <p class="ms-5">Date of Release: April 6, 2023</p>
+				  <p class="ms-5">Developed by TEAM @ASCII</p>
+				  <p class="ms-5">System Requirements: Windows 10 or later, macOS 10.15 or later, Chrome or Firefox browser</p>
+				  <h3>Release Notes</h3>
+				  <ul>
+				    <li>Both Administrator and Operator role can registered for lunch</li>
+				    <li>Administrator can view reports such as Summary Report, Registered list, Registered-Eat list, Registered-Not Eat list and Unregistered list</li>
+				    <li>Administrator can setup lunch registration Lock time(default time is Friday 12PM), Holiday Excel file import, Suggestions lists(can be export as PDF) and announce to all users of the system(can send email)</li>
+				  </ul><hr>
+				  <h3>Import Data Files Format (Master Data)</h3><hr>
+				  <p class="text-center fs-5 fw-bold" style="text-decoration: underline;">Holiday</p>
+				  <table class="table">
+					<thead>
+						<tr>
+							<td>No.</td>
+							<td>Date</td>
+							<td>Holiday</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>04-01-23</td>
+							<td>Independence Day</td>
+						</tr>
+						<tr>
+							<td>2</td>
+							<td>12-02-23</td>
+							<td>Union Day</td>
+						</tr>
+						<tr>
+							<td>3</td>
+							<td>02-03-23</td>
+							<td>Peasant's Day</td>
+						</tr>
+					</tbody>
+				  </table>
+				  <p class="text-center fs-5 fw-bold" style="text-decoration: underline;">Employee Data</p>
+				  <table class="table">
+					<thead>
+						<tr>
+							<td>Sr.</td>
+							<td>Division</td>
+							<td>Staff ID</td>
+							<td>Name</td>
+							<td>DoorlogNo.</td>
+							<td>Dept</td>
+							<td>Team</td>
+							<td>Email</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>SDD</td>
+							<td>25-00114</td>
+							<td>Arjun</td>
+							<td>30075</td>
+							<td>Local Business Dept</td>
+							<td>GGI RPA Development</td>
+							<td>arjun@diracetechnology.com</td>
+						</tr>
+					</tbody>
+				  </table>
+				  <p class="text-center fs-5 fw-bold" style="text-decoration: underline;">Doorlog Data</p>
+				  <table class="table">
+					<thead>
+						<tr>
+							<td>Department</td>
+							<td>Name</td>
+							<td>No.</td>
+							<td>Date/Time</td>
+							<td>Location ID</td>
+							<td>ID Number</td>
+							<td>VerifyCode</td>
+							<td>CardNo</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>OUR COMPANY</td>
+							<td>1004</td>
+							<td>1004</td>
+							<td>4/18/2023 11:43:54</td>
+							<td>1</td>
+							<td>Other</td>
+							<td class="text-center">-</td>
+							<td class="text-center">-</td>
+						</tr>
+					</tbody>
+				  </table><br>
+				  <h3>Third-Party Libraries</h3>
+				  <ul>
+				    <li>Bootstrap 5.0</li>
+				    <li>jQuery 3.6</li>
+				    <li>Font Awesome 6.2.1</li>
+				    <li>Chart.js</li>
+				    <li>DataTable</li>
+				  </ul>
+				  <h3>Contact Us</h3>
+				  <p class="text-center">For support or feedback, please contact us at <b>:</b> <br>
+					<a href="mailto:mr.bhonemyatp@gmail.com">mr.bhonemyatp@gmail.com</a>, 
+					<a href="mailto:aungchannyein1999@gmail.com">aungchannyein1999@gmail.com</a>, 
+					<a href="mailto:eiphyuhlaing.phyu@gmail.com">eiphyuhlaing.phyu@gmail.com</a>, 
+					<a href="mailto:heinhtetzaw2070@gmail.com">heinhtetzaw2070@gmail.com</a>, 
+					<a href="mailto:zhiendharuki89@gmail.com">zhiendharuki89@gmail.com</a>.
+				  </p>
+			</div>
+        </div>
+
+        <!-- Footer Start -->
+        <div class="container-fluid px-4">
+				<div class="bg-secondary rounded-top p-4 ">
+					<div class="row ">
+						<div class="col-12 col-sm-6 text-center text-sm-start ">
+							&copy; <a href="#" style="color: rgb(8, 50, 238);">Catering
+								Service Management System</a>, All Right Reserved.
+						</div>
+						<div class="col-12 col-sm-6 text-center text-sm-end">
+							<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal ". Thank you for your support. ***/-->
+							Developed By <a href="" style="color: rgb(8, 50, 238);">TEAM
+								@ASCII</a>
+						</div>
+					</div>
+				</div>
+			</div>
+        <!-- Footer End -->
+    </div>
+    <!-- Content End -->
+</body>
+</html>

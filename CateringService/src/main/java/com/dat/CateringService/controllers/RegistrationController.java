@@ -74,12 +74,15 @@ public class RegistrationController {
 			int firstWeekNumber = firstDayOfMonth.get(weekFields.weekOfWeekBasedYear());
 			int lastWeekNumber = lastDayOfMonth.get(weekFields.weekOfWeekBasedYear());
 			int currentWeeknumber = date.get(weekFields.weekOfWeekBasedYear());
-			System.out.println(lastWeekNumber + " : " + currentWeeknumber);
 			String status = "Register";
 			Boolean nextMonth = false;
+			
+			if(staffService.getStaffById(authentication.getName()).getName().equals("Admin") || staffService.getStaffById(authentication.getName()).getStaffID().equals("1")) {
+				model.addAttribute("submitBtn", true);
+			}
+			
 			if (currentWeeknumber == lastWeekNumber) {
 				nextMonth = true;
-				System.out.println("Last week");
 				LocalDate TempDate = date.plusMonths(1);
 				date = LocalDate.of(date.getYear(), TempDate.getMonth(), 1);
 				firstDayOfMonth = date.withDayOfMonth(1);
@@ -248,7 +251,7 @@ public class RegistrationController {
 				}
 				disabledDates.removeAll(nextRemove);
 			}
-			
+			model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 			model.addAttribute("holidayNames", holidayNames);
 			model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 			model.addAttribute("currentDay", date.getDayOfMonth());
@@ -429,7 +432,7 @@ public class RegistrationController {
 	
 				}
 			}
-			
+			model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 			model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 			model.addAttribute("currentDay", date.getDayOfMonth());
 			model.addAttribute("checkedMeats", checkedMeats);

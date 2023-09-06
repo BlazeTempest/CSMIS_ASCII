@@ -71,4 +71,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurant !=null ? restaurant.getReceived_by(): "";
 	}
 
+	@Override
+	public String findDuplicateRestaurantName(String restaurantName, String phone, String email) {
+		return restaurantRepository.findDuplicateRestaurantName(restaurantName, phone, email);
+	}
+
 }

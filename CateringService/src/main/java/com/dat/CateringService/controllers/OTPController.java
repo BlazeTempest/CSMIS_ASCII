@@ -12,15 +12,11 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class OTPController {
@@ -40,11 +36,12 @@ public class OTPController {
 
 
     @PostMapping("/send-otp")
-    public String sendOTP(@RequestParam("email") String email, Model model, HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException {
+    public String sendOTP(@RequestParam("email") String email, Model model, RedirectAttributes attr, HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException {
             	
         List<Staff> staffList = staffService.getStaffByEmail(email);
         if (staffList.isEmpty()) {
             // staffId doesn't exist, return an error message
+        	System.out.println("Invalid email");
             model.addAttribute("error", "Staff not found in the database");
             return "redirect:/";
         }
@@ -69,6 +66,8 @@ public class OTPController {
         otpSender.sendOTP(email, otp);
         model.addAttribute(staffId);
         model.addAttribute("email", email);
+        
+        System.out.println("OTP >>> "+ otp);
         return "redirect:/showMyLoginPage";
     }
     

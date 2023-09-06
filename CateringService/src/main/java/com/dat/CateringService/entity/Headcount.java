@@ -25,9 +25,7 @@ public class Headcount {
 	
 	@Column(name="actual_count")
 	private int actualCount;
-	
-	@Column(name="amount")
-	private int amount;
+
 	
 	@Column(name="difference")
 	private int difference;
@@ -47,14 +45,13 @@ public class Headcount {
 		super();
 	}
 
-	public Headcount(int headcount_id, LocalDate invoice_date, int registeredCount, int actualCount, int amount,
+	public Headcount(int headcount_id, LocalDate invoice_date, int registeredCount, int actualCount,
 			int difference) {
 		super();
 		this.headcount_id = headcount_id;
 		this.invoiceDate = invoice_date;
 		this.registeredCount = registeredCount;
 		this.actualCount = actualCount;
-		this.amount = amount;
 		this.difference = difference;
 	}
 
@@ -90,13 +87,6 @@ public class Headcount {
 		this.actualCount = actualCount;
 	}
 
-	public int getAmount() {
-		return amount;
-	}
-
-	public void setAmount(int amount) {
-		this.amount = amount;
-	}
 
 	public int getDifference() {
 		return difference;

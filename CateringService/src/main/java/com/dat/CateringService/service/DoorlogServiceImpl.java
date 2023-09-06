@@ -63,6 +63,11 @@ public class DoorlogServiceImpl implements DoorlogService {
 	public DailyDoorLog getByIdAndDate(String id, LocalDate date) {
 		return repository.findByStaffIDAndDineDate(id, date);
 	}
+
+	@Override
+	public void deleteAll(List<DailyDoorLog> doorlog) {
+		repository.deleteAll(doorlog);
+	}
 	
 	
 }

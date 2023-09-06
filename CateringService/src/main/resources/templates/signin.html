@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DarkPan - Bootstrap 5 Admin Template</title>
+    <title>CSMIS</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -115,14 +115,14 @@
 						
 					</form>
 					
-                        
+
                     <span style="font-size:14px; color:rgb(97, 37, 238);" class="ms-4">Catering Service Management System</span><br>
 
                     </div>
                 </div>
             </div>
         </div>
-
+		<input type="hidden" th:value=${emails} id="emails">
         <div class="modal fade" id="forgetPasswordModal" tabindex="-1" aria-labelledby="forgetPasswordModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content bg-secondary">
@@ -134,34 +134,30 @@
                         <form id="otpForm" th:action="@{/send-otp}" method="POST">
                             <div class="mb-3">
                                 <label for="forgetEmail" class="form-label text-dark">Email address</label>
-                                <input name="email" type="email" class="form-control text-dark bg-white" id="forgetEmail" aria-describedby="forgetEmailHelp">
+                                <input name="email" placeholder="Please enter email provided from DAT company" type="email" class="form-control text-dark bg-white" id="forgetEmail" aria-describedby="forgetEmailHelp" required>
                                 <div id="forgetEmailHelp" class="form-text text-dark">We'll send you instructions on how to reset your password.</div>
                             </div>
-                            <button type="submit" class="btn btn-sm btn-primary" id="sendOtpBtn">Send OTP</button>
+                            <button type="submit" class="btn btn-sm btn-primary" id="sendOtpBtn" disabled>Send OTP</button>
                         </form>
                             
                         <form th:action="@{/resetPassword}" method="POST">
                             <div class="mb-3">
                                 <label for="otp" class="form-label text-dark mt-3">Enter OTP</label>
-                                <input name="otp" type="text" class="form-control text-dark bg-white" id="otp" aria-describedby="otpHelp">
+                                <input required name="otp" type="text" class="form-control text-dark bg-white" id="otp" aria-describedby="otpHelp">
                                 <div id="otpHelp" class="form-text text-dark">Enter the One Time Password sent to your email.</div>
                             </div>
-                            <!--  <div class="mb-3">
-    							<label for="staffId" class="form-label text-dark mt-3">Staff ID</label>
-							    <input name="staffId" type="text" class="form-control text-dark bg-white" id="staffId" aria-describedby="staffIdHelp">
-							    <div id="staffIdHelp" class="form-text text-dark">Enter your staff ID.</div>
-							</div> -->
                             <div class="mb-3">
                                 <label for="otp" class="form-label text-dark mt-3">Enter New Password</label>
-                                <input name="newPassword" type="text" class="form-control text-dark bg-white" id="otp" aria-describedby="otpHelp">
+                                <input required name="newPassword" type="password" class="form-control text-dark bg-white" id="newPassword" aria-describedby="otpHelp">
                                 <div id="otpHelp" class="form-text text-dark">Enter your new password.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="otp" class="form-label text-dark mt-3">Comfirm Password</label>
-                                <input name="confirmPassword" type="text" class="form-control text-dark bg-white" id="otp" aria-describedby="otpHelp">
+                                <input required name="confirmPassword" type="password" class="form-control text-dark bg-white" id="confirmPassword" aria-describedby="otpHelp">
                                 <div id="otpHelp" class="form-text text-dark">Confirm your new password.</div>
                             </div>
-                            <button type="submit" class="btn btn-sm btn-primary float-end" id="sendOTP">Comfirm</button>
+                            
+                            <button type="submit" class="btn btn-sm btn-primary float-end" id="confirmBtn">Confirm</button>
 
                         </form>
                     </div>
@@ -181,7 +177,7 @@
     <script src="lib/tempusdominus/js/moment.min.js"></script>
     <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-    
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
     <script>
@@ -194,6 +190,42 @@
 	    this.querySelector('i').classList.toggle('bi-eye');
 	    this.querySelector('i').classList.toggle('bi-eye-slash');
 	  });
+	  
+	  const sendOtpBtn = document.getElementById("sendOtpBtn");
+	  const email = document.querySelector('#forgetEmail');
+	    sendOtpBtn.addEventListener("click", function() {
+	    	if (email.val.length>0) {
+	    		sendOtpBtn.innerHTML = "OTP Sent";
+	    	}
+	  });
+	    $(document).ready(function () {
+	        // Get the list of emails as an array of strings
+	        var emailsString = document.getElementById('emails').value;
+	        
+		    var emails = emailsString.split(",");
+		    console.log(emails.includes("mr.bhonemyatp@gmail.com"));
+	        $('#forgetEmail').keyup(function () {
+	            var enteredEmail = $(this).val();
+	            var emailExists = false;
+				console.log(enteredEmail);
+	            // Check if the entered email exists in the list
+	            if(emails.includes(enteredEmail)){
+	            	emailExists = true;
+	            }else{
+	            	emailExists = false;
+	            }
+
+	            if (enteredEmail.length > 0 && emailExists) {
+	                $('#sendOtpBtn').prop('disabled', false);
+	            } else {
+	                $('#sendOtpBtn').prop('disabled', true);
+	                // Show an error message
+	                $('#errorMessage').text('The entered email is not in our records.');
+	            }
+	        });
+	    });
+
+
 	</script>
 </body>
 

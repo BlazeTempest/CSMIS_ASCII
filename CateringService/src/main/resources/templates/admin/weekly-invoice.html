@@ -67,28 +67,55 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
 <style>
-
-form-select{
-    color:black !important;
-    background-color: white !important;
+.page-item.active .page-link {
    
+    background-color: white !important;
+    border-color: black !important;
+}
+.page-link{
+	color:black !important;	
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    box-sizing: border-box !important;
+    display: inline-block !important;
+    min-width: 1.5em !important;
+     margin-left: 0px !important;
+    padding:0px !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    color: inherit !important;
+    border: 1px solid transparent !important;
+    border-radius: 2px !important;
+    background: transparent !important;
+}
+.dataTables_wrapper .dataTables_length select {
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 5px;
+    background-color: transparent;
+    padding-right:20px !important;
 }
 .form-control{
-    background-color: transparent !important;
+	background-color:white !important;
+	color:black !important;
 }
-
 .form-control:focus {
-    color: black !important;
-    background-color: transparent !important;
-    border-color: #f58b8b;
-    outline: 0;
-    box-shadow: 0 0 0 0 black !important;
-}
-.form-select:focus {
     border-color: black !important;
     outline: 0;
-    box-shadow: 0 0 0 0.12rem black !important;
+    box-shadow: 0 0 0 0rem black !important;
 }
+.form-select{
+	color:black !important;
+	font-weight:bold !important;
+}
+.form-select:focus{
+	 border-color: black !important;
+	box-shadow: 0 0 0 0rem black !important;
+}
+.dataTables_wrapper .dataTables_length select {
+    border: 1px solid black !important;
+ }
 
 table tr th {
 	border: none;
@@ -96,7 +123,7 @@ table tr th {
 
 #dataTableEx tr th {
 	color: black;
-	font-size: 1.2em;
+	
 }
 
 #dataTableEx tr td {
@@ -169,6 +196,27 @@ i.fa-solid {
 	#NOprint {
 		display: none;
 	}
+	/* #invoiceTable tr td:nth-child(odd){
+	 	font-size:28px;
+		color:red !important;
+		
+	} */
+	
+	#totalDiff td{
+		display:none;
+	}
+	
+	#totalAmount{
+		margin-top:10px;
+	}
+	#printBtn
+	{
+		display:none;
+	}
+	#confirmBtn
+	{
+		display:none;
+	}
 	#select {
 		border: none;
 		margin: 0;
@@ -220,9 +268,62 @@ i.fa-solid {
 }
 
 /* end style for report btn */
+
+   /* Style for the toggle switch */
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 32px;
+	height: 18px;
+	margin: 10px;
+	border-radius: 9px;
+	background-color: #ccc;
+}
+
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 1px;
+	left: 1px;
+	right: 1px;
+	bottom: 1px;
+	border-radius: 9px;
+	background-color: #fff;
+	transition: .4s;
+}
+
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 12px;
+	width: 12px;
+	left: 2px;
+	bottom: 2px;
+	background-color: #ccc;
+	border-radius: 50%;
+	transition: .4s;
+}
+
+input:checked+.slider {
+	background-color: #2196F3;
+}
+
+input:focus+.slider {
+	box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+	transform: translateX(12px);
+	background-color: #fff;
+}
+/* end Style for the toggle switch */
 </style>
-
-
 
 </head>
 
@@ -256,6 +357,8 @@ i.fa-solid {
 				<div class="navbar-nav w-100">
 					<a th:href="@{dashboard}" class="nav-item nav-link"><i
 						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
+						th:href="@{/importFiles}" class="nav-item nav-link"><i
+						class="fas fa-upload me-2"></i>Import Data</a><a
 						th:href="@{/employee-list}" class="nav-item nav-link"><i
 						class="fas fa-users me-2"></i>Employee List</a> <a
 						th:href="@{registered-list}" class="nav-item nav-link"><i
@@ -264,15 +367,9 @@ i.fa-solid {
 						Register</a> <a th:href="@{menu}" class="nav-item nav-link"><i
 						class="fas fa-hamburger me-2"></i>Menu</a> <a th:href="@{restaurant}"
 						class="nav-item nav-link"><i class="fas fa-home me-2"></i>Restaurant</a>
-					<div class="nav-item dropdown">
-						<a href="#" class="nav-link dropdown-toggle"
-							data-bs-toggle="dropdown"><i class="fas fa-file me-2"></i>Invoice</a>
-						<div class="dropdown-menu bg-transparent border-0">
-							<a th:href="@{/weekly-invoice}" class="dropdown-item active">Weekly
-								Invoice</a> <a th:href="@{/monthly_invoice}" class="dropdown-item">Monthly
-								Invoice</a>
-						</div>
-					</div>
+					<a th:href="@{weekly-invoice}" class="nav-item nav-link active"><i
+						class="fas fa-file me-2"></i>Invoice</a>
+
 					<div class="nav-item">
 						<a th:href="@{/suggestion}" class="nav-link"><i
 							class="far fa-file-alt me-2"></i>Suggestions</a>
@@ -281,6 +378,9 @@ i.fa-solid {
 						<a th:href="@{/holiday}" class="nav-link"><i
 							class="fa fa-mug-hot me-2"></i>Holidays</a>
 					</div>
+					<div class="nav-item">
+						<a th:href="@{/about}" class="nav-item nav-link "><i class="fa fa-circle-question me-2"></i>About</a>
+					</div>
 				</div>
 			</nav>
 		</div>
@@ -288,47 +388,57 @@ i.fa-solid {
 
 		<!-- Content Start -->
 		<div class="content">
-			<!-- Navbar Start -->
-			<nav id="NOprint"
-				class="navbar navbar-expand bg-secondary-nav navbar-dark sticky-top px-4 py-0">
-				<a href="#" class="sidebar-toggler flex-shrink-0"> <i
-					class="fa fa-bars"></i>
-				</a>
-				<div class="navbar-nav align-items-center ms-auto">
+			  <!-- Navbar Start -->
+        <nav id="NOprint" class="navbar navbar-expand bg-secondary-nav navbar-dark sticky-top px-4 py-0">
+            <a href="#" class="sidebar-toggler flex-shrink-0" id="NOprint">
+                <i class="fa fa-bars"></i>
+            </a>
+               <div class="navbar-nav align-items-center ms-auto">
 					<div class="nav-item dropdown">
-
-						<i onclick="myFunction(this)"
-							title="This is a mail notification on/off for lunch!"
-							class="fa-solid fa-bell"></i> <span
-							class="text-center text-white ms-2">Email </span>
-					</div>
-					<div class="nav-item">
+					<label class="switch"> <input type="checkbox" th:checked="${noti}"
+						id="toggle-switch" /> <span class="slider"></span>
+					</label>
+					<span class="text-center text-white" id="NOprint">Email </span>
+				</div>
+                <div class="nav-item" id="NOprint">
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="img/admin-logo.png" alt="" style="width: 40px; height: 40px" />
                             <span class="d-none d-lg-inline-flex" th:text=${name}></span>
                         </a>
-                       <div
-                                class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
+                       <div class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
                                 <a th:href="@{/userProfile}" class="dropdown-item fw-bold text-center">Profile</a>
 
                                 <form action="#" th:action="@{/logout}" method="POST">
-
                                     <input type="submit" value="Logout"
-                                        class="btn btn-outline-link bg-white fw-bold mt-1"
+                                        class="dropdown-item fw-bold text-center"
                                         style="color: rgb(0, 0, 0); width: 100%; height: 45px;" />
-
                                 </form>
                             </div>
                     </div>
                 </div>
-				</div>
-			</nav>
-			<!-- Navbar End -->
+            </div>
+        </nav>
+        <!-- Navbar End -->
 
-			<!-- Sale & Revenue Start -->
+			<div class="container-fluid mt-1" id="NOprint">
+				<div class="row my-2 bg-secondary ms-3 me-3 rounded">
+					<div class="btn-group d-flex justify-content-start me-5 py-4"
+						role="group" aria-label="Button group with options">
+						<div role="group" class="me-5">
+							<a th:href="@{weekly-invoice}"
+								class="btn btn-primary px-5 py-2 active">Weekly Invoice</a>
+						</div>
+						<div role="group">
+							<a th:href="@{monthly_invoice}" class="btn btn-primary px-5 py-2">Monthly
+								Invoice</a> 
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<!-- Weekly Invoice start -->
-			<div class="container-fluid pt-2" id="NOprint">
+			<div class="container-fluid pt-1" id="NOprint">
 				<div class="row my-3 bg-secondary ms-3 me-3 rounded">
 					<div class=" mb-4 d-flex justify-content-end">
 						<button type="button" onclick="myDailyInvoiceFunction()"
@@ -357,7 +467,7 @@ i.fa-solid {
 							<form th:action="@{/saveWeeklyInvoice}"
 								th:object="${weeklyInvoice}" method="POST">
 								<input type="hidden" th:field="*{voucher_ID}"
-									th:value="${generateId}">
+									th:value="${voucherID}">
 
 								<div class="row mb-3">
 									<label for="inputPassword3"
@@ -381,7 +491,7 @@ i.fa-solid {
 										class="col-sm-4 col-form-label text-dark">Invoice
 										for(Start Date)</label>
 									<div class="col-sm-8">
-										<input type="date" th:field="*{start_date}" required
+										<input type="date" th:field="*{startDate}" required
 											class="form-control bg-white text-primary"
 											id="inputPassword3">
 									</div>
@@ -391,7 +501,7 @@ i.fa-solid {
 										class="col-sm-4 col-form-label text-dark">Invoice
 										for(End Date)</label>
 									<div class="col-sm-8">
-										<input type="date" th:field="*{end_date}" required
+										<input type="date" th:field="*{endDate}" required
 											class="form-control bg-white text-primary"
 											id="inputPassword3">
 									</div>
@@ -412,16 +522,17 @@ i.fa-solid {
 			<div class="container-fluid mb-3 " id="dailyInvoice"
 				style="display: none;">
 				<div class="bg-secondary ms-3 me-3 rounded p-5">
+					
 					<table class="table table-striped" id="dataTableEx">
 						<thead>
 							<tr>
-								<th>Sr</th>
+								<th class="pb-4">No</th>
 								<th>Invoice Date</th>
-								<th>Registered Count</th>
-								<th>Actual Count</th>
-								<th>Difference</th>
+								<th >Registered Count</th>
+								<th >Actual Count</th>
+								<th class="pb-4">Difference</th>
 								<th>Total Price</th>
-								<th>Amount</th>
+								<th class="pb-4">Amount</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -434,26 +545,13 @@ i.fa-solid {
 								<td th:text="${temp.totalPrice}"></td>
 								<td th:text="${temp.totalAmount}"></td>
 							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td th:text="${totalDailyRegisteredCount}"></td>
-								<td th:text="${totalDailyActualCount}"></td> 
-								<td th:text="${totalDailyDiffCount}"></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td class="text-center fw-bold fs-5">Total Amount</td>
-								<td class="text-center fw-bold fs-5" th:text="${allDailyTotalAmount} + ' MMK'"></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
 						</tbody>
 					</table>
+					<div class="text-center fw-bold fs-5" id="totalAmount">
+						<span>Total Amount :</span> 
+						<span th:text="${allDailyTotalAmount} + ' MMK'"></span>
+					</div>
+					
 				</div>
 			</div>
 
@@ -571,7 +669,7 @@ i.fa-solid {
 									</tr>
 								</thead>
 								<tbody>
-									<tr id="content" th:each="tempWeeklyInvoice,i : ${dto}"
+									<tr th:each="tempWeeklyInvoice,i : ${dto}"
 									>
 										<td th:text="${i.count}">
 										<td th:text="${tempWeeklyInvoice.invoiceDate}">
@@ -581,7 +679,7 @@ i.fa-solid {
 										<td th:text="${tempWeeklyInvoice.totalPrice}">
 										<td th:text="${tempWeeklyInvoice.totalAmount}">
 									</tr>
-									<tr class="fw-bold">
+									<tr class="fw-bold" id="totalDiff">
 										<td></td>
 										<td></td>
 										<td th:text="${totalRegisterCount}"></td>
@@ -591,18 +689,21 @@ i.fa-solid {
 										<td></td>
 									</tr>
 									<tr>
-										<td colspan="4" class="pt-4 fs-5">TOTAL AMOUNT</td>
-										
-										<td colspan="4">
-											<div class="input-group mb-3">
-												<input type="text" class="form-control pt-3 w-25 fs-5 fw-bold text-dark text-end" name="totalCost" th:value="${totalCost}" readonly
-													style="border:none;background-color: transparent;"> <span
-													class="input-group-text text-dark fw-bold fs-5 pt-3" style="border:none;background-color: transparent;">MMK</span>
-											</div>
-										</td>
+										<td colspan="3"><h4>Total Amount</h4></td>
+										<td colspan="4"><div class="input-group mb-3">
+										<input type="text"
+											class="form-control w-25 fs-4 fw-bold text-dark text-end"
+											name="totalCost" th:value="${totalCost}" readonly 
+											style="border:none;background-color:transparent !important;"> <span
+											class="input-group-text text-dark fw-bold fs-5 "
+											style="border:none; background-color: transparent;">MMK</span>
+									</div></td>
 									</tr>
 								</tbody>
+								
 							</table>
+							
+
 							<table class="table">
 								<thead>
 									<tr>
@@ -661,31 +762,15 @@ i.fa-solid {
 						<input type="hidden" name="numberOfPax" th:value="${numberOfPax}">
 						<div id="NOprint">
 							<button type="button" id="printBtn" onclick="getPrint()"
-								class="btn btn-outline-dark mb-5 ms-5" th:disabled="${printStatus}">Print</button>
+								class="btn btn-outline-dark mb-5 ms-5" >Print</button>
 							<button type="submit" id="confirmBtn"
-								class="btn btn-outline-dark mb-5 ms-2" th:disabled="${confirmStatus}">Create Invoice</button>
+								class="btn btn-outline-dark mb-5 ms-2" >Create Invoice</button>
 						</div>
 					</div>
 				</form>
 			</div>
 			<!-- Weekly Invoice end -->
 
-			<div class="containet-fluid" id="NOprint">
-				<div class="row bg-secondary  ms-4 me-4 my-2">
-					<div class="btn-group d-flex justify-content-end me-5 py-5"
-						role="group" aria-label="Button group with options">
-						<div role="group" class="me-5">
-							<a th:href="@{summary}" class="btn btn-primary px-5 py-2 active">Weekly
-								Invoice</a>
-						</div>
-						<div role="group">
-							<a th:href="@{registered-list}" class="btn btn-primary px-5 py-2">Monthly
-								Invoice</a>
-						</div>
-					</div>
-
-				</div>
-			</div>
 
 			<!-- Footer Start -->
 			<div class="container-fluid pt-4 px-4 " id="NOprint">
@@ -716,13 +801,13 @@ i.fa-solid {
 
 	<script>
 	
-	const printBtn = document.getElementById('printBtn');
-	const confirmBtn = document.getElementById('confirmBtn');	
+	 const printBtn = document.getElementById('printBtn');
+	const confirmBtn = document.getElementById('confirmBtn');	  
 	
 	function getPrint() {
 		window.print();
-		printBtn.disabled = true;
-		confirmBtn.disabled = true;
+		printBtn.disabled=true;
+		confirmBtn.disabled=false;
 	}
 		$(document).ready(function() {
 			$("#dataTableEx").DataTable();
@@ -769,6 +854,21 @@ i.fa-solid {
 				btn.innerHTML = '<i class="fa fa-plus"></i>&nbsp; View Daily Invoice'; // change button text
 			}
 		}
+		// Start JavaScript code to handle the toggle switch event
+		var toggleSwitch = document.getElementById("toggle-switch");
+		toggleSwitch.addEventListener("change", function() {
+			var isChecked = this.checked;
+			console.log("Toggle switch is " + (isChecked ? "on" : "off"));
+			// Send HTTP request to server to update database
+			// ...
+			var xhttp = new XMLHttpRequest();
+			xhttp.open("GET", "/toggle-switch?isChecked=" + isChecked, true);
+			xhttp.setRequestHeader("Content-type",
+					"application/x-www-form-urlencoded");
+			xhttp.send("isChecked=" + isChecked);
+		});
+		// End JavaScript code to handle the toggle switch event
+		
 	</script>
 	<!-- JavaScript Libraries -->
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -783,7 +883,9 @@ i.fa-solid {
 	<script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
 	<!-- Template Javascript -->
+
 	<script src="js/main.js"></script>
+	
 </body>
 
 </html>

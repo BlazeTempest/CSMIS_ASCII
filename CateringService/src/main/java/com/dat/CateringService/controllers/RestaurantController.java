@@ -38,6 +38,8 @@ public class RestaurantController {
 				List<Restaurant> theRestaurant = restaurantService.findAll();
 
 				// add to the spring model
+		        theModel.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
+				theModel.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 				theModel.addAttribute("restaurant", theRestaurant);
 				Restaurant restaurants=new Restaurant();
 				theModel.addAttribute("restaurants", restaurants);
@@ -76,8 +78,6 @@ public class RestaurantController {
 	    }
 	}
 
-
-
 	@PostMapping("/saveRestaurant")
 	public String saveRestaurant(@ModelAttribute("restaurants") Restaurant theRestaurant, RedirectAttributes model) {
 
@@ -87,13 +87,21 @@ public class RestaurantController {
 				tempRes.setStatus("inactive");
 			}
 				
-			theRestaurant.setCreated_date(LocalDate.now());
-			theRestaurant.setStatus("active");
-		    restaurantService.save(theRestaurant);
-	    // Add a success message to the model
-	    model.addFlashAttribute("message","Restaurant saved successfully!");
-	    return "redirect:/restaurant";
-		}
+			String existingRestaurantDatas=restaurantService.findDuplicateRestaurantName(theRestaurant.getRestaurant_name(), theRestaurant.getPhone(), theRestaurant.getEmail());
+			if(existingRestaurantDatas !=null)
+			{
+				model.addFlashAttribute("existingRestaurantDatas",theRestaurant.getRestaurant_name()+ " is already existed!");
+				 return "redirect:/restaurant";
+			}else {
+				theRestaurant.setCreated_date(LocalDate.now());
+				theRestaurant.setStatus("active");
+				
+				restaurantService.save(theRestaurant);
+				
+				model.addFlashAttribute("message", "Restaurant saved successfully!");
+				return "redirect:/restaurant";
+			}
+	}
 	
 	
 	@PostMapping("/editRestaurant")

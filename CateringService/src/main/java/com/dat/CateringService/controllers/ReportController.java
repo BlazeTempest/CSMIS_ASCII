@@ -59,7 +59,7 @@ public class ReportController {
 	@GetMapping("/registered-list")
 	public String plannedList(Authentication authentication , Model model, RedirectAttributes redirect) {
 		List<Registered_list> registeredStaffs = registeredService.getRegisteredStaffByDate(LocalDate.now());
-		
+		model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("teams", staffService.getTeamNames());
 		model.addAttribute("divs", staffService.getDivNames());
@@ -114,7 +114,7 @@ public class ReportController {
 				}
 				registeredList.removeAll(toRemove);
 			}
-			
+			model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 			model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 			model.addAttribute("teams", staffService.getTeamNames());
 			model.addAttribute("divs", staffService.getDivNames());
@@ -127,7 +127,7 @@ public class ReportController {
 	@GetMapping("/register-eat-list")
 	public String plannedEatList(Authentication authentication, Model model) {
 		List<Registered_list> eatList = registeredService.getRegisteredStaffByStatusAndDineAndDate(true, true, LocalDate.now(), LocalDate.now());
-		   
+		model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());   
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("start", LocalDate.now().minusDays(5));
 		model.addAttribute("end", LocalDate.now());
@@ -185,7 +185,7 @@ public class ReportController {
 			}
 			registeredList.removeAll(toRemove);
 		}
-		
+		model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("teams", staffService.getTeamNames());
 		model.addAttribute("eatStaffs", registeredList);
@@ -198,7 +198,7 @@ public class ReportController {
 	@GetMapping("/register-not-eat-list")
 	public String plannedNotEatList(Authentication authentication , Model model) {
 		List<Registered_list> eatList = registeredService.getRegisteredStaffByStatusAndDineAndDate(false, true, LocalDate.now(), LocalDate.now());
-		
+		model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("eatStaffs", eatList);
 		model.addAttribute("teams", staffService.getTeamNames());
@@ -247,7 +247,7 @@ public class ReportController {
 			}
 			registeredList.removeAll(toRemove);
 		}
-		
+		model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("teams", staffService.getTeamNames());
 		model.addAttribute("eatStaffs", registeredList);
@@ -265,7 +265,7 @@ public class ReportController {
 	@GetMapping("/not-registereed-eat-list")
 	public String unplannedEatList(Authentication authentication, Model model) {
 		List<DailyDoorLog> doorlogs = doorlogService.getByRegisteredAndStaffID(false, LocalDate.now(), LocalDate.of(2023,3,28));
-		
+		model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("totalNum", doorlogs.size());
 		model.addAttribute("staffs", doorlogs);
@@ -311,7 +311,7 @@ public class ReportController {
 			}
 			doorlogs.removeAll(toRemove);
 		}
-		
+		model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("team", team);
 		model.addAttribute("searchName", name);
@@ -389,7 +389,7 @@ public class ReportController {
 			}
 			staffs.add(report);
 		}
-		
+		model.addAttribute("noti", staffService.getStaffById(authentication.getName()).getEmail_noti());
 		model.addAttribute("name", staffService.getStaffById(authentication.getName()).getName());
 		model.addAttribute("type1", type1);
 		model.addAttribute("type2", type2);
@@ -408,17 +408,12 @@ public class ReportController {
 			InputStream inputStream = file.getInputStream();
 			inputStream.available();
 			List<DailyDoorLog> objects = DoorlogImporter.readExcel(inputStream);
+			LocalDate deletedDate = objects.get(0).getDineDate();
 			List<DailyDoorLog> doorlogs = objects.stream().distinct().collect(Collectors.toList());
-			List<DailyDoorLog> todayImported = doorlogService.getDoorlogByImportedDate(LocalDate.now());
-			List<Integer> ids = new ArrayList<>();
+			List<DailyDoorLog> todayImported = doorlogService.getDoorlogByDineDate(deletedDate, deletedDate);
 			
-			for(DailyDoorLog temp : todayImported) {
-				ids.add(temp.getDoorLogNo());
-			}
+			doorlogService.deleteAll(todayImported);
 			for(DailyDoorLog temp : doorlogs) {
-				if(ids.contains(temp.getDoorLogNo())) {
-					continue;
-				}else {
 					Staff staff = staffService.getByDoorlog(temp.getDoorLogNo());
 					
 					if(staff!=null) {
@@ -442,7 +437,7 @@ public class ReportController {
 						continue;
 					}
 				}
-			}
+			
 			
 			DailyDoorLog ddl = doorlogService.getLastInserted();
 			LocalDate start = ddl.getDineDate();

@@ -72,6 +72,90 @@ i.fa-solid {
 .fa-solid:hover {
 	color: rgb(250, 16, 75);
 }
+
+/* start style for report btn */
+.btn-group {
+	padding-right: 30px;
+	padding-left: 30px;
+}
+
+.btn-group .btn {
+	border-radius: 10px;
+}
+
+.btn-check:checked+.btn-primary, .btn-check:active+.btn-primary,
+	.btn-primary:active, .btn-primary.active, .show>.btn-primary.dropdown-toggle
+	{
+	color: #06324d;
+	background-color: white;
+	border-color: #06324d;
+	box-shadow: 5px 5px #06324d;
+}
+
+.btn-primary:hover {
+	background-color: #06324d;
+	color: white;
+	transform: scale(1.1);
+	box-shadow: 0 0 20px #06324d;
+}
+
+/* end style for report btn */
+
+   /* Style for the toggle switch */
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 32px;
+	height: 18px;
+	margin: 10px;
+	border-radius: 9px;
+	background-color: #ccc;
+}
+
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 1px;
+	left: 1px;
+	right: 1px;
+	bottom: 1px;
+	border-radius: 9px;
+	background-color: #fff;
+	transition: .4s;
+}
+
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 12px;
+	width: 12px;
+	left: 2px;
+	bottom: 2px;
+	background-color: #ccc;
+	border-radius: 50%;
+	transition: .4s;
+}
+
+input:checked+.slider {
+	background-color: #2196F3;
+}
+
+input:focus+.slider {
+	box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+	transform: translateX(12px);
+	background-color: #fff;
+}
+/* end Style for the toggle switch */
+
 </style>
 <script>
         function myFunction(x) {
@@ -116,43 +200,26 @@ table tr th {
 				<div class="navbar-nav w-100">
 					<a href="/" class="nav-item nav-link"><i
 						class="fa fa-tachometer-alt me-2"></i>Dashboard</a> <a
+						th:href="@{/importFiles}" class="nav-item nav-link"><i
+						class="fas fa-upload me-2"></i>Import Data</a> <a
 						th:href="@{/employee-list}" class="nav-item nav-link"><i
-						class="fas fa-users me-2"></i>Employee List</a>
-					<a th:href="@{registered-list}"  class="nav-item nav-link"
-            		><i class="fa fa-laptop me-2"></i>Report</a>
-					<a th:href="@{registration}" class="nav-item nav-link"
-              ><i class="fas fa-pen me-2"></i>Lunch Register</a
-            >
-            <a th:href="@{menu}" class="nav-item nav-link"
-              ><i class="fas fa-hamburger me-2"></i>Menu</a
-            >
-            <a th:href="@{restaurant}" class="nav-item nav-link"
-              ><i class="fas fa-home me-2"></i>Restaurant</a
-            >
-            <div class="nav-item dropdown">
-              <a
-                href="#"
-                class="nav-link dropdown-toggle active"
-                data-bs-toggle="dropdown"
-                ><i class="fas fa-file me-2"></i>Invoice</a
-              >
-              <div class="dropdown-menu bg-transparent border-0">
-                <a th:href="@{/weekly-invoice}" class="dropdown-item"
-                  >Weekly Invoice</a
-                >
-                <a th:href="@{/monthly_invoice}" class="dropdown-item active"
-                  >Monthly Invoice</a
-                >
-              </div>
-            </div>
-            <div class="nav-item">
-              <a th:href="@{suggestion}" class="nav-link"
-                ><i class="far fa-file-alt me-2"></i>Suggestions</a
-              >
-            </div>
-            <div class="nav-item">
-              <a th:href="@{holiday}" class="nav-link"><i class="fa fa-mug-hot me-2"></i>Holidays</a>
-                </div>
+						class="fas fa-users me-2"></i>Employee List</a> <a
+						th:href="@{registered-list}" class="nav-item nav-link"><i
+						class="fa fa-laptop me-2"></i>Report</a> <a th:href="@{registration}"
+						class="nav-item nav-link"><i class="fas fa-pen me-2"></i>Lunch
+						Register</a> <a th:href="@{menu}" class="nav-item nav-link"><i
+						class="fas fa-hamburger me-2"></i>Menu</a> <a th:href="@{restaurant}"
+						class="nav-item nav-link"><i class="fas fa-home me-2"></i>Restaurant</a>
+					<a th:href="@{monthly_invoice}" class="nav-item nav-link active"><i
+						class="fas fa-file me-2"></i>Invoice</a>
+					<div class="nav-item">
+						<a th:href="@{suggestion}" class="nav-link"><i
+							class="far fa-file-alt me-2"></i>Suggestions</a>
+					</div>
+					<div class="nav-item">
+						<a th:href="@{holiday}" class="nav-link"><i
+							class="fa fa-mug-hot me-2"></i>Holidays</a>
+					</div>
 				</div>
 			</nav>
 		</div>
@@ -160,39 +227,54 @@ table tr th {
 
 		<!-- Content Start -->
 		<div class="content">
-			<!-- Navbar Start -->
-			<nav
-				class="navbar navbar-expand bg-secondary-nav navbar-dark sticky-top px-4 py-0">
-				<a href="#" class="sidebar-toggler flex-shrink-0"> <i
-					class="fa fa-bars"></i>
-				</a>
-				<div class="navbar-nav align-items-center ms-auto">
+			  <!-- Navbar Start -->
+        <nav class="navbar navbar-expand bg-secondary-nav navbar-dark sticky-top px-4 py-0">
+            <a href="#" class="sidebar-toggler flex-shrink-0">
+                <i class="fa fa-bars"></i>
+            </a>
+               <div class="navbar-nav align-items-center ms-auto">
 					<div class="nav-item dropdown">
+					<label class="switch"> <input type="checkbox" th:checked="${noti}"
+						id="toggle-switch" /> <span class="slider"></span>
+					</label>
+					<span class="text-center text-white">Email </span>
+				</div>
+                <div class="nav-item">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img class="rounded-circle me-lg-2" src="img/admin-logo.png" alt="" style="width: 40px; height: 40px" />
+                            <span class="d-none d-lg-inline-flex" th:text=${name}></span>
+                        </a>
+                       <div class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
+                                <a th:href="@{/userProfile}" class="dropdown-item fw-bold text-center">Profile</a>
 
-						<i onclick="myFunction(this)"
-							title="This is a mail notification on/off for lunch!"
-							class="fa-solid fa-bell"></i> <span
-							class="text-center text-white ms-2">Email </span>
-					</div>
-					<div class="nav-item">
-
-						<div class="nav-item dropdown">
-							<a href="#" class="nav-link dropdown-toggle"
-								data-bs-toggle="dropdown"> <img
-								class="rounded-circle me-lg-2" src="img/admin-logo.png" alt=""
-								style="width: 40px; height: 40px" /> <span
-								class="d-none d-lg-inline-flex">Admin</span>
-							</a>
-							<div
-								class="dropdown-menu dropdown-menu-end bg-transparent border-0 rounded-0 rounded-bottom m-0">
-								<a href="profile.html" class="dropdown-item">Profile</a> <a
-									href="signin.html" class="dropdown-item">Log Out</a>
-							</div>
+                                <form action="#" th:action="@{/logout}" method="POST">
+                                    <input type="submit" value="Logout"
+                                        class="dropdown-item fw-bold text-center"
+                                        style="color: rgb(0, 0, 0); width: 100%; height: 45px;" />
+                                </form>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Navbar End -->
+			
+			<div class="container-fluid mt-1" id="NOprint">
+				<div class="row my-2 bg-secondary ms-3 me-3 rounded">
+					<div class="btn-group d-flex justify-content-start me-5 py-4"
+						role="group" aria-label="Button group with options">
+						<div role="group" class="me-5">
+							<a th:href="@{weekly-invoice}"
+								class="btn btn-primary px-5 py-2">Weekly Invoice</a>
+						</div>
+						<div role="group">
+							<a th:href="@{monthly_invoice}" class="btn btn-primary px-5 py-2 active">Monthly
+								Invoice</a> 
 						</div>
 					</div>
 				</div>
-			</nav>
-			<!-- Navbar End -->
+			</div>
 
 			<div class="container-fluid mt-4">
 				<div class="bg-secondary ms-3 me-3 rounded">
@@ -207,15 +289,15 @@ table tr th {
 					<div class="container-fluid">
 							<form th:action="@{/searchPaidVoucher}" method="get" class="row g-3 ms-2">
 								<div class=" col-md-3">
-									<input class="form-control bg-white border-info"
+									<input class="form-control bg-white border-info" required
 										name="startDate" type="text" th:value=${start}
 										placeholder="From date" onfocus="(this.type='date')"
 										onblur="(this.type='text')">
 								</div>
 								<div class="col-md-3">
-									<input class="form-control bg-white border-info" th:value="${end}"
+									<input class="form-control bg-white border-info" th:value="${end}" required
 										name="endDate" type="text"
-										placeholder="From date" onfocus="(this.type='date')"
+										placeholder="To date" onfocus="(this.type='date')"
 										onblur="(this.type='text')">
 								</div>
 								<div class="col-md-2">
@@ -250,7 +332,7 @@ table tr th {
 									<tr th:each="temp, i : ${paymentVoucher}" class="text-center">
 										<td th:text="${i.count}"></td>
 										<td
-											th:text="${temp.voucher_ID + ' / ' + temp.start_date + ' ~' + temp.end_date}"></td>
+											th:text="${temp.voucher_ID + ' / ' + temp.startDate + ' ~' + temp.endDate}"></td>
 										<td th:text="${temp.restaurant_name}"></td>
 										<td th:text="${temp.cashier}"></td>
 										<td th:text="${temp.received_by}"></td>
@@ -322,6 +404,23 @@ table tr th {
 
 	<!-- Template Javascript -->
 	<script src="js/main.js"></script>
+	<script>
+	
+	// Start JavaScript code to handle the toggle switch event
+	var toggleSwitch = document.getElementById("toggle-switch");
+	toggleSwitch.addEventListener("change", function() {
+		var isChecked = this.checked;
+		console.log("Toggle switch is " + (isChecked ? "on" : "off"));
+		// Send HTTP request to server to update database
+		// ...
+		var xhttp = new XMLHttpRequest();
+		xhttp.open("GET", "/toggle-switch?isChecked=" + isChecked, true);
+		xhttp.setRequestHeader("Content-type",
+				"application/x-www-form-urlencoded");
+		xhttp.send("isChecked=" + isChecked);
+	});
+	// End JavaScript code to handle the toggle switch event
+	</script>
 </body>
 
 </html>

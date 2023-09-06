@@ -34,4 +34,9 @@ public class WeeklyInvoiceServiceImpl implements WeeklyInvoiceService {
 	public List<PaymentVoucher> findByPaymentDateBetween(LocalDate start, LocalDate end) {
 		return weeklyInvoiceRepository.findByPaymentDateBetween(start, end);
 	}
+
+	@Override
+	public String findLastInsertedVoucherID() {
+		return weeklyInvoiceRepository.findLastInsertedToDate();
+	}
 }
